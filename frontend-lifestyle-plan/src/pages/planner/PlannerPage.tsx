@@ -8,8 +8,10 @@ const PlannerPage = () => {
   // };
 
   return (
-    <div className="max-w-xl mx-auto mt-10">
-      <h2 className="text-3xl font-semibold">What are your goals?</h2>
+    <div className="max-w-xl mx-auto mt-4">
+      <h2 className="text-3xl font-bold tracking-wider text-left p-4">
+        What are your goals?
+      </h2>
       <PlannerForm />
     </div>
   );

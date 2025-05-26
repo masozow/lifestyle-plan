@@ -1,22 +1,22 @@
-import { schema_nutritionForm } from "@/schemas";
+import { schema_plannerForm } from "@/schemas";
 
 export const steps = [
     {
       title: "Goal",
       name: "objective",
-      options: schema_nutritionForm.shape.objective.options,
+      options: schema_plannerForm.shape.objective.options,
       defaultValue: "lose fat",
     },
     {
       title: "Restriction",
       name: "restriction",
-      options: schema_nutritionForm.shape.restriction.options,
+      options: schema_plannerForm.shape.restriction.options,
       defaultValue: "none",
     },
     {
       title: "Preference",
       name: "preference",
-      options: schema_nutritionForm.shape.preference.options,
+      options: schema_plannerForm.shape.preference.options,
       defaultValue: "latin",
     },
     {

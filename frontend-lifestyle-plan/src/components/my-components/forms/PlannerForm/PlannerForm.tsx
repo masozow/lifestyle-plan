@@ -7,20 +7,21 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { schema_nutritionForm } from "@/schemas";
+import { schema_plannerForm, type PlannerFormValues } from "@/schemas";
 import { steps } from "./helpers";
 
-type FormType = z.infer<typeof schema_nutritionForm>;
+type FormType = z.infer<typeof schema_plannerForm>;
 
 export const PlannerForm = () => {
   const [plan, setPlan] = useState("");
   const [currentStep, setCurrentStep] = useState(0);
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormType>({
-    resolver: zodResolver(schema_nutritionForm),
+  } = useForm<PlannerFormValues>({
+    resolver: zodResolver(schema_plannerForm),
+    mode: "onBlur",
   });
 
   const onSubmit = async (data: FormType) => {
@@ -53,7 +54,9 @@ export const PlannerForm = () => {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <Label className="text-2xl">{steps[currentStep].title}</Label>
+              <Label className="text-2xl font-semibold">
+                {steps[currentStep].title}
+              </Label>
               <RadioGroup defaultValue={steps[currentStep].defaultValue}>
                 {steps[currentStep].options &&
                   steps[currentStep].options.map((opt) => (
@@ -87,6 +90,8 @@ export const PlannerForm = () => {
               <Textarea
                 placeholder={`${steps[currentStep].title}...`}
                 {...register("extras")}
+                className="mt-4 resize-none overflow-y-scroll h-[5rem]"
+                rows={4}
               />
             </motion.div>
           )}
