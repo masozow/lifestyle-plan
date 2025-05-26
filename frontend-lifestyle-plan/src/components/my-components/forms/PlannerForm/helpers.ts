@@ -19,5 +19,10 @@ export const steps = [
       options: schema_nutritionForm.shape.preference.options,
       defaultValue: "latin",
     },
-    "textarea",
+    {
+        title:"Extras",
+        name:"extras",
+        options: "",
+        defaultValue: "",
+    }
   ] as const;

@@ -55,21 +55,22 @@ export const PlannerForm = () => {
             >
               <Label className="text-2xl">{steps[currentStep].title}</Label>
               <RadioGroup defaultValue={steps[currentStep].defaultValue}>
-                {steps[currentStep].options.map((opt) => (
-                  <div key={opt} className="flex items-center space-x-2">
-                    <RadioGroupItem
-                      value={opt}
-                      id={`${steps[currentStep].name}-${opt}`}
-                      {...register(steps[currentStep].name)}
-                    />
-                    <Label
-                      className="capitalize cursor-pointer"
-                      htmlFor={`${steps[currentStep].name}-${opt}`}
-                    >
-                      {opt}
-                    </Label>
-                  </div>
-                ))}
+                {steps[currentStep].options &&
+                  steps[currentStep].options.map((opt) => (
+                    <div key={opt} className="flex items-center space-x-2">
+                      <RadioGroupItem
+                        value={opt}
+                        id={`${steps[currentStep].name}-${opt}`}
+                        {...register(steps[currentStep].name)}
+                      />
+                      <Label
+                        className="capitalize cursor-pointer"
+                        htmlFor={`${steps[currentStep].name}-${opt}`}
+                      >
+                        {opt}
+                      </Label>
+                    </div>
+                  ))}
               </RadioGroup>
             </motion.div>
           )}
@@ -82,7 +83,11 @@ export const PlannerForm = () => {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <Textarea placeholder="Extras..." {...register("extra")} />
+              <Label className="text-2xl">{steps[currentStep].title}</Label>
+              <Textarea
+                placeholder={`${steps[currentStep].title}...`}
+                {...register("extras")}
+              />
             </motion.div>
           )}
         </AnimatePresence>
