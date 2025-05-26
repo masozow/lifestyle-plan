@@ -1,19 +1,18 @@
-import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { useForm, type FieldError } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { schema_plannerForm, type PlannerFormValues } from "@/schemas";
 import { steps } from "./helpers";
+import CustomRadiogroup from "../BaseForm/CustomRadiogroup";
+import CustomTextArea from "../BaseForm/CustomTextArea";
 
-type FormType = z.infer<typeof schema_plannerForm>;
+type Step = (typeof steps)[number];
+type RadioStep = Extract<Step, { options: readonly string[] }>;
 
 export const PlannerForm = () => {
-  const [plan, setPlan] = useState("");
+  const [plan, setPlan] = useState<PlannerFormValues | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
   const {
     control,
@@ -22,9 +21,16 @@ export const PlannerForm = () => {
   } = useForm<PlannerFormValues>({
     resolver: zodResolver(schema_plannerForm),
     mode: "onBlur",
+    defaultValues: {
+      objective: "lose fat",
+      restriction: "none",
+      preference: "latin",
+      extras: "",
+    },
   });
 
-  const onSubmit = async (data: FormType) => {
+  const onSubmit = async (data: PlannerFormValues) => {
+    setPlan(data);
     console.log("Data: ", data);
   };
 
@@ -44,59 +50,29 @@ export const PlannerForm = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
-      <div className="min-h-[10rem] flex flex-col justify-center">
+      <div className="min-h-[12rem] flex flex-col justify-center">
         <AnimatePresence mode="wait">
-          {currentStep < 3 && (
-            <motion.div
-              key={currentStep}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Label className="text-2xl font-semibold">
-                {steps[currentStep].title}
-              </Label>
-              <RadioGroup defaultValue={steps[currentStep].defaultValue}>
-                {steps[currentStep].options &&
-                  steps[currentStep].options.map((opt) => (
-                    <div key={opt} className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value={opt}
-                        id={`${steps[currentStep].name}-${opt}`}
-                        {...register(steps[currentStep].name)}
-                      />
-                      <Label
-                        className="capitalize cursor-pointer"
-                        htmlFor={`${steps[currentStep].name}-${opt}`}
-                      >
-                        {opt}
-                      </Label>
-                    </div>
-                  ))}
-              </RadioGroup>
-            </motion.div>
-          )}
-
-          {currentStep === 3 && (
-            <motion.div
-              key="textarea"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Label className="text-2xl">{steps[currentStep].title}</Label>
-              <Textarea
-                placeholder={`${steps[currentStep].title}...`}
-                {...register("extras")}
-                className="mt-4 resize-none overflow-y-scroll h-[5rem]"
-                rows={4}
-              />
-            </motion.div>
+          {currentStep < 3 ? (
+            <CustomRadiogroup
+              key={steps[currentStep].name}
+              control={control}
+              name={steps[currentStep].name as keyof PlannerFormValues}
+              options={(steps[currentStep] as RadioStep).options}
+              defaultValue={(steps[currentStep] as RadioStep).defaultValue}
+              error={errors[steps[currentStep].name] as FieldError | undefined}
+            />
+          ) : (
+            <CustomTextArea
+              key="extras"
+              name="extras"
+              control={control}
+              error={errors.extras}
+              title={steps[currentStep].title}
+            />
           )}
         </AnimatePresence>
       </div>
+
       <div className="flex gap-4 justify-end">
         {currentStep > 0 && (
           <Button
@@ -127,7 +103,9 @@ export const PlannerForm = () => {
           animate={{ opacity: 1 }}
         >
           <h3 className="text-lg font-bold mb-2">Generated Plan:</h3>
-          <pre className="whitespace-pre-wrap">{plan}</pre>
+          <pre className="whitespace-pre-wrap">
+            {JSON.stringify(plan, null, 2)}
+          </pre>
         </motion.div>
       )}
     </motion.form>
