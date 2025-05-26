@@ -1,6 +1,6 @@
 import { Outlet } from "react-router";
 import "./App.css";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
 
 function App() {
   return (
