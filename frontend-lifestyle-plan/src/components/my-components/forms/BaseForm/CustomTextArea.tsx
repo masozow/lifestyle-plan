@@ -1,17 +1,27 @@
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import type { PlannerFormValues } from "@/schemas";
-import { motion } from "framer-motion"; // Changed from "motion/react"
-import { Controller, type Control, type FieldError } from "react-hook-form";
+import { motion } from "framer-motion";
+import {
+  Controller,
+  type Control,
+  type FieldError,
+  type FieldValues,
+  type Path,
+} from "react-hook-form";
 
-interface Props {
-  name: keyof PlannerFormValues;
-  control: Control<PlannerFormValues>;
+interface Props<T extends FieldValues> {
+  name: Path<T>;
+  control: Control<T>;
   error?: FieldError;
   title: string;
 }
 
-const CustomTextArea = ({ name, control, error, title }: Props) => {
+const CustomTextArea = <T extends FieldValues>({
+  name,
+  control,
+  error,
+  title,
+}: Props<T>) => {
   return (
     <motion.div
       key={`textarea-${title}`}
@@ -40,5 +50,4 @@ const CustomTextArea = ({ name, control, error, title }: Props) => {
     </motion.div>
   );
 };
-
 export default CustomTextArea;

@@ -7,12 +7,30 @@ import { schema_plannerForm, type PlannerFormValues } from "@/schemas";
 import { steps } from "./helpers";
 import CustomRadiogroup from "../BaseForm/CustomRadiogroup";
 import CustomTextArea from "../BaseForm/CustomTextArea";
+import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 
 type Step = (typeof steps)[number];
 type RadioStep = Extract<Step, { options: readonly string[] }>;
 
-export const PlannerForm = () => {
-  const [plan, setPlan] = useState<PlannerFormValues | null>(null);
+const getDefaultValues = (steps: readonly Step[]): PlannerFormValues => {
+  return steps.reduce((acc, step) => {
+    if ("defaultValue" in step) {
+      return { ...acc, [step.name]: step.defaultValue };
+    }
+    return { ...acc, [step.name]: "" };
+  }, {} as PlannerFormValues);
+};
+
+interface Props {
+  submitFunction: (data: PlannerFormValues) => void;
+  titleChangeFunction: (title: string) => void;
+  plan?: PlannerFormValues | null;
+}
+export const PlannerForm = ({
+  plan,
+  submitFunction,
+  titleChangeFunction,
+}: Props) => {
   const [currentStep, setCurrentStep] = useState(0);
   const {
     control,
@@ -21,21 +39,14 @@ export const PlannerForm = () => {
   } = useForm<PlannerFormValues>({
     resolver: zodResolver(schema_plannerForm),
     mode: "onBlur",
-    defaultValues: {
-      objective: "lose fat",
-      restriction: "none",
-      preference: "latin",
-      extras: "",
-    },
+    defaultValues: getDefaultValues(steps),
   });
-
-  const onSubmit = async (data: PlannerFormValues) => {
-    setPlan(data);
-    console.log("Data: ", data);
-  };
 
   const nextStep = () => {
     setCurrentStep((prev) => prev + 1);
+    if (currentStep === steps.length - 1) {
+      titleChangeFunction("Review your plan");
+    }
   };
 
   const prevStep = () => {
@@ -44,7 +55,7 @@ export const PlannerForm = () => {
 
   return (
     <motion.form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(submitFunction)}
       className="flex flex-col gap-4 p-4"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -53,7 +64,7 @@ export const PlannerForm = () => {
       <div className="min-h-[12rem] flex flex-col justify-center">
         <AnimatePresence mode="wait">
           {currentStep < 3 ? (
-            <CustomRadiogroup
+            <CustomRadiogroup<PlannerFormValues>
               key={steps[currentStep].name}
               control={control}
               name={steps[currentStep].name as keyof PlannerFormValues}
@@ -61,14 +72,28 @@ export const PlannerForm = () => {
               defaultValue={(steps[currentStep] as RadioStep).defaultValue}
               error={errors[steps[currentStep].name] as FieldError | undefined}
             />
-          ) : (
-            <CustomTextArea
+          ) : currentStep === steps.length - 2 ? (
+            <CustomTextArea<PlannerFormValues>
               key="extras"
               name="extras"
               control={control}
               error={errors.extras}
               title={steps[currentStep].title}
             />
+          ) : (
+            <Card key="summary" className="flex flex-col gap-4 p-4">
+              <CardTitle className="text-2xl font-bold">
+                {plan?.objective ?? ""}
+              </CardTitle>
+              <CardContent className="flex flex-col gap-4">
+                {JSON.stringify(plan, null, 2)}
+              </CardContent>
+              <CardFooter className="flex flex-col gap-4">
+                <Button type="submit" className="text-lg p-4">
+                  Generate Plan
+                </Button>
+              </CardFooter>
+            </Card>
           )}
         </AnimatePresence>
       </div>
@@ -85,13 +110,9 @@ export const PlannerForm = () => {
           </Button>
         )}
 
-        {currentStep < steps.length - 1 ? (
+        {currentStep < steps.length - 1 && (
           <Button type="button" onClick={nextStep} className="text-lg p-4">
             Next
-          </Button>
-        ) : (
-          <Button type="submit" className="text-lg p-4">
-            Generate Plan
           </Button>
         )}
       </div>

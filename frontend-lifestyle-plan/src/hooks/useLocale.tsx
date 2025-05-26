@@ -1,15 +1,15 @@
 import { useState } from "react";
 import i18next from "@/lib/i18n";
 
-const SUPPORTED_LOCALES = ["en", "es"] as const;
-type Locale = (typeof SUPPORTED_LOCALES)[number];
-
+type Locale = "en" | "es";
 export const useLocale = () => {
-  const [locale, setLocale] = useState<Locale>(
-    () => i18next.language as Locale
-  );
+  const [locale, setLocale] = useState<Locale>(() => {
+    const currentLang = i18next.language;
+    return currentLang === "en" || currentLang === "es" ? currentLang : "en";
+  });
 
   const changeLocale = async (newLocale: Locale) => {
+    if (newLocale !== "en" && newLocale !== "es") return;
     await i18next.changeLanguage(newLocale);
     setLocale(newLocale);
   };
