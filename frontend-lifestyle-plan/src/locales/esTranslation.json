@@ -1,0 +1,14 @@
+{
+  "welcome": "Bienvenido",
+  "landingPage": {
+    "title": "Planifica tus comidas diarias sin estrés.",
+    "subtitle1": "Establece tus metas y ajusta tus comidas a tu estilo de vida.",
+    "subtitle2": "Provee retroalimentación y rastrea tu progreso."
+  },
+  "login": "Iniciar sesión",
+  "logout": "Cerrar sesión",
+  "nutrition": {
+    "title": "Plan Nutricional",
+    "submit": "Generar Plan"
+  }
+}

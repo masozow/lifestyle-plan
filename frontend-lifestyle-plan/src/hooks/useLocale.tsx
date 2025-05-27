@@ -1,18 +1,23 @@
 import { useState } from "react";
-import i18next from "@/lib/i18n";
+import i18next from "@/lib/i18n"; // usa la instancia ya configurada
+import { availableLocales, type LocaleCode } from "@/locales/localesTypes";
 
-type Locale = "en" | "es";
 export const useLocale = () => {
-  const [locale, setLocale] = useState<Locale>(() => {
-    const currentLang = i18next.language;
-    return currentLang === "en" || currentLang === "es" ? currentLang : "en";
-  });
+  const initial = i18next.resolvedLanguage || i18next.language;
+  const defaultLocale: LocaleCode =
+    initial in availableLocales ? (initial as LocaleCode) : "en";
 
-  const changeLocale = async (newLocale: Locale) => {
-    if (newLocale !== "en" && newLocale !== "es") return;
+  const [locale, setLocale] = useState<LocaleCode>(defaultLocale);
+
+  const changeLocale = async (newLocale: LocaleCode) => {
+    if (!(newLocale in availableLocales)) return;
     await i18next.changeLanguage(newLocale);
     setLocale(newLocale);
   };
 
-  return { locale, changeLocale };
+  return {
+    locale,
+    changeLocale,
+    currentLocaleName: availableLocales[locale],
+  };
 };

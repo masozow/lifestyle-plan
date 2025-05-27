@@ -1,5 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import LanguageDetector from "i18next-browser-languagedetector"; // 👈 importante
 import { z } from "zod";
 import { zodI18nMap } from "zod-i18n-map";
 
@@ -18,12 +19,12 @@ const uiEs = {
   logout: "Cerrar sesión",
 };
 
-
 i18n
+  .use(LanguageDetector) // 👈 habilita detección automática
   .use(initReactI18next)
   .init({
-    lng: "en", 
-    fallbackLng: "es",
+    fallbackLng: "en",
+    supportedLngs: ["en", "es"],
     debug: false,
     interpolation: { escapeValue: false },
     resources: {
@@ -36,8 +37,11 @@ i18n
         zod: zodEs,
       },
     },
+    detection: {
+      order: ["localStorage", "cookie", "navigator"],
+      caches: ["localStorage", "cookie"],
+    },
   });
-
 
 z.setErrorMap(zodI18nMap);
 

@@ -1,0 +1,14 @@
+{
+  "welcome": "Welcome",
+  "landingPage": {
+    "title": "Plan your daily meals with no stress.",
+    "subtitle1": "Set your goals and adjust your meals to fit your lifestyle.",
+    "subtitle2": "Provide feedback and track your progress."
+  },
+  "login": "Login",
+  "logout": "Logout",
+  "nutrition": {
+    "title": "Nutrition Plan",
+    "submit": "Generate Plan"
+  }
+}
