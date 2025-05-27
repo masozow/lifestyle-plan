@@ -1,12 +1,29 @@
 {
-  "welcome": "Welcome",
   "landingPage": {
     "title": "Plan your daily meals with no stress.",
     "subtitle1": "Set your goals and adjust your meals to fit your lifestyle.",
-    "subtitle2": "Provide feedback and track your progress."
+    "subtitle2": "Provide feedback and track your progress.",
+    "button": "Get started"
   },
-  "login": "Login",
-  "logout": "Logout",
+  "navBar": {
+    "languageMenu": "Language",
+    "login": "Login",
+    "logout": "Logout"
+  },
+  "plannerPage":{
+    "title": "What are your goals?",
+    "titleReview": "Review your plan"
+  },
+  "plannerForm": {
+    "buttons":{
+      "next": "Next",
+      "back": "Back"
+    },
+    "objective": "Goal",
+    "restriction": "Restriction",
+    "preference": "Preference",
+    "extras": "Extras"
+  },
   "nutrition": {
     "title": "Nutrition Plan",
     "submit": "Generate Plan"

@@ -6,21 +6,11 @@ import { zodI18nMap } from "zod-i18n-map";
 
 import zodEs from "zod-i18n-map/locales/es/zod.json";
 import zodEn from "zod-i18n-map/locales/en/zod.json";
-
-const uiEn = {
-  welcome: "Welcome",
-  login: "Login",
-  logout: "Logout",
-};
-
-const uiEs = {
-  welcome: "Bienvenido",
-  login: "Iniciar sesión",
-  logout: "Cerrar sesión",
-};
+import enTranslation from "@/locales/enTranslation.json";
+import esTranslation from "@/locales/esTranslation.json";
 
 i18n
-  .use(LanguageDetector) // 👈 habilita detección automática
+  .use(LanguageDetector) 
   .use(initReactI18next)
   .init({
     fallbackLng: "en",
@@ -29,11 +19,11 @@ i18n
     interpolation: { escapeValue: false },
     resources: {
       en: {
-        translation: uiEn,
+        translation: enTranslation,
         zod: zodEn,
       },
       es: {
-        translation: uiEs,
+        translation: esTranslation,
         zod: zodEs,
       },
     },

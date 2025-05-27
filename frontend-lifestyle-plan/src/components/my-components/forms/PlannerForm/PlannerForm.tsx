@@ -2,13 +2,13 @@ import { useForm, type FieldError } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { schema_plannerForm, type PlannerFormValues } from "@/schemas";
 import { steps } from "./helpers";
 import CustomRadiogroup from "../BaseForm/CustomRadiogroup";
 import CustomTextArea from "../BaseForm/CustomTextArea";
-// import { Card, CardContent } from "@/components/ui/card";
 import SummaryCard from "./SummaryCard";
+import { useTranslation } from "react-i18next";
 
 type Step = (typeof steps)[number];
 type RadioStep = Extract<Step, { options: readonly string[] }>;
@@ -32,6 +32,7 @@ export const PlannerForm = ({
   submitFunction,
   titleChangeFunction,
 }: Props) => {
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(0);
   const {
     control,
@@ -43,13 +44,20 @@ export const PlannerForm = ({
     defaultValues: getDefaultValues(steps),
   });
 
-  const nextStep = () => {
-    setCurrentStep((prev) => prev + 1);
-    if (currentStep === steps.length - 1) {
-      titleChangeFunction("Review your plan");
+  //Adding this effect just to ensure that the titleReview is
+  //changed when the user switches languages
+  useEffect(() => {
+    if (currentStep === steps.length) {
+      titleChangeFunction(t("plannerPage.titleReview"));
     }
-    console.log("Step: ", currentStep);
-    console.log("Step length: ", steps.length);
+  }, [currentStep, t, titleChangeFunction]);
+
+  const nextStep = () => {
+    const newStep = currentStep + 1;
+    setCurrentStep(newStep);
+    if (newStep === steps.length) {
+      titleChangeFunction(t("plannerPage.titleReview"));
+    }
   };
 
   const prevStep = () => {
@@ -98,7 +106,7 @@ export const PlannerForm = ({
             className="text-lg p-4"
             variant="outline"
           >
-            Back
+            {t("plannerForm.buttons.back")}
           </Button>
         )}
 
@@ -109,7 +117,7 @@ export const PlannerForm = ({
             className="text-lg p-4"
             disabled={Object.keys(errors).length > 0}
           >
-            Next
+            {t("plannerForm.buttons.next")}
           </Button>
         ) : (
           <Button type="submit" className="text-lg p-4">

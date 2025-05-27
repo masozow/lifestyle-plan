@@ -54,7 +54,7 @@ const LandingPage = () => {
         </motion.div>
         <div className="mx-auto lg:mx-0 ">
           <Button asChild className="p-8 text-2xl">
-            <Link to="/app">Get Started</Link>
+            <Link to="/app">{t("landingPage.button")}</Link>
           </Button>
         </div>
       </div>

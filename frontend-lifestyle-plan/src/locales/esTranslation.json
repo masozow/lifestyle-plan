@@ -3,12 +3,30 @@
   "landingPage": {
     "title": "Planifica tus comidas diarias sin estrés.",
     "subtitle1": "Establece tus metas y ajusta tus comidas a tu estilo de vida.",
-    "subtitle2": "Provee retroalimentación y rastrea tu progreso."
+    "subtitle2": "Provee retroalimentación y rastrea tu progreso.",
+    "button": "Iniciemos"
   },
-  "login": "Iniciar sesión",
-  "logout": "Cerrar sesión",
+  "navBar": {
+    "languageMenu": "Idioma",
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión"
+  },
+  "plannerPage":{
+    "title": "¿Qué quieres lograr?",
+    "titleReview": "Revisa tu plan"
+  },
+  "plannerForm": {
+    "buttons":{
+      "next": "Siguiente",
+      "back": "Volver"
+    },
+    "objective": "Goal",
+    "restriction": "Restriction",
+    "preference": "Preference",
+    "extras": "Extras"
+  },
   "nutrition": {
-    "title": "Plan Nutricional",
-    "submit": "Generar Plan"
+    "title": "Nutrition Plan",
+    "submit": "Generate Plan"
   }
 }
