@@ -7,10 +7,10 @@ import { useTranslation } from "react-i18next";
 const LandingPage = () => {
   const { t } = useTranslation();
   return (
-    <div className="container flex flex-col-reverse mx-auto p-8 lg:flex-row">
-      <div className="flex flex-col space-y-10 mb-44 m-10 lg:m-10 xl:m-20 lg:mt:16 lg:w-1/2 xl:mb-52">
+    <div className="container flex flex-col justify-center gap-12 pt-4 px-4 mx-auto sm:flex-row lg:px-40">
+      <div className="flex flex-col w-full m-2 lg:m-5 xl:m-10 lg:mt:16 md:w-1/2 lg:w-1/3 xl:w-1/2">
         <motion.h1
-          className="text-5xl font-bold text-center lg:text-6xl lg:max-w-md lg:text-left"
+          className="text-4xl font-bold text-center md:text-5xl lg:text-6xl lg:max-w-md sm:text-left"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ duration: 1, ease: "easeInOut" }}
@@ -19,7 +19,7 @@ const LandingPage = () => {
         </motion.h1>
         <motion.div className="h-[72px] relative overflow-hidden">
           <motion.p
-            className="text-2xl text-center text-gray-400 lg:max-w-md lg:text-left absolute w-full"
+            className="text-1xl md:text-2xl text-center text-gray-400 lg:max-w-md sm:text-left absolute w-full"
             initial={{ y: 0, opacity: 1 }}
             animate={{
               y: [0, -72, -72, 0, 0],
@@ -36,7 +36,7 @@ const LandingPage = () => {
           </motion.p>
 
           <motion.p
-            className="text-2xl text-center text-gray-400 lg:max-w-md lg:text-left absolute w-full"
+            className="text-1xl md:text-2xl text-center text-gray-400 lg:max-w-md sm:text-left absolute w-full"
             initial={{ y: 72, opacity: 0 }}
             animate={{
               y: [72, 0, 0, -72, -72],
@@ -52,13 +52,13 @@ const LandingPage = () => {
             {t("landingPage.subtitle2")}
           </motion.p>
         </motion.div>
-        <div className="mx-auto lg:mx-0 ">
-          <Button asChild className="p-8 text-2xl">
+        <div className="text-center ">
+          <Button asChild className="p-4 md:p-8 text-1xl md:text-2xl">
             <Link to="/app">{t("landingPage.button")}</Link>
           </Button>
         </div>
       </div>
-      <div className="mb-24 mx-auto md:w-180 md:px-10 lg:mb-0 lg:w-1/2">
+      <div className="hidden w-1/2 sm:block mb-24 md:mb-0 md:w-1/2 lg:w-2/3 md:mx-auto xl:w-1/2">
         <img
           src={landing_image}
           alt="woman cooking"
