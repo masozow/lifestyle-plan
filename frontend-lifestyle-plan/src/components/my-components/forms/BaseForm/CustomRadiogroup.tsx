@@ -7,15 +7,15 @@ import {
   type FieldError,
   type FieldValues,
   type Path,
-  type PathValue,
 } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 interface Props<T extends FieldValues> {
   control: Control<T>;
-  defaultValue: PathValue<T, Path<T>>;
-  options: readonly string[];
+  defaultValue: string;
+  options: { value: string; label: string }[]; // Now accepts value-label pairs
   name: Path<T>;
-  error?: FieldError | undefined; // Explicitly type as FieldError or undefined
+  error?: FieldError;
 }
 
 const CustomRadiogroup = <T extends FieldValues>({
@@ -25,6 +25,8 @@ const CustomRadiogroup = <T extends FieldValues>({
   name,
   error,
 }: Props<T>) => {
+  const { t } = useTranslation();
+
   return (
     <motion.div
       key={name.toString()}
@@ -36,21 +38,24 @@ const CustomRadiogroup = <T extends FieldValues>({
       <Controller
         name={name}
         control={control}
-        defaultValue={defaultValue}
+        rules={{ required: t("validation.required") || "Required" }} // Get message from locales
         render={({ field }) => (
           <RadioGroup
-            value={field.value as string}
+            value={field.value}
             onValueChange={field.onChange}
-            defaultValue={defaultValue as string}
+            defaultValue={defaultValue}
           >
-            {options.map((opt) => (
-              <div key={opt} className="flex items-center space-x-2">
-                <RadioGroupItem value={opt} id={`${name.toString()}-${opt}`} />
+            {options.map((option) => (
+              <div key={option.value} className="flex items-center space-x-2">
+                <RadioGroupItem
+                  value={option.value}
+                  id={`${name.toString()}-${option.value}`}
+                />
                 <Label
-                  className="capitalize cursor-pointer"
-                  htmlFor={`${name.toString()}-${opt}`}
+                  className="cursor-pointer"
+                  htmlFor={`${name.toString()}-${option.value}`}
                 >
-                  {opt}
+                  {option.label}
                 </Label>
               </div>
             ))}
@@ -61,4 +66,5 @@ const CustomRadiogroup = <T extends FieldValues>({
     </motion.div>
   );
 };
+
 export default CustomRadiogroup;

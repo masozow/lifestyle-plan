@@ -10,19 +10,38 @@
     "login": "Login",
     "logout": "Logout"
   },
-  "plannerPage":{
+  "plannerPage": {
     "title": "What are your goals?",
     "titleReview": "Review your plan"
   },
   "plannerForm": {
-    "buttons":{
+    "buttons": {
       "next": "Next",
       "back": "Back"
     },
-    "objective": "Goal",
+    "objective": "Objective",
     "restriction": "Restriction",
     "preference": "Preference",
-    "extras": "Extras"
+    "extras": "Extras",
+    "options": {
+      "objective": {
+        "lose-fat": "Lose fat",
+        "gain-muscle": "Gain muscle",
+        "maintain-weight": "Maintain weight"
+      },
+      "restriction": {
+        "none": "None",
+        "vegetarian": "Vegetarian",
+        "gluten-free": "Gluten-free",
+        "dairy-free": "Dairy-free"
+      },
+      "preference": {
+        "latin": "Latin",
+        "mediterranean": "Mediterranean",
+        "asian": "Asian",
+        "high-protein": "High protein"
+      }
+    }
   },
   "nutrition": {
     "title": "Nutrition Plan",

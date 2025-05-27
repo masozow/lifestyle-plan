@@ -1,25 +1,62 @@
-import { useForm, type FieldError } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { schema_plannerForm, type PlannerFormValues } from "@/schemas";
-import { steps } from "./helpers";
 import CustomRadiogroup from "../BaseForm/CustomRadiogroup";
 import CustomTextArea from "../BaseForm/CustomTextArea";
 import SummaryCard from "./SummaryCard";
 import { useTranslation } from "react-i18next";
 
-type Step = (typeof steps)[number];
-type RadioStep = Extract<Step, { options: readonly string[] }>;
+interface FormStep {
+  name: keyof PlannerFormValues;
+  title: string;
+  options?: { value: string; label: string }[];
+  defaultValue?: string;
+}
 
-const getDefaultValues = (steps: readonly Step[]): PlannerFormValues => {
-  return steps.reduce((acc, step) => {
-    if ("defaultValue" in step) {
-      return { ...acc, [step.name]: step.defaultValue };
-    }
-    return { ...acc, [step.name]: "" };
-  }, {} as PlannerFormValues);
+const usePlannerSteps = (): FormStep[] => {
+  const { t } = useTranslation();
+
+  const stepsData = t("plannerForm.options", { returnObjects: true }) as Record<
+    string,
+    Record<string, string>
+  >;
+
+  return [
+    {
+      name: "objective",
+      title: t("plannerForm.objective") || "Goal",
+      options: Object.entries(stepsData.objective).map(([value, label]) => ({
+        value,
+        label,
+      })),
+      defaultValue: "lose-fat",
+    },
+    {
+      name: "restriction",
+      title: t("plannerForm.restriction") || "Restriction",
+      options: Object.entries(stepsData.restriction).map(([value, label]) => ({
+        value,
+        label,
+      })),
+      defaultValue: "none",
+    },
+    {
+      name: "preference",
+      title: t("plannerForm.preference") || "Preference",
+      options: Object.entries(stepsData.preference).map(([value, label]) => ({
+        value,
+        label,
+      })),
+      defaultValue: "latin",
+    },
+    {
+      name: "extras",
+      title: t("plannerForm.extras") || "Extras",
+    },
+  ];
 };
 
 interface Props {
@@ -27,13 +64,25 @@ interface Props {
   titleChangeFunction: (title?: string) => void;
   plan?: PlannerFormValues | null;
 }
+
 export const PlannerForm = ({
   plan,
   submitFunction,
   titleChangeFunction,
 }: Props) => {
   const { t } = useTranslation();
+  const steps = usePlannerSteps();
   const [currentStep, setCurrentStep] = useState(0);
+
+  const getDefaultValues = (): PlannerFormValues => {
+    return steps.reduce((acc, step) => {
+      if (step.defaultValue) {
+        return { ...acc, [step.name]: step.defaultValue };
+      }
+      return { ...acc, [step.name]: "" };
+    }, {} as PlannerFormValues);
+  };
+
   const {
     control,
     handleSubmit,
@@ -41,16 +90,14 @@ export const PlannerForm = ({
   } = useForm<PlannerFormValues>({
     resolver: zodResolver(schema_plannerForm),
     mode: "onChange",
-    defaultValues: getDefaultValues(steps),
+    defaultValues: getDefaultValues(),
   });
 
-  //Adding this effect just to ensure that the titleReview is
-  //changed when the user switches languages
   useEffect(() => {
     if (currentStep === steps.length) {
       titleChangeFunction(t("plannerPage.titleReview"));
     }
-  }, [currentStep, t, titleChangeFunction]);
+  }, [currentStep, t, titleChangeFunction, steps.length]);
 
   const nextStep = () => {
     const newStep = currentStep + 1;
@@ -65,6 +112,12 @@ export const PlannerForm = ({
     setCurrentStep((prev) => prev - 1);
   };
 
+  const isRadioStep = (
+    step: FormStep
+  ): step is FormStep & { options: { value: string; label: string }[] } => {
+    return !!step.options;
+  };
+
   return (
     <motion.form
       onSubmit={handleSubmit(submitFunction)}
@@ -75,16 +128,18 @@ export const PlannerForm = ({
     >
       <div className="min-h-[12rem] flex flex-col justify-center">
         <AnimatePresence mode="wait">
-          {currentStep < 3 ? (
-            <CustomRadiogroup<PlannerFormValues>
-              key={steps[currentStep].name}
-              control={control}
-              name={steps[currentStep].name as keyof PlannerFormValues}
-              options={(steps[currentStep] as RadioStep).options}
-              defaultValue={(steps[currentStep] as RadioStep).defaultValue}
-              error={errors[steps[currentStep].name] as FieldError | undefined}
-            />
-          ) : currentStep === 3 ? (
+          {currentStep < steps.length - 1 ? (
+            isRadioStep(steps[currentStep]) && (
+              <CustomRadiogroup<PlannerFormValues>
+                key={steps[currentStep].name}
+                control={control}
+                name={steps[currentStep].name}
+                defaultValue={steps[currentStep].defaultValue || ""}
+                options={steps[currentStep].options}
+                error={errors[steps[currentStep].name]}
+              />
+            )
+          ) : currentStep === steps.length - 1 ? (
             <CustomTextArea<PlannerFormValues>
               key="extras"
               name="extras"
@@ -121,7 +176,7 @@ export const PlannerForm = ({
           </Button>
         ) : (
           <Button type="submit" className="text-lg p-4">
-            Generate Plan
+            {t("nutrition.submit")}
           </Button>
         )}
       </div>

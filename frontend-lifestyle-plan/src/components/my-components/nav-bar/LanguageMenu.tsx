@@ -16,7 +16,7 @@ const LanguageMenu = (): JSX.Element => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>
         <Button variant="ghost">
           {t("navBar.languageMenu")}
           {": "}

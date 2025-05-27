@@ -1,5 +1,4 @@
 {
-  "welcome": "Bienvenido",
   "landingPage": {
     "title": "Planifica tus comidas diarias sin estrés.",
     "subtitle1": "Establece tus metas y ajusta tus comidas a tu estilo de vida.",
@@ -11,22 +10,41 @@
     "login": "Iniciar sesión",
     "logout": "Cerrar sesión"
   },
-  "plannerPage":{
+  "plannerPage": {
     "title": "¿Qué quieres lograr?",
     "titleReview": "Revisa tu plan"
   },
   "plannerForm": {
-    "buttons":{
+    "buttons": {
       "next": "Siguiente",
       "back": "Volver"
     },
-    "objective": "Goal",
-    "restriction": "Restriction",
-    "preference": "Preference",
-    "extras": "Extras"
+    "objective": "Objetivo",
+    "restriction": "Restricción",
+    "preference": "Preferencia",
+    "extras": "Extras",
+    "options": {
+      "objective": {
+        "lose-fat": "Perder grasa",
+        "gain-muscle": "Ganar músculo",
+        "maintain-weight": "Mantener peso"
+      },
+      "restriction": {
+        "none": "Ninguna",
+        "vegetarian": "Vegetariano",
+        "gluten-free": "Sin gluten",
+        "dairy-free": "Sin lácteos"
+      },
+      "preference": {
+        "latin": "Latina",
+        "mediterranean": "Mediterránea",
+        "asian": "Asiática",
+        "high-protein": "Alta en proteína"
+      }
+    }
   },
   "nutrition": {
-    "title": "Nutrition Plan",
-    "submit": "Generate Plan"
+    "title": "Plan Nutricional",
+    "submit": "Generar Plan"
   }
 }
