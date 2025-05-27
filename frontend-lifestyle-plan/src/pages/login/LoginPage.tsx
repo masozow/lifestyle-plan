@@ -1,4 +1,4 @@
-import { LoginForm } from "@/components/login-form";
+import { LoginForm } from "@/components";
 import { Cherry } from "lucide-react";
 import landing_image from "../landing/landing_image.png";
 import { Link } from "react-router";

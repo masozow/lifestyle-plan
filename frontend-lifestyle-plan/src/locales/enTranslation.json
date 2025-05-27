@@ -1,0 +1,50 @@
+{
+  "landingPage": {
+    "title": "Plan your daily meals with no stress.",
+    "subtitle1": "Set your goals and adjust your meals to fit your lifestyle.",
+    "subtitle2": "Provide feedback and track your progress.",
+    "button": "Get started"
+  },
+  "navBar": {
+    "languageMenu": "Language",
+    "login": "Login",
+    "logout": "Logout"
+  },
+  "plannerPage": {
+    "title": "What are your goals?",
+    "titleReview": "Review your plan"
+  },
+  "plannerForm": {
+    "buttons": {
+      "next": "Next",
+      "back": "Back"
+    },
+    "objective": "Objective",
+    "restriction": "Restriction",
+    "preference": "Preference",
+    "extras": "Extras",
+    "options": {
+      "objective": {
+        "lose-fat": "Lose fat",
+        "gain-muscle": "Gain muscle",
+        "maintain-weight": "Maintain weight"
+      },
+      "restriction": {
+        "none": "None",
+        "vegetarian": "Vegetarian",
+        "gluten-free": "Gluten-free",
+        "dairy-free": "Dairy-free"
+      },
+      "preference": {
+        "latin": "Latin",
+        "mediterranean": "Mediterranean",
+        "asian": "Asian",
+        "high-protein": "High protein"
+      }
+    }
+  },
+  "nutrition": {
+    "title": "Nutrition Plan",
+    "submit": "Generate Plan"
+  }
+}

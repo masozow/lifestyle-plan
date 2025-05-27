@@ -3,7 +3,9 @@ import landing_image from "./landing_image.png";
 import { Button } from "@/components/ui/button";
 import "./LandingPage.module.css";
 import { motion } from "motion/react";
+import { useTranslation } from "react-i18next";
 const LandingPage = () => {
+  const { t } = useTranslation();
   return (
     <div className="container flex flex-col-reverse mx-auto p-8 lg:flex-row">
       <div className="flex flex-col space-y-10 mb-44 m-10 lg:m-10 xl:m-20 lg:mt:16 lg:w-1/2 xl:mb-52">
@@ -13,7 +15,7 @@ const LandingPage = () => {
           animate={{ scale: 1 }}
           transition={{ duration: 1, ease: "easeInOut" }}
         >
-          Plan your daily meals with no stress.
+          {t("landingPage.title")}
         </motion.h1>
         <motion.div className="h-[72px] relative overflow-hidden">
           <motion.p
@@ -30,7 +32,7 @@ const LandingPage = () => {
               delay: 4,
             }}
           >
-            Set your goals and adjust your meals to fit your lifestyle.
+            {t("landingPage.subtitle1")}
           </motion.p>
 
           <motion.p
@@ -47,12 +49,12 @@ const LandingPage = () => {
               delay: 4,
             }}
           >
-            Provide feedback and track your progress.
+            {t("landingPage.subtitle2")}
           </motion.p>
         </motion.div>
         <div className="mx-auto lg:mx-0 ">
           <Button asChild className="p-8 text-2xl">
-            <Link to="/">Get Started</Link>
+            <Link to="/app">{t("landingPage.button")}</Link>
           </Button>
         </div>
       </div>
