@@ -1,22 +1,22 @@
+import type { PlannerFormValues } from "@/schemas";
 import { useTranslation } from "react-i18next";
 
-interface FormStep {
-  name: string;
+export interface FormStep {
+  name: keyof PlannerFormValues;
   title: string;
   options?: { value: string; label: string }[];
   defaultValue?: string;
 }
 
-export const usePlannerSteps = () => {
+export const usePlannerSteps = (): FormStep[] => {
   const { t } = useTranslation();
 
-  // Get all steps data from translations
   const stepsData = t("plannerForm.options", { returnObjects: true }) as Record<
     string,
     Record<string, string>
   >;
 
-  const steps: FormStep[] = [
+  return [
     {
       name: "objective",
       title: t("plannerForm.objective") || "Goal",
@@ -49,6 +49,4 @@ export const usePlannerSteps = () => {
       title: t("plannerForm.extras") || "Extras",
     },
   ];
-
-  return steps;
 };
