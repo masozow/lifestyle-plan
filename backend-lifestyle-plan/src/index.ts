@@ -1,16 +1,16 @@
 import express from "express";
 import cors from "cors";
-import deepSeekRoutes from "./routes/deepSeek.route";
-
-
-
-
+import openaiRoutes from "./routes/openai.route.js";
+import testRoutes from "./routes/tests.route.js";
 const app = express();
+
+//middleware
 app.use(cors());
 app.use(express.json());
-app.use("/api/deepseek", deepSeekRoutes);
 
-
+//routes
+app.use("/api/deepseek", openaiRoutes);
+app.use("/api/test",testRoutes);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
@@ -18,4 +18,3 @@ app.listen(PORT, () => {
 });
 
 export default app;
-
