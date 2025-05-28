@@ -14,7 +14,9 @@ const SummaryCard = ({ data }: Props) => {
       <CardContent className="grid grid-cols-2 gap-2 overflow-auto text-wrap text-left">
         {Object.entries(data).map(([key, value]) => (
           <div key={key}>
-            <h1 className="font-bold capitalize text-1xl">{key}</h1>
+            <h1 className="font-bold capitalize text-1xl">
+              {t(`plannerForm.${key}`)}
+            </h1>
             <p
               className={cn(
                 "overflow-y-scroll max-h-[3rem]",
