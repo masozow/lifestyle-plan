@@ -1,4 +1,4 @@
-import insertLog from "./insertLog";
+import insertLog from "./insertLog.js";
 
 /**
  * Enum for error levels.

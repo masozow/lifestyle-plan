@@ -1,4 +1,4 @@
-import initDb from "./logDBconfig";
+import initDb from "./logDBconfig.js";
 
 /**
  * Inserts a log into the database.

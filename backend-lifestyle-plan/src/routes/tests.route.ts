@@ -3,6 +3,8 @@ import deepSeekController from "../controllers/deepSeek.controller.js";
 
 const router = express.Router();
 
-router.post("/sendPrompt", deepSeekController.sendPlanPrompt);
+router.get("/", (req,res) => {
+    res.send("ok");
+});
 
 export default router;
