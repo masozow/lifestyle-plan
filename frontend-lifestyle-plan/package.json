@@ -30,8 +30,9 @@
     "react-router": "7.6.0",
     "tailwind-merge": "3.3.0",
     "tailwindcss": "4.1.7",
-    "zod": "3.25.28",
-    "zod-i18n-map": "2.27.0"
+    "zod": "^3.25.28",
+    "zod-i18n-map": "2.27.0",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
     "@eslint/js": "9.25.0",

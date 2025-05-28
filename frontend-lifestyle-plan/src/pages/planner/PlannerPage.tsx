@@ -1,17 +1,17 @@
-// import GoalForm from "@/components/my-components/forms/GoalForm";
 import { PlannerForm } from "@/components";
 import type { PlannerFormValues } from "@/schemas";
-import { useState } from "react";
+import { usePlanStore } from "@/store";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const PlannerPage = () => {
-  const [plan, setPlan] = useState<PlannerFormValues | null>(null);
+  // const [plan, setPlan] = useState<PlannerFormValues | null>(null);
   const { t } = useTranslation();
   const [customTitle, setCustomTitle] = useState<string | undefined>();
-
+  const plan = usePlanStore((state) => state.plan);
+  const setPlan = usePlanStore((state) => state.setPlan);
   const onSubmit = async (data: PlannerFormValues) => {
     setPlan(data);
-    console.log("Data: ", data);
   };
 
   const handleFormTitleChange = (title?: string) => {
@@ -19,7 +19,9 @@ const PlannerPage = () => {
   };
 
   const formTitle = customTitle || t("plannerPage.title");
-
+  useEffect(() => {
+    console.log("Plan from store: ", plan);
+  }, [plan]);
   return (
     <div className="max-w-xl mx-auto pt-10 sm:pt-1">
       <h2 className="text-3xl font-bold tracking-wider mx-auto p-4">
