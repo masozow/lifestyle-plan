@@ -18,7 +18,8 @@ const SummaryCard = ({ data }: Props) => {
             <p
               className={cn(
                 "overflow-y-scroll max-h-[3rem]",
-                key.toLowerCase() === "extras" && "text-sm"
+                key.toLowerCase() === "extras" &&
+                  "text-sm border-1 border-dashed rounded-b-md"
               )}
             >
               {key.toLowerCase() === "extras"
