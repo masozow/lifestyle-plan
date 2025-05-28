@@ -72,7 +72,7 @@ export const PlannerForm = ({
   return (
     <motion.form
       onSubmit={handleSubmit(submitFunction)}
-      className="flex flex-col gap-4 p-4"
+      className="flex flex-col justify-between"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -104,7 +104,7 @@ export const PlannerForm = ({
         </AnimatePresence>
       </div>
 
-      <div className="flex gap-4 justify-end">
+      <div className="flex gap-4 justify-end text-right">
         {currentStep > 0 && (
           <Button
             type="button"

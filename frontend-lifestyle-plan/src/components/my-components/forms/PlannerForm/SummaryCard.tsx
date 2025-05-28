@@ -1,4 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 interface Props {
   data: {
@@ -14,7 +15,12 @@ const SummaryCard = ({ data }: Props) => {
         {Object.entries(data).map(([key, value]) => (
           <div key={key}>
             <h1 className="font-bold capitalize text-1xl">{key}</h1>
-            <p className="overflow-y-scroll max-h-[3rem]">
+            <p
+              className={cn(
+                "overflow-y-scroll max-h-[3rem]",
+                key.toLowerCase() === "extras" && "text-sm"
+              )}
+            >
               {key.toLowerCase() === "extras"
                 ? value
                 : t(`plannerForm.options.${key}.${value}`)}

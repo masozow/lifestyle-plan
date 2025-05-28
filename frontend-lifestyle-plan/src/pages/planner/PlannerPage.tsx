@@ -21,7 +21,7 @@ const PlannerPage = () => {
   const formTitle = customTitle || t("plannerPage.title");
 
   return (
-    <div className="max-w-xl mx-auto mt-4">
+    <div className="max-w-xl mx-auto pt-10 sm:pt-1">
       <h2 className="text-3xl font-bold tracking-wider mx-auto p-4">
         {formTitle}
       </h2>

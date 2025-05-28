@@ -53,7 +53,7 @@ const LandingPage = () => {
           </motion.p>
         </motion.div>
         <div className="text-center ">
-          <Button asChild className="p-4 md:p-8 text-1xl md:text-2xl">
+          <Button asChild className="mt-4 p-4 md:p-8 text-1xl md:text-2xl">
             <Link to="/app">{t("landingPage.button")}</Link>
           </Button>
         </div>
