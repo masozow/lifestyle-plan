@@ -1,0 +1,13 @@
+{
+  "weight": 70,
+  "height": 175,
+  "age": 30,
+  "waist": 85,
+  "neck": 40,
+  "hip": 95,
+  "gender": "female",
+  "objective": "lose-fat",
+  "restriction": "gluten-free",
+  "preference": "Mediterranean",
+  "extras": "Loves fast food"
+}
