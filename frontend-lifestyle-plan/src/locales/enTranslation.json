@@ -43,6 +43,29 @@
       }
     }
   },
+  "profileForm": {
+    "unitSystem": {
+      "title": "Measurement System",
+      "metric": "Metric (kg, cm)",
+      "imperial": "Imperial (lbs, inches)"
+    },
+    "gender": {
+      "title": "Gender",
+      "female": "Female",
+      "male": "Male"
+    },
+    "weight": "Weight",
+    "height": "Height",
+    "age": "Age",
+    "waist": "Waist Circumference",
+    "neck": "Neck Circumference",
+    "hip": "Hip Circumference",
+    "buttons": {
+      "back": "Back",
+      "next": "Next",
+      "submit": "Save Profile"
+    }
+  },
   "nutrition": {
     "title": "Nutrition Plan",
     "submit": "Generate Plan"
