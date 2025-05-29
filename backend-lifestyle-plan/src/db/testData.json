@@ -1,0 +1,405 @@
+{
+   "language":"es",
+   "daily_calorie_target":1700,
+   "macro_ratios":{
+      "protein":20,
+      "carbs":50,
+      "fat":30
+   },
+   "unit_system":"metric",
+   "units":{
+      "macro": {
+         "protein": "g",
+         "carbs": "g",
+         "fat": "g"
+      },
+      "portion": "g"
+   },
+   "weekly_plan":[
+      {
+         "day":"Lunes",
+         "meals":[
+            {
+               "meal":"Desayuno",
+               "food":"Avena con frutas y nueces",
+               "portion":300,
+               "macro":{
+                  "protein":20,
+                  "carbs":40,
+                  "fat":10
+               }
+            },
+            {
+               "meal":"Almuerzo",
+               "food":"Ensalada de atún con lechuga, tomate y aguacate",
+               "portion":400,
+               "macro":{
+                  "protein":35,
+                  "carbs":30,
+                  "fat":20
+               }
+            },
+            {
+               "meal":"Colación",
+               "food":"Fruta fresca con almendras",
+               "portion":150,
+               "macro":{
+                  "protein":8,
+                  "carbs":20,
+                  "fat":12
+               }
+            },
+            {
+               "meal":"Cena",
+               "food":"Pescado a la parrilla con ensalada de lechuga,\n               tomate y aguacate",
+               "portion":500,
+               "macro":{
+                  "protein":40,
+                  "carbs":30,
+                  "fat":25
+               }
+            },
+            {
+               "meal":"Colación nocturna",
+               "food":"Yogur griego y miel",
+               "portion":200,
+               "macro":{
+                  "protein":20,
+                  "carbs":30,
+                  "fat":10
+               }
+            }
+         ]
+      },
+      {
+         "day":"Martes",
+         "meals":[
+            {
+               "meal":"Desayuno",
+               "food":"Huevo revuelto con espinacas y tomate",
+               "portion":250,
+               "macro":{
+                  "protein":25,
+                  "carbs":20,
+                  "fat":15
+               }
+            },
+            {
+               "meal":"Almuerzo",
+               "food":"Sopa de lentejas con pan integral",
+               "portion":450,
+               "macro":{
+                  "protein":30,
+                  "carbs":40,
+                  "fat":20
+               }
+            },
+            {
+               "meal":"Colación",
+               "food":"Palitos de zanahoria con hummus",
+               "portion":100,
+               "macro":{
+                  "protein":5,
+                  "carbs":10,
+                  "fat":10
+               }
+            },
+            {
+               "meal":"Cena",
+               "food":"Pollo a la parrilla con ensalada de lechuga,\n               tomate y aguacate",
+               "portion":500,
+               "macro":{
+                  "protein":40,
+                  "carbs":30,
+                  "fat":25
+               }
+            },
+            {
+               "meal":"Colación nocturna",
+               "food":"Té verde con limón",
+               "portion":0,
+               "macro":{
+                  "protein":0,
+                  "carbs":0,
+                  "fat":0
+               }
+            }
+         ]
+      },
+      {
+         "day":"Miércoles",
+         "meals":[
+            {
+               "meal":"Desayuno",
+               "food":"Avena con plátano y miel",
+               "portion":350,
+               "macro":{
+                  "protein":25,
+                  "carbs":40,
+                  "fat":15
+               }
+            },
+            {
+               "meal":"Almuerzo",
+               "food":"Ensalada de pollo con lechuga,\n               tomate y aguacate",
+               "portion":450,
+               "macro":{
+                  "protein":35,
+                  "carbs":30,
+                  "fat":20
+               }
+            },
+            {
+               "meal":"Colación",
+               "food":"Manzana con almendras",
+               "portion":150,
+               "macro":{
+                  "protein":8,
+                  "carbs":20,
+                  "fat":12
+               }
+            },
+            {
+               "meal":"Cena",
+               "food":"Salmón a la parrilla con ensalada de lechuga,\n               tomate y aguacate",
+               "portion":500,
+               "macro":{
+                  "protein":40,
+                  "carbs":30,
+                  "fat":25
+               }
+            },
+            {
+               "meal":"Colación nocturna",
+               "food":"Yogur natural con fresa",
+               "portion":200,
+               "macro":{
+                  "protein":20,
+                  "carbs":30,
+                  "fat":10
+               }
+            }
+         ]
+      },
+      {
+         "day":"Jueves",
+         "meals":[
+            {
+               "meal":"Desayuno",
+               "food":"Huevo revuelto con champiñones",
+               "portion":250,
+               "macro":{
+                  "protein":25,
+                  "carbs":20,
+                  "fat":15
+               }
+            },
+            {
+               "meal":"Almuerzo",
+               "food":"Ensalada de garbanzos con lechuga,\n               tomate y aguacate",
+               "portion":450,
+               "macro":{
+                  "protein":30,
+                  "carbs":40,
+                  "fat":20
+               }
+            },
+            {
+               "meal":"Colación",
+               "food":"Palitos de apio con hummus",
+               "portion":100,
+               "macro":{
+                  "protein":5,
+                  "carbs":10,
+                  "fat":10
+               }
+            },
+            {
+               "meal":"Cena",
+               "food":"Pescado a la parrilla con ensalada de lechuga,\n               tomate y aguacate",
+               "portion":500,
+               "macro":{
+                  "protein":40,
+                  "carbs":30,
+                  "fat":25
+               }
+            },
+            {
+               "meal":"Colación nocturna",
+               "food":"Té verde con limón",
+               "portion":0,
+               "macro":{
+                  "protein":0,
+                  "carbs":0,
+                  "fat":0
+               }
+            }
+         ]
+      },
+      {
+         "day":"Viernes",
+         "meals":[
+            {
+               "meal":"Desayuno",
+               "food":"Avena con plátano y nueces",
+               "portion":350,
+               "macro":{
+                  "protein":25,
+                  "carbs":40,
+                  "fat":15
+               }
+            },
+            {
+               "meal":"Almuerzo",
+               "food":"Ensalada de atún con lechuga, tomate y aguacate",
+               "portion":450,
+               "macro":{
+                  "protein":35,
+                  "carbs":30,
+                  "fat":20
+               }
+            },
+            {
+               "meal":"Colación",
+               "food":"Fruta fresca con almendras",
+               "portion":150,
+               "macro":{
+                  "protein":8,
+                  "carbs":20,
+                  "fat":12
+               }
+            },
+            {
+               "meal":"Cena",
+               "food":"Pollo a la parrilla con ensalada de lechuga,\n               tomate y aguacate",
+               "portion":500,
+               "macro":{
+                  "protein":40,
+                  "carbs":30,
+                  "fat":25
+               }
+            },
+            {
+               "meal":"Colación nocturna",
+               "food":"Yogur griego con miel",
+               "portion":200,
+               "macro":{
+                  "protein":20,
+                  "carbs":30,
+                  "fat":10
+               }
+            }
+         ]
+      },
+      {
+         "day":"Sábado",
+         "meals":[
+            {
+               "meal":"Desayuno",
+               "food":"Huevo revuelto con espinacas y tomate",
+               "portion":250,
+               "macro":{
+                  "protein":25,
+                  "carbs":20,
+                  "fat":15
+               }
+            },
+            {
+               "meal":"Almuerzo",
+               "food":"Sopa de verduras con pan integral",
+               "portion":450,
+               "macro":{
+                  "protein":30,
+                  "carbs":40,
+                  "fat":20
+               }
+            },
+            {
+               "meal":"Colación",
+               "food":"Palitos de zanahoria con hummus",
+               "portion":100,
+               "macro":{
+                  "protein":5,
+                  "carbs":10,
+                  "fat":10
+               }
+            },
+            {
+               "meal":"Cena",
+               "food":"Pescado a la parrilla con ensalada de lechuga,\n               tomate y aguacate",
+               "portion":500,
+               "macro":{
+                  "protein":40,
+                  "carbs":30,
+                  "fat":25
+               }
+            },
+            {
+               "meal":"Colación nocturna",
+               "food":"Té verde con limón",
+               "portion":0,
+               "macro":{
+                  "protein":0,
+                  "carbs":0,
+                  "fat":0
+               }
+            }
+         ]
+      },
+      {
+         "day":"Domingo",
+         "meals":[
+            {
+               "meal":"Desayuno",
+               "food":"Avena con plátano y miel",
+               "portion":350,
+               "macro":{
+                  "protein":25,
+                  "carbs":40,
+                  "fat":15
+               }
+            },
+            {
+               "meal":"Almuerzo",
+               "food":"Ensalada de pollo con lechuga, tomate y aguacate",
+               "portion":450,
+               "macro":{
+                  "protein":35,
+                  "carbs":30,
+                  "fat":20
+               }
+            },
+            {
+               "meal":"Colación",
+               "food":"Manzana con almendras",
+               "portion":150,
+               "macro":{
+                  "protein":8,
+                  "carbs":20,
+                  "fat":12
+               }
+            },
+            {
+               "meal":"Cena",
+               "food":"Salmón a la parrilla con ensalada de lechuga,\n               tomate y aguacate",
+               "portion":500,
+               "macro":{
+                  "protein":40,
+                  "carbs":30,
+                  "fat":25
+               }
+            },
+            {
+               "meal":"Colación nocturna",
+               "food":"Yogur natural con fresa",
+               "portion":200,
+               "macro":{
+                  "protein":20,
+                  "carbs":30,
+                  "fat":10
+               }
+            }
+         ]
+      }
+   ]
+}

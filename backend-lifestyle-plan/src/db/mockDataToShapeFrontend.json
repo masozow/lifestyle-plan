@@ -1,202 +1,441 @@
 {
-    "daily_calorie_target": 1700,
-    "macro_ratios": {
-        "protein": 1.6,
-        "fat": 0.8
-    },
-    "weekly_plan": [
-        {
-            "day": "Monday",
-            "breakfast": {
-                "name": "Greek yogurt with nuts",
-                "calories": 350,
-                "carbs": 35,
-                "fat": 20
-            },
-            "lunch": {
-                "name": "Grilled chicken breast with quinoa and vegetables",
-                "calories": 400,
-                "carbs": 30,
-                "fat": 15
-            },
-            "dinner": {
-                "name": "Baked salmon with sweet potato and green beans",
-                "calories": 450,
-                "carbs": 40,
-                "fat": 20
-            },
-            "snack": {
-                "name": "Apple slices with almond butter",
-                "calories": 150,
-                "carbs": 20,
-                "fat": 8
-            }
-        },
-        {
-            "day": "Tuesday",
-            "breakfast": {
-                "name": "Avocado toast on gluten-free bread with scrambled eggs",
-                "calories": 300,
-                "carbs": 30,
-                "fat": 20
-            },
-            "lunch": {
-                "name": "Lentil soup with gluten-free bread",
-                "calories": 450,
-                "carbs": 60,
-                "fat": 15
-            },
-            "dinner": {
-                "name": "Grilled turkey burger on gluten-free bun with roasted vegetables",
-                "calories": 500,
-                "carbs": 40,
-                "fat": 25
-            },
-            "snack": {
-                "name": "Rice cakes with hummus",
-                "calories": 100,
-                "carbs": 20,
-                "fat": 10
-            }
-        },
-        {
-            "day": "Wednesday",
-            "breakfast": {
-                "name": "Smoothie bowl with banana, spinach, and almond milk topped with nuts",
-                "calories": 350,
-                "carbs": 40,
-                "fat": 20
-            },
-            "lunch": {
-                "name": "Grilled chicken breast with mixed greens and gluten-free wrap",
-                "calories": 400,
-                "carbs": 30,
-                "fat": 20
-            },
-            "dinner": {
-                "name": "Shrimp and vegetable stir-fry with brown rice",
-                "calories": 500,
-                "carbs": 60,
-                "fat": 25
-            },
-            "snack": {
-                "name": "Cottage cheese with cucumber slices",
-                "calories": 150,
-                "carbs": 5,
-                "fat": 5
-            }
-        },
-        {
-            "day": "Thursday",
-            "breakfast": {
-                "name": "Scrambled eggs with spinach and gluten-free toast",
-                "calories": 250,
-                "carbs": 20,
-                "fat": 15
-            },
-            "lunch": {
-                "name": "Grilled chicken Caesar salad",
-                "calories": 400,
-                "carbs": 10,
-                "fat": 30
-            },
-            "dinner": {
-                "name": "Baked cod with roasted asparagus and quinoa",
-                "calories": 400,
-                "carbs": 30,
-                "fat": 20
-            },
-            "snack": {
-                "name": "Hard-boiled egg and cherry tomatoes",
-                "calories": 100,
-                "carbs": 5,
-                "fat": 5
-            }
-        },
-        {
-            "day": "Friday",
-            "breakfast": {
-                "name": "Avocado and bacon omelette with gluten-free toast",
-                "calories": 300,
-                "carbs": 20,
-                "fat": 25
-            },
-            "lunch": {
-                "name": "Turkey and avocado wrap with mixed greens",
-                "calories": 500,
-                "carbs": 40,
-                "fat": 30
-            },
-            "dinner": {
-                "name": "Grilled shrimp skewers with quinoa and steamed broccoli",
-                "calories": 400,
-                "carbs": 40,
-                "fat": 20
-            },
-            "snack": {
-                "name": "Rice crackers with honey and almond butter",
-                "calories": 150,
-                "carbs": 30,
-                "fat": 10
-            }
-        },
-        {
-            "day": "Saturday",
-            "breakfast": {
-                "name": "Greek yogurt with mixed berries and granola",
-                "calories": 300,
-                "carbs": 40,
-                "fat": 15
-            },
-            "lunch": {
-                "name": "Grilled chicken breast with mixed greens and gluten-free wrap",
-                "calories": 400,
-                "carbs": 30,
-                "fat": 20
-            },
-            "dinner": {
-                "name": "Baked chicken thighs with roasted sweet potato and green beans",
-                "calories": 500,
-                "carbs": 60,
-                "fat": 25
-            },
-            "snack": {
-                "name": "Apple slices with peanut butter",
-                "calories": 150,
-                "carbs": 20,
-                "fat": 8
-            }
-        },
-        {
-            "day": "Sunday",
-            "breakfast": {
-                "name": "Omelette with mushrooms and spinach, served with gluten-free toast",
-                "calories": 250,
-                "carbs": 20,
-                "fat": 15
-            },
-            "lunch": {
-                "name": "Grilled turkey and cheese sandwich on gluten-free bread with carrot sticks",
-                "calories": 500,
-                "carbs": 40,
-                "fat": 30
-            },
-            "dinner": {
-                "name": "Shrimp and vegetable stir-fry with brown rice",
-                "calories": 500,
-                "carbs": 60,
-                "fat": 25
-            },
-            "snack": {
-                "name": "Cottage cheese with cucumber slices",
-                "calories": 150,
-                "carbs": 5,
-                "fat": 5
-            }
-        }
-    ],
-    "meta": {
-        "generated_at": "2025-05-28T22:51:25.665Z",
-        "model": "llama3-70b-8192"
-    }
-}
+   "language": "es",
+   "daily_calorie_target": 1800,
+   "macro_ratios": {
+     "protein": 0.25,
+     "carbs": 0.55,
+     "fat": 0.20
+   },
+   "unit_system": "metric",
+   "units": {
+     "macro": {
+       "protein": "g",
+       "carbs": "g",
+       "fat": "g",
+       "energy": "kcal"
+     },
+     "portion": "g"
+   },
+   "weekly_plan": [
+     {
+       "day": "Lunes",
+       "meals": [
+         {
+           "meal": "Desayuno",
+           "food": "Avena con frutas y frutos secos",
+           "portion": 300,
+           "macro": {
+             "protein": 20,
+             "carbs": 40,
+             "fat": 10,
+             "energy": 400
+           }
+         },
+         {
+           "meal": "Almuerzo",
+           "food": "Ensalada de pollo con aguacate y aceitunas",
+           "portion": 400,
+           "macro": {
+             "protein": 40,
+             "carbs": 20,
+             "fat": 20,
+             "energy": 500
+           }
+         },
+         {
+           "meal": "Cena",
+           "food": "Pescado al horno con quinoa y brócoli",
+           "portion": 500,
+           "macro": {
+             "protein": 50,
+             "carbs": 30,
+             "fat": 15,
+             "energy": 600
+           }
+         },
+         {
+           "meal": "Merienda 1",
+           "food": "Frutas frescas con yogur natural",
+           "portion": 200,
+           "macro": {
+             "protein": 15,
+             "carbs": 30,
+             "fat": 0,
+             "energy": 150
+           }
+         },
+         {
+           "meal": "Merienda 2",
+           "food": "Palitos de zanahoria con hummus",
+           "portion": 100,
+           "macro": {
+             "protein": 5,
+             "carbs": 10,
+             "fat": 10,
+             "energy": 100
+           }
+         }
+       ]
+     },
+     {
+       "day": "Martes",
+       "meals": [
+         {
+           "meal": "Desayuno",
+           "food": "Tortilla de espinacas con aguacate y pan integral",
+           "portion": 350,
+           "macro": {
+             "protein": 25,
+             "carbs": 30,
+             "fat": 15,
+             "energy": 450
+           }
+         },
+         {
+           "meal": "Almuerzo",
+           "food": "Pollo a la plancha con ensalada de lechuga y tomate",
+           "portion": 450,
+           "macro": {
+             "protein": 45,
+             "carbs": 10,
+             "fat": 20,
+             "energy": 550
+           }
+         },
+         {
+           "meal": "Cena",
+           "food": "Tofu al horno con arroz integral y guisantes",
+           "portion": 550,
+           "macro": {
+             "protein": 35,
+             "carbs": 40,
+             "fat": 15,
+             "energy": 650
+           }
+         },
+         {
+           "meal": "Merienda 1",
+           "food": "Batido de proteínas con plátano y almendras",
+           "portion": 250,
+           "macro": {
+             "protein": 20,
+             "carbs": 30,
+             "fat": 10,
+             "energy": 200
+           }
+         },
+         {
+           "meal": "Merienda 2",
+           "food": "Galletas integrales con mantequilla de maní",
+           "portion": 150,
+           "macro": {
+             "protein": 8,
+             "carbs": 20,
+             "fat": 16,
+             "energy": 220
+           }
+         }
+       ]
+     },
+     {
+       "day": "Miércoles",
+       "meals": [
+         {
+           "meal": "Desayuno",
+           "food": "Avena con frutas y nueces",
+           "portion": 300,
+           "macro": {
+             "protein": 15,
+             "carbs": 40,
+             "fat": 10,
+             "energy": 400
+           }
+         },
+         {
+           "meal": "Almuerzo",
+           "food": "Ensalada de atún con aguacate y lechuga",
+           "portion": 400,
+           "macro": {
+             "protein": 40,
+             "carbs": 10,
+             "fat": 20,
+             "energy": 500
+           }
+         },
+         {
+           "meal": "Cena",
+           "food": "Pollo al horno con patatas y zanahorias",
+           "portion": 500,
+           "macro": {
+             "protein": 50,
+             "carbs": 30,
+             "fat": 15,
+             "energy": 600
+           }
+         },
+         {
+           "meal": "Merienda 1",
+           "food": "Frutas frescas con queso fresco",
+           "portion": 200,
+           "macro": {
+             "protein": 15,
+             "carbs": 30,
+             "fat": 10,
+             "energy": 150
+           }
+         },
+         {
+           "meal": "Merienda 2",
+           "food": "Palitos de pepino con hummus",
+           "portion": 100,
+           "macro": {
+             "protein": 5,
+             "carbs": 10,
+             "fat": 10,
+             "energy": 100
+           }
+         }
+       ]
+     },
+     {
+       "day": "Jueves",
+       "meals": [
+         {
+           "meal": "Desayuno",
+           "food": "Tortilla de espinacas con aguacate y pan integral",
+           "portion": 350,
+           "macro": {
+             "protein": 25,
+             "carbs": 30,
+             "fat": 15,
+             "energy": 450
+           }
+         },
+         {
+           "meal": "Almuerzo",
+           "food": "Pollo a la plancha con ensalada de lechuga y tomate",
+           "portion": 450,
+           "macro": {
+             "protein": 45,
+             "carbs": 10,
+             "fat": 20,
+             "energy": 550
+           }
+         },
+         {
+           "meal": "Cena",
+           "food": "Pescado al horno con quinoa y brócoli",
+           "portion": 500,
+           "macro": {
+             "protein": 50,
+             "carbs": 30,
+             "fat": 15,
+             "energy": 600
+           }
+         },
+         {
+           "meal": "Merienda 1",
+           "food": "Batido de proteínas con plátano y almendras",
+           "portion": 250,
+           "macro": {
+             "protein": 20,
+             "carbs": 30,
+             "fat": 10,
+             "energy": 200
+           }
+         },
+         {
+           "meal": "Merienda 2",
+           "food": "Galletas integrales con mantequilla de maní",
+           "portion": 150,
+           "macro": {
+             "protein": 8,
+             "carbs": 20,
+             "fat": 16,
+             "energy": 220
+           }
+         }
+       ]
+     },
+     {
+       "day": "Viernes",
+       "meals": [
+         {
+           "meal": "Desayuno",
+           "food": "Avena con frutas y nueces",
+           "portion": 300,
+           "macro": {
+             "protein": 15,
+             "carbs": 40,
+             "fat": 10,
+             "energy": 400
+           }
+         },
+         {
+           "meal": "Almuerzo",
+           "food": "Ensalada de pollo con aguacate y aceitunas",
+           "portion": 400,
+           "macro": {
+             "protein": 40,
+             "carbs": 20,
+             "fat": 20,
+             "energy": 500
+           }
+         },
+         {
+           "meal": "Cena",
+           "food": "Tofu al horno con arroz integral y guisantes",
+           "portion": 550,
+           "macro": {
+             "protein": 35,
+             "carbs": 40,
+             "fat": 15,
+             "energy": 650
+           }
+         },
+         {
+           "meal": "Merienda 1",
+           "food": "Frutas frescas con yogur natural",
+           "portion": 200,
+           "macro": {
+             "protein": 15,
+             "carbs": 30,
+             "fat": 0,
+             "energy": 150
+           }
+         },
+         {
+           "meal": "Merienda 2",
+           "food": "Palitos de zanahoria con hummus",
+           "portion": 100,
+           "macro": {
+             "protein": 5,
+             "carbs": 10,
+             "fat": 10,
+             "energy": 100
+           }
+         }
+       ]
+     },
+     {
+       "day": "Sábado",
+       "meals": [
+         {
+           "meal": "Desayuno",
+           "food": "Tortilla de espinacas con aguacate y pan integral",
+           "portion": 350,
+           "macro": {
+             "protein": 25,
+             "carbs": 30,
+             "fat": 15,
+             "energy": 450
+           }
+         },
+         {
+           "meal": "Almuerzo",
+           "food": "Pollo a la plancha con ensalada de lechuga y tomate",
+           "portion": 450,
+           "macro": {
+             "protein": 45,
+             "carbs": 10,
+             "fat": 20,
+             "energy": 550
+           }
+         },
+         {
+           "meal": "Cena",
+           "food": "Pescado al horno con quinoa y brócoli",
+           "portion": 500,
+           "macro": {
+             "protein": 50,
+             "carbs": 30,
+             "fat": 15,
+             "energy": 600
+           }
+         },
+         {
+           "meal": "Merienda 1",
+           "food": "Batido de proteínas con plátano y almendras",
+           "portion": 250,
+           "macro": {
+             "protein": 20,
+             "carbs": 30,
+             "fat": 10,
+             "energy": 200
+           }
+         },
+         {
+           "meal": "Merienda 2",
+           "food": "Galletas integrales con mantequilla de maní",
+           "portion": 150,
+           "macro": {
+             "protein": 8,
+             "carbs": 20,
+             "fat": 16,
+             "energy": 220
+           }
+         }
+       ]
+     },
+     {
+       "day": "Domingo",
+       "meals": [
+         {
+           "meal": "Desayuno",
+           "food": "Avena con frutas y nueces",
+           "portion": 300,
+           "macro": {
+             "protein": 15,
+             "carbs": 40,
+             "fat": 10,
+             "energy": 400
+           }
+         },
+         {
+           "meal": "Almuerzo",
+           "food": "Ensalada de pollo con aguacate y aceitunas",
+           "portion": 400,
+           "macro": {
+             "protein": 40,
+             "carbs": 20,
+             "fat": 20,
+             "energy": 500
+           }
+         },
+         {
+           "meal": "Cena",
+           "food": "Tofu al horno con arroz integral y guisantes",
+           "portion": 550,
+           "macro": {
+             "protein": 35,
+             "carbs": 40,
+             "fat": 15,
+             "energy": 650
+           }
+         },
+         {
+           "meal": "Merienda 1",
+           "food": "Frutas frescas con yogur natural",
+           "portion": 200,
+           "macro": {
+             "protein": 15,
+             "carbs": 30,
+             "fat": 0,
+             "energy": 150
+           }
+         },
+         {
+           "meal": "Merienda 2",
+           "food": "Palitos de zanahoria con hummus",
+           "portion": 100,
+           "macro": {
+             "protein": 5,
+             "carbs": 10,
+             "fat": 10,
+             "energy": 100
+           }
+         }
+       ]
+     }
+   ]
+ }

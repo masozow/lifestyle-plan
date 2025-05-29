@@ -1,13 +1,16 @@
 import openai from "../config/openai.js";
 import { Request, Response } from 'express';
-import { prompt } from "../helpers/prompt.js";
-
+import { prompt } from "../helpers/openAI/prompt.js";
+import { getCompletion } from "../helpers/openAI/completion.js";
+import mockDataToShapeFrontend  from '../db/mockDataToShapeFrontend.json' with { type: 'json' };;
 const sendPlanPrompt = async (req: Request, res: Response) => {
   const { 
     objective, 
     restriction, 
     preference, 
     extras,
+    language,
+    unitSystem,
     weight,
     height,
     age,
@@ -17,25 +20,18 @@ const sendPlanPrompt = async (req: Request, res: Response) => {
     gender
   } = req.body;
 
-  if (!weight || !height || !age || !waist || !neck || !gender || !objective) {
-    return res.status(400).json({ 
+  if (!unitSystem||!language||!weight || !height || !age || !waist || !neck || !gender || !objective) {
+    res.status(400).json({ 
       error: "Missing required fields" 
     });
+    return;
   }
 
   try {
-    // Get raw text response first (workaround for Groq's strict JSON validation)
-    const completion = await openai.chat.completions.create({
-      model: "llama3-70b-8192",
-      messages: [
-        { 
-          role: "system", 
-          content: `You are a nutritionist AI that creates detailed meal plans.
-                   Respond with PURE JSON only, no commentary or markdown.` 
-        },
-        { 
-          role: "user", 
-          content: prompt(
+    const model="llama-3.3-70b-versatile";
+    const pr = prompt(
+            unitSystem,
+            language,
             weight,
             height,
             age,
@@ -47,43 +43,40 @@ const sendPlanPrompt = async (req: Request, res: Response) => {
             restriction,
             preference,
             extras
-          )
-        }
-      ],
-      temperature: 0.5,
-      max_tokens: 2000
-    });
-
-    // Clean and parse the response
-    let responseText = completion.choices[0].message.content;
-    responseText = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
-    
-    const mealPlan = JSON.parse(responseText);
+          );
+    const completion = await getCompletion(
+      model,
+      "system",
+      `You are a nutritionist AI that creates detailed meal plans. 
+       Respond with PURE JSON only, no commentary or markdown.`,
+      "user",
+      pr,
+      0.76,
+      4290
+    );
+    const mockCompletion=mockDataToShapeFrontend;
+    const mealPlan = JSON.parse(completion);
 
     if (!mealPlan.daily_calorie_target || !mealPlan.weekly_plan) {
       throw new Error("Incomplete meal plan structure");
     }
 
-    return res.json({
+    res.json({
       ...mealPlan,
       meta: {
         generated_at: new Date().toISOString(),
-        model: "llama3-70b-8192"
+        model: model
       }
     });
-
   } catch (error) {
     console.error("Error:", error);
-    return res.status(500).json({ 
+    res.status(500).json({ 
       error: "Meal plan generation failed",
       details: error.message
     });
   }
 };
 
-// Keep your original export style
-const openaiController = {
+export const OpenAI = {
   sendPlanPrompt
 };
-
-export default openaiController;
