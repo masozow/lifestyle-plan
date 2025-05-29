@@ -1,6 +1,6 @@
-export const saveToServer = async <T>(url: string, data: T): Promise<any> => {
+export const saveToServer = async <T>(url: string, method: string, data: T): Promise<any> => {
   const response = await fetch(url, {
-    method: "POST",
+    method: method,
     headers: {
       "Content-Type": "application/json",
     },

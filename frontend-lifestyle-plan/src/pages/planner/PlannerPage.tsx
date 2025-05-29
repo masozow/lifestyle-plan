@@ -1,7 +1,7 @@
 import { PlannerForm } from "@/components";
 import type { PlannerFormValues } from "@/schemas";
 import { usePlanStore } from "@/store";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const PlannerPage = () => {
@@ -19,9 +19,10 @@ const PlannerPage = () => {
   };
 
   const formTitle = customTitle || t("plannerPage.title");
-  useEffect(() => {
-    console.log("Plan from store: ", plan);
-  }, [plan]);
+  console.log("Plan from store: ", plan);
+  // useEffect(() => {
+  //   console.log("Plan from store: ", plan);
+  // }, [plan]);
   return (
     <div className="max-w-xl mx-auto pt-10 sm:pt-1">
       <h2 className="text-3xl font-bold tracking-wider mx-auto p-4">
