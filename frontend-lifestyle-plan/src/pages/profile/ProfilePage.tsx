@@ -1,7 +1,13 @@
+import { ProfileForm } from "@/components";
+
 interface Props {}
 
 const ProfilePage = (props: Props) => {
-  return <div>Profile</div>;
+  return (
+    <div>
+      <ProfileForm />
+    </div>
+  );
 };
 
 export default ProfilePage;

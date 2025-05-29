@@ -3,3 +3,8 @@ export * from "./my-components/forms/LoginForm.tsx";
 export * from "./my-components/nav-bar/NavBar.tsx";
 export * from "./my-components/forms/PlannerForm/SummaryCard.tsx";
 export * from "./my-components/nav-bar/LanguageMenu.tsx";
+export * from "./my-components/forms/ProfileForm/ProfileForm.tsx";
+export * from "./my-components/forms/BaseForm/CustomNumberInput.tsx";
+export * from "./my-components/forms/BaseForm/CustomRadiogroup.tsx";
+export * from "./my-components/forms/BaseForm/CustomTextArea.tsx";
+export * from "./my-components/forms/BaseForm/CustomInput.tsx";

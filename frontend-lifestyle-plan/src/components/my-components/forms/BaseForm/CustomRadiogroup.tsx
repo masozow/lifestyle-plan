@@ -18,7 +18,7 @@ interface Props<T extends FieldValues> {
   error?: FieldError;
 }
 
-const CustomRadiogroup = <T extends FieldValues>({
+export const CustomRadiogroup = <T extends FieldValues>({
   control,
   defaultValue,
   options,
@@ -66,5 +66,3 @@ const CustomRadiogroup = <T extends FieldValues>({
     </motion.div>
   );
 };
-
-export default CustomRadiogroup;
