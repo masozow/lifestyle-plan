@@ -10,6 +10,10 @@
     "login": "Iniciar sesión",
     "logout": "Cerrar sesión"
   },
+  "summaryCard":{
+    "title": "Resumen",
+    "noData": "Sin datos"
+  },
   "plannerPage": {
     "title": "¿Qué quieres lograr?",
     "titleReview": "Revisa tu plan"
@@ -17,7 +21,8 @@
   "plannerForm": {
     "buttons": {
       "next": "Siguiente",
-      "back": "Volver"
+      "back": "Volver",
+      "submit":"Generar Plan"
     },
     "objective": "Objetivo",
     "restriction": "Restricción",

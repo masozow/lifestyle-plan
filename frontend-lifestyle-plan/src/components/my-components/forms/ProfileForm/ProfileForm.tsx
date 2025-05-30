@@ -14,30 +14,32 @@ interface Props {
   submitFunction: (data: ProfileFormValues) => void;
   titleChangeFunction: (title?: string) => void;
   initialValues?: Partial<ProfileFormValues>;
-  profile?: ProfileFormValues | null;
+  profile: ProfileFormValues | null;
 }
 
 export const ProfileForm = ({
   profile,
-  submitFunction: onSubmit,
+  submitFunction,
   titleChangeFunction,
   initialValues,
 }: Props) => {
   const { t } = useTranslation();
-  const { steps } = useProfileSteps();
+  const { steps, getDefaultValues } = useProfileSteps();
+  const defaultValues = getDefaultValues();
   const [currentStep, setCurrentStep] = useState(0);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   const {
     control,
     handleSubmit,
     watch,
-    formState: { errors },
+    formState: { errors, touchedFields, isValid },
+    trigger,
   } = useForm<ProfileFormValues>({
     resolver: zodResolver(schema_profileForm),
     mode: "onChange",
     defaultValues: {
-      unitSystem: "metric",
-      gender: "female",
+      ...defaultValues,
       ...initialValues,
     },
   });
@@ -49,7 +51,7 @@ export const ProfileForm = ({
     if (field === "weight") return unitSystem === "metric" ? "kg" : "lbs";
     if (field === "height") return unitSystem === "metric" ? "cm" : "inches";
     if (field === "age") return "";
-    return unitSystem === "metric" ? "cm" : "inches"; // For waist, neck, hip
+    return unitSystem === "metric" ? "cm" : "inches";
   };
 
   useEffect(() => {
@@ -57,21 +59,35 @@ export const ProfileForm = ({
       titleChangeFunction(t("profilePage.titleReview"));
     }
   }, [currentStep, t, titleChangeFunction, steps.length]);
+  const isStepValid = async () => {
+    const currentField = steps[currentStep].name;
+    await trigger(currentField as keyof ProfileFormValues);
+    return !errors[currentField as keyof ProfileFormValues];
+  };
+
   const nextStep = () => {
-    const newStep = currentStep + 1;
-    setCurrentStep(newStep);
-    if (newStep === steps.length) {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep((prev) => prev + 1);
+    } else {
+      setIsCompleted(true);
       titleChangeFunction(t("profilePage.titleReview"));
     }
   };
+  const handleNext = async () => {
+    if (await isStepValid()) {
+      nextStep();
+    }
+  };
+
   const prevStep = () => {
     titleChangeFunction();
     setCurrentStep((prev) => prev - 1);
+    setIsCompleted(false);
   };
 
   return (
     <motion.form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(submitFunction)}
       className="flex flex-col justify-between gap-6"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -88,8 +104,12 @@ export const ProfileForm = ({
               options={steps[currentStep].options || []}
               error={errors[steps[currentStep].name as keyof ProfileFormValues]}
             />
-          ) : currentStep < steps.length - 1 ? (
-            !(gender === "male" && steps[currentStep].name === "hips") && (
+          ) : (
+            !(
+              gender === "male" &&
+              steps[currentStep].name === "hip" &&
+              !isCompleted
+            ) && (
               <CustomNumberInput<ProfileFormValues>
                 key={steps[currentStep].name}
                 control={control}
@@ -101,8 +121,12 @@ export const ProfileForm = ({
                 }
               />
             )
-          ) : (
-            <SummaryCard key="summary" data={profile as ProfileFormValues} />
+          )}
+          {isCompleted && (
+            <SummaryCard<ProfileFormValues>
+              data={profile ?? null}
+              translationPrefix="profileForm"
+            />
           )}
         </AnimatePresence>
       </div>
@@ -119,10 +143,10 @@ export const ProfileForm = ({
           </Button>
         )}
 
-        {currentStep < steps.length - 1 ? (
+        {!isCompleted ? (
           <Button
             type="button"
-            onClick={nextStep}
+            onClick={handleNext}
             className="text-lg p-4"
             disabled={
               !!errors[steps[currentStep].name as keyof ProfileFormValues]
@@ -134,7 +158,7 @@ export const ProfileForm = ({
           <Button
             type="submit"
             className={cn("text-lg p-4", errors && "cursor-not-allowed")}
-            disabled={!!errors}
+            disabled={Object.keys(errors).length > 0}
           >
             {t("profileForm.buttons.submit")}
           </Button>

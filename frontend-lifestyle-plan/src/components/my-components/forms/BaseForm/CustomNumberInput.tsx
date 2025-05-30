@@ -1,7 +1,7 @@
-// NumberInput.tsx
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
+import { useState } from "react";
 import {
   Controller,
   type Control,
@@ -25,6 +25,7 @@ export const CustomNumberInput = <T extends FieldValues>({
   error,
   unit,
 }: Props<T>) => {
+  const [isTouched, setIsTouched] = useState(false);
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -42,8 +43,17 @@ export const CustomNumberInput = <T extends FieldValues>({
         render={({ field }) => (
           <Input
             {...field}
+            id={name.toString()}
             type="number"
-            onChange={(e) => field.onChange(Number(e.target.value))}
+            value={field.value ?? ""}
+            onChange={(e) => {
+              const value = e.target.value;
+              field.onChange(value === "" ? undefined : Number(value));
+            }}
+            onBlur={() => {
+              field.onBlur();
+              setIsTouched(true);
+            }}
           />
         )}
       />

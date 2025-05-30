@@ -24,8 +24,9 @@ export const PlannerForm = ({
 }: Props) => {
   const { t } = useTranslation();
   const { steps, getDefaultValues } = usePlannerSteps();
-  const [currentStep, setCurrentStep] = useState(0);
   const defaultValues = getDefaultValues();
+  const [currentStep, setCurrentStep] = useState(0);
+
   const {
     control,
     handleSubmit,
@@ -51,7 +52,7 @@ export const PlannerForm = ({
       setCurrentStep((prev) => prev + 1);
     } else {
       setIsCompleted(true);
-      titleChangeFunction(t("profilePage.titleReview"));
+      titleChangeFunction(t("plannerPage.titleReview"));
     }
   };
 
@@ -92,7 +93,10 @@ export const PlannerForm = ({
             )
           )}
           {isCompleted && (
-            <SummaryCard key="summary" data={plan as PlannerFormValues} />
+            <SummaryCard<PlannerFormValues>
+              data={plan ?? null}
+              translationPrefix="plannerForm"
+            />
           )}
         </AnimatePresence>
       </div>
@@ -120,7 +124,7 @@ export const PlannerForm = ({
           </Button>
         ) : (
           <Button type="submit" className="text-lg p-4">
-            {t("nutrition.submit")}
+            {t("plannerForm.buttons.submit")}
           </Button>
         )}
       </div>
