@@ -43,6 +43,33 @@
       }
     }
   },
+  "profilePage": {
+    "title": "Completa tu perfil",
+    "titleReview": "Revisa tu perfil"
+  },
+  "profileForm": {
+    "unitSystem": {
+      "title": "Sistema de Medidas",
+      "metric": "Métrico (kg, cm)",
+      "imperial": "Imperial (lbs, pulgadas)"
+    },
+    "gender": {
+      "title": "Género",
+      "female": "Femenino",
+      "male": "Masculino"
+    },
+    "weight": "Peso",
+    "height": "Estatura",
+    "age": "Edad",
+    "waist": "Circunferencia de cintura",
+    "neck": "Circunferencia de cuello",
+    "hip": "Circunferencia de cadera",
+    "buttons": {
+      "back": "Volver",
+      "next": "Siguiente",
+      "submit": "Guardar Perfil"
+    }
+  },
   "nutrition": {
     "title": "Plan Nutricional",
     "submit": "Generar Plan"

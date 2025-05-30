@@ -8,11 +8,16 @@ import { CustomRadiogroup, CustomNumberInput } from "@/components";
 import { useTranslation } from "react-i18next";
 
 interface Props {
-  onSubmit: (data: ProfileFormValues) => void;
+  submitFunction: (data: ProfileFormValues) => void;
   initialValues?: Partial<ProfileFormValues>;
+  plan?: ProfileFormValues | null;
 }
 
-export const ProfileForm = ({ onSubmit, initialValues }: Props) => {
+export const ProfileForm = ({
+  plan,
+  submitFunction: onSubmit,
+  initialValues,
+}: Props) => {
   const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -91,6 +96,7 @@ export const ProfileForm = ({ onSubmit, initialValues }: Props) => {
   const getUnit = (field: string) => {
     if (field === "weight") return unitSystem === "metric" ? "kg" : "lbs";
     if (field === "height") return unitSystem === "metric" ? "cm" : "inches";
+    if (field === "age") return "";
     return "cm"; // For waist, neck, hip
   };
 
@@ -137,7 +143,7 @@ export const ProfileForm = ({ onSubmit, initialValues }: Props) => {
             className="text-lg p-4"
             variant="outline"
           >
-            {t("form.buttons.back")}
+            {t("profileForm.buttons.back")}
           </Button>
         )}
 
@@ -150,11 +156,11 @@ export const ProfileForm = ({ onSubmit, initialValues }: Props) => {
               !!errors[steps[currentStep].name as keyof ProfileFormValues]
             }
           >
-            {t("form.buttons.next")}
+            {t("profileForm.buttons.next")}
           </Button>
         ) : (
           <Button type="submit" className="text-lg p-4">
-            {t("form.buttons.submit")}
+            {t("profileForm.buttons.submit")}
           </Button>
         )}
       </div>

@@ -43,6 +43,10 @@
       }
     }
   },
+  "profilePage": {
+    "title": "Complete your profile",
+    "titleReview": "Review your profile"
+  },
   "profileForm": {
     "unitSystem": {
       "title": "Measurement System",
