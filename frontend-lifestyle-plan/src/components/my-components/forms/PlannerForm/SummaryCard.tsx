@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 interface Props {
   data: {
-    [key: string]: string;
+    [key: string]: any;
   };
 }
 

@@ -2,78 +2,30 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { schema_profileForm, type ProfileFormValues } from "@/schemas";
 import { CustomRadiogroup, CustomNumberInput } from "@/components";
 import { useTranslation } from "react-i18next";
+import { cn } from "@/lib/utils";
+import SummaryCard from "../PlannerForm/SummaryCard";
+import { useProfileSteps } from "@/hooks";
 
 interface Props {
   submitFunction: (data: ProfileFormValues) => void;
+  titleChangeFunction: (title?: string) => void;
   initialValues?: Partial<ProfileFormValues>;
-  plan?: ProfileFormValues | null;
+  profile?: ProfileFormValues | null;
 }
 
 export const ProfileForm = ({
-  plan,
+  profile,
   submitFunction: onSubmit,
+  titleChangeFunction,
   initialValues,
 }: Props) => {
   const { t } = useTranslation();
+  const { steps } = useProfileSteps();
   const [currentStep, setCurrentStep] = useState(0);
-
-  const steps = [
-    {
-      name: "unitSystem",
-      title: t("profileForm.unitSystem.title"),
-      options: [
-        { value: "metric", label: t("profileForm.unitSystem.metric") },
-        { value: "imperial", label: t("profileForm.unitSystem.imperial") },
-      ],
-      defaultValue: "metric",
-      type: "radio",
-    },
-    {
-      name: "gender",
-      title: t("profileForm.gender.title"),
-      options: [
-        { value: "female", label: t("profileForm.gender.female") },
-        { value: "male", label: t("profileForm.gender.male") },
-      ],
-      defaultValue: "female",
-      type: "radio",
-    },
-    {
-      name: "weight",
-      title: t("profileForm.weight"),
-      type: "number",
-    },
-    {
-      name: "height",
-      title: t("profileForm.height"),
-      type: "number",
-    },
-    {
-      name: "age",
-      title: t("profileForm.age"),
-      type: "number",
-    },
-    {
-      name: "waist",
-      title: t("profileForm.waist"),
-      type: "number",
-    },
-    {
-      name: "neck",
-      title: t("profileForm.neck"),
-      type: "number",
-    },
-    {
-      name: "hip",
-      title: t("profileForm.hip"),
-      type: "number",
-      optional: true,
-    },
-  ];
 
   const {
     control,
@@ -91,17 +43,31 @@ export const ProfileForm = ({
   });
 
   const unitSystem = watch("unitSystem");
-  //   const gender = watch("gender");
+  const gender = watch("gender");
 
   const getUnit = (field: string) => {
     if (field === "weight") return unitSystem === "metric" ? "kg" : "lbs";
     if (field === "height") return unitSystem === "metric" ? "cm" : "inches";
     if (field === "age") return "";
-    return "cm"; // For waist, neck, hip
+    return unitSystem === "metric" ? "cm" : "inches"; // For waist, neck, hip
   };
 
-  const nextStep = () => setCurrentStep((prev) => prev + 1);
-  const prevStep = () => setCurrentStep((prev) => prev - 1);
+  useEffect(() => {
+    if (currentStep === steps.length) {
+      titleChangeFunction(t("profilePage.titleReview"));
+    }
+  }, [currentStep, t, titleChangeFunction, steps.length]);
+  const nextStep = () => {
+    const newStep = currentStep + 1;
+    setCurrentStep(newStep);
+    if (newStep === steps.length) {
+      titleChangeFunction(t("profilePage.titleReview"));
+    }
+  };
+  const prevStep = () => {
+    titleChangeFunction();
+    setCurrentStep((prev) => prev - 1);
+  };
 
   return (
     <motion.form
@@ -122,15 +88,21 @@ export const ProfileForm = ({
               options={steps[currentStep].options || []}
               error={errors[steps[currentStep].name as keyof ProfileFormValues]}
             />
+          ) : currentStep < steps.length - 1 ? (
+            !(gender === "male" && steps[currentStep].name === "hips") && (
+              <CustomNumberInput<ProfileFormValues>
+                key={steps[currentStep].name}
+                control={control}
+                name={steps[currentStep].name as keyof ProfileFormValues}
+                label={steps[currentStep].title}
+                unit={getUnit(steps[currentStep].name)}
+                error={
+                  errors[steps[currentStep].name as keyof ProfileFormValues]
+                }
+              />
+            )
           ) : (
-            <CustomNumberInput<ProfileFormValues>
-              key={steps[currentStep].name}
-              control={control}
-              name={steps[currentStep].name as keyof ProfileFormValues}
-              label={steps[currentStep].title}
-              unit={getUnit(steps[currentStep].name)}
-              error={errors[steps[currentStep].name as keyof ProfileFormValues]}
-            />
+            <SummaryCard key="summary" data={profile as ProfileFormValues} />
           )}
         </AnimatePresence>
       </div>
@@ -159,7 +131,11 @@ export const ProfileForm = ({
             {t("profileForm.buttons.next")}
           </Button>
         ) : (
-          <Button type="submit" className="text-lg p-4">
+          <Button
+            type="submit"
+            className={cn("text-lg p-4", errors && "cursor-not-allowed")}
+            disabled={!!errors}
+          >
             {t("profileForm.buttons.submit")}
           </Button>
         )}
