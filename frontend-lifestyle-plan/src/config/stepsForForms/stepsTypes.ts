@@ -1,8 +1,4 @@
-export enum StepType {
-  RADIO = 'radio',
-  NUMBER = 'number',
-  TEXTAREA = 'textarea'
-}
+export type StepType  = 'radio'| 'number'| 'textarea';
 
 export type Step = {
   name: string;
@@ -16,14 +12,10 @@ export type Step = {
   optional?: boolean;
 };
 
-export type StepConfig = {
-  name: string;
-  titleKey: string;
+export interface StepConfig extends Omit<Step, 'title' | 'options'> {
+  titleKey: string;    
   options?: {
     value: string;
-    labelKey: string;
+    labelKey: string;  
   }[];
-  defaultValue?: string;
-  type: StepType;
-  optional?: boolean;
-};
+}

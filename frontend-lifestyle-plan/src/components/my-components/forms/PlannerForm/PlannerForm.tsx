@@ -7,7 +7,8 @@ import { schema_plannerForm, type PlannerFormValues } from "@/schemas";
 import { CustomRadiogroup, CustomTextArea } from "@/components";
 import SummaryCard from "./SummaryCard";
 import { useTranslation } from "react-i18next";
-import { usePlannerSteps } from "@/hooks";
+import { useSteps } from "@/hooks";
+import { plannerSteps } from "@/config";
 
 interface Props {
   submitFunction: (data: PlannerFormValues) => void;
@@ -23,7 +24,7 @@ export const PlannerForm = ({
   initialValues,
 }: Props) => {
   const { t } = useTranslation();
-  const { steps, getDefaultValues } = usePlannerSteps();
+  const { steps, getDefaultValues } = useSteps(plannerSteps);
   const defaultValues = getDefaultValues();
   const [currentStep, setCurrentStep] = useState(0);
 

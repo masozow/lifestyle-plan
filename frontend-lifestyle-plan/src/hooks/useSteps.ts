@@ -1,47 +1,25 @@
+// hooks/useSteps.ts
 import { useTranslation } from "react-i18next";
-const validateStepConfig = (config: StepConfig[]) => {
-  config.forEach(step => {
-    if (step.type === 'radio' && !step.options) {
-      throw new Error(`Radio step ${step.name} must have options`);
-    }
-  });
-};
+import type { Step, StepConfig } from "@/config";
 
-export const useSteps = (stepConfig: StepConfig[]) => {
+export const useSteps = (stepConfigs: StepConfig[]): { steps: Step[]; getDefaultValues: () => Record<string, any> } => {
   const { t } = useTranslation();
 
-  validateStepConfig(stepConfig);
-
-  const translatedSteps = stepConfig.map(step => ({
-    ...step,
-    title: t(step.titleKey),
-    options: step.options?.map(option => ({
-      value: option.value,
-      label: t(option.labelKey)
+  const steps: Step[] = stepConfigs.map(config => ({
+    ...config,
+    title: t(config.titleKey),
+    options: config.options?.map(opt => ({
+      value: opt.value,
+      label: t(opt.labelKey)
     }))
   }));
 
-  const getDefaultValues = () => {
-    return translatedSteps.reduce((acc: Record<string, any>, step) => {
-      if (step.defaultValue !== undefined) {
-        acc[step.name] = step.defaultValue;
-      }
-      return acc;
-    }, {});
-  };
+  const getDefaultValues = () => steps.reduce((acc, step) => {
+    if (step.defaultValue !== undefined) {
+      acc[step.name] = step.defaultValue;
+    }
+    return acc;
+  }, {} as Record<string, any>);
 
-  return { steps: translatedSteps, getDefaultValues };
+  return { steps, getDefaultValues };
 };
-
-interface StepConfig {
-  name: string;
-  titleKey: string;
-  options?: {
-    value: string;
-    labelKey: string;
-  }[];
-  defaultValue?: string;
-  type: 'radio' | 'number' | 'textarea';
-  optional?: boolean;
-}
-
