@@ -1,0 +1,14 @@
+USE nutrition;
+
+CREATE TABLE profile (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  unitSystem ENUM('metric', 'imperial') NOT NULL,
+  gender ENUM('male', 'female') NOT NULL,
+  weight FLOAT NOT NULL CHECK (weight BETWEEN 30 AND 1000),
+  height FLOAT NOT NULL CHECK (height BETWEEN 30 AND 250),
+  age INT NOT NULL CHECK (age BETWEEN 18 AND 150),
+  waist FLOAT NOT NULL CHECK (waist BETWEEN 15 AND 200),
+  neck FLOAT NOT NULL CHECK (neck BETWEEN 8 AND 80),
+  hip FLOAT NULL CHECK (hip BETWEEN 15 AND 200),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

@@ -18,7 +18,7 @@ const PlannerPage = () => {
   };
 
   const formTitle = customTitle || t("plannerPage.title");
-  // console.log("Plan from store: ", plan);
+  console.log("Plan from store: ", plan);
 
   return (
     <div className="max-w-xl mx-auto pt-10 sm:pt-1">

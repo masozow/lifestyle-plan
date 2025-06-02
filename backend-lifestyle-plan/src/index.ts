@@ -2,8 +2,11 @@ import express from "express";
 import cors from "cors";
 import openaiRoutes from "./routes/openai.route.js";
 import testRoutes from "./routes/tests.route.js";
-const app = express();
+import sequelize from "./config/sequelize.js";
+import Profile from "./models/profile.model.js";
 
+const app = express();
+await sequelize.sync({ alter: true });
 //middleware
 app.use(cors());
 app.use(express.json());
