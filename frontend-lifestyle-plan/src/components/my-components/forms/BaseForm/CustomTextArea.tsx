@@ -30,7 +30,10 @@ export const CustomTextArea = <T extends FieldValues>({
       exit={{ opacity: 0, x: -20 }}
       transition={{ duration: 0.3 }}
     >
-      <Label className="text-2xl" htmlFor={`textarea-${title}`}>
+      <Label
+        className="text-2xl text-left mb-4 font-semibold"
+        htmlFor={`textarea-${title}`}
+      >
         {title}
       </Label>
       <Controller

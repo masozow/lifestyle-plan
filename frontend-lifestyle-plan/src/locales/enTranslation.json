@@ -10,7 +10,7 @@
     "login": "Login",
     "logout": "Logout"
   },
-  "summaryCard":{
+  "summaryCard": {
     "title": "Summary",
     "noData": "No data"
   },
@@ -24,28 +24,34 @@
       "back": "Back",
       "submit": "Generate Plan"
     },
-    "objective": "Objective",
-    "restriction": "Restriction",
-    "preference": "Preference",
-    "extras": "Extras",
-    "options": {
-      "objective": {
+    "objective": {
+      "title": "Objective",
+      "options": {
         "lose-fat": "Lose fat",
         "gain-muscle": "Gain muscle",
         "maintain-weight": "Maintain weight"
-      },
-      "restriction": {
+      }
+    },
+    "restriction": {
+      "title": "Restriction",
+      "options": {
         "none": "None",
         "vegetarian": "Vegetarian",
         "gluten-free": "Gluten-free",
         "dairy-free": "Dairy-free"
-      },
-      "preference": {
+      }
+    },
+    "preference": {
+      "title": "Preference",
+      "options": {
         "latin": "Latin",
         "mediterranean": "Mediterranean",
         "asian": "Asian",
         "high-protein": "High protein"
       }
+    },
+    "extras": {
+      "title": "Extras"
     }
   },
   "profilePage": {
@@ -53,26 +59,42 @@
     "titleReview": "Review your profile"
   },
   "profileForm": {
-    "unitSystem": {
-      "title": "Measurement System",
-      "metric": "Metric (kg, cm)",
-      "imperial": "Imperial (lbs, inches)"
-    },
-    "gender": {
-      "title": "Gender",
-      "female": "Female",
-      "male": "Male"
-    },
-    "weight": "Weight",
-    "height": "Height",
-    "age": "Age",
-    "waist": "Waist Circumference",
-    "neck": "Neck Circumference",
-    "hip": "Hip Circumference",
     "buttons": {
       "back": "Back",
       "next": "Next",
       "submit": "Save Profile"
+    },
+    "unitSystem": {
+      "title": "Measurement System",
+      "options": {
+        "metric": "Metric (kg, cm)",
+        "imperial": "Imperial (lbs, inches)"
+      }
+    },
+    "gender": {
+      "title": "Gender",
+      "options": {
+        "female": "Female",
+        "male": "Male"
+      }
+    },
+    "weight": {
+      "title": "Weight"
+    },
+    "height": {
+      "title": "Height"
+    },
+    "age": {
+      "title": "Age"
+    },
+    "waist": {
+      "title": "Waist Circumference"
+    },
+    "neck": {
+      "title": "Neck Circumference"
+    },
+    "hip": {
+      "title": "Hip Circumference"
     }
   },
   "nutrition": {

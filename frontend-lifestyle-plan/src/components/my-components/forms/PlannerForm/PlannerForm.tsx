@@ -76,6 +76,7 @@ export const PlannerForm = ({
             <CustomRadiogroup<PlannerFormValues>
               key={steps[currentStep].name}
               control={control}
+              title={`${steps[currentStep].title}`}
               name={steps[currentStep].name as keyof PlannerFormValues}
               defaultValue={steps[currentStep].defaultValue || ""}
               options={steps[currentStep].options || []}
