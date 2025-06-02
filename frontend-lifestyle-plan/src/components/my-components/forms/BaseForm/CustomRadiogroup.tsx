@@ -13,13 +13,15 @@ import { useTranslation } from "react-i18next";
 interface Props<T extends FieldValues> {
   control: Control<T>;
   defaultValue: string;
-  options: { value: string; label: string }[]; // Now accepts value-label pairs
+  title?: string | null;
+  options: { value: string; label: string }[];
   name: Path<T>;
   error?: FieldError;
 }
 
-const CustomRadiogroup = <T extends FieldValues>({
+export const CustomRadiogroup = <T extends FieldValues>({
   control,
+  title,
   defaultValue,
   options,
   name,
@@ -35,6 +37,9 @@ const CustomRadiogroup = <T extends FieldValues>({
       exit={{ opacity: 0, x: -20 }}
       transition={{ duration: 0.3 }}
     >
+      {title && (
+        <h1 className="text-2xl text-left mb-4 font-semibold">{title}</h1>
+      )}
       <Controller
         name={name}
         control={control}
@@ -66,5 +71,3 @@ const CustomRadiogroup = <T extends FieldValues>({
     </motion.div>
   );
 };
-
-export default CustomRadiogroup;

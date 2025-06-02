@@ -3,6 +3,7 @@ import NavBar from "@/components/my-components/nav-bar/NavBar";
 import LandingPage from "@/pages/landing/LandingPage";
 import LoginPage from "@/pages/login/LoginPage";
 import PlannerPage from "@/pages/planner/PlannerPage";
+import ProfilePage from "@/pages/profile/ProfilePage";
 import { createBrowserRouter } from "react-router";
 
 export const router = createBrowserRouter([
@@ -17,6 +18,7 @@ export const router = createBrowserRouter([
         children: [
           { path: "", element: <PlannerPage /> },
           { path: "login", element: <LoginPage /> },
+          { path: "profile", element: <ProfilePage /> },
         ],
       },
       // { path: "search", element: <SearchPage /> },

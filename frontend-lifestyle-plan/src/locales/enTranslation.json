@@ -10,6 +10,10 @@
     "login": "Login",
     "logout": "Logout"
   },
+  "summaryCard": {
+    "title": "Summary",
+    "noData": "No data"
+  },
   "plannerPage": {
     "title": "What are your goals?",
     "titleReview": "Review your plan"
@@ -17,30 +21,80 @@
   "plannerForm": {
     "buttons": {
       "next": "Next",
-      "back": "Back"
+      "back": "Back",
+      "submit": "Generate Plan"
     },
-    "objective": "Objective",
-    "restriction": "Restriction",
-    "preference": "Preference",
-    "extras": "Extras",
-    "options": {
-      "objective": {
+    "objective": {
+      "title": "Objective",
+      "options": {
         "lose-fat": "Lose fat",
         "gain-muscle": "Gain muscle",
         "maintain-weight": "Maintain weight"
-      },
-      "restriction": {
+      }
+    },
+    "restriction": {
+      "title": "Restriction",
+      "options": {
         "none": "None",
         "vegetarian": "Vegetarian",
         "gluten-free": "Gluten-free",
         "dairy-free": "Dairy-free"
-      },
-      "preference": {
+      }
+    },
+    "preference": {
+      "title": "Preference",
+      "options": {
         "latin": "Latin",
         "mediterranean": "Mediterranean",
         "asian": "Asian",
         "high-protein": "High protein"
       }
+    },
+    "extras": {
+      "title": "Extras"
+    }
+  },
+  "profilePage": {
+    "title": "Complete your profile",
+    "titleReview": "Review your profile"
+  },
+  "profileForm": {
+    "buttons": {
+      "back": "Back",
+      "next": "Next",
+      "submit": "Save Profile"
+    },
+    "unitSystem": {
+      "title": "Measurement System",
+      "options": {
+        "metric": "Metric (kg, cm)",
+        "imperial": "Imperial (lbs, inches)"
+      }
+    },
+    "gender": {
+      "title": "Gender",
+      "options": {
+        "female": "Female",
+        "male": "Male"
+      }
+    },
+    "weight": {
+      "title": "Weight"
+    },
+    "height": {
+      "title": "Height"
+    },
+    "age": {
+      "title": "Age"
+    },
+    "waist": {
+      "title": "Waist Circumference"
+    },
+    "neck": {
+      "title": "Neck Circumference"
+    },
+    "hip": {
+      "title": "Hip Circumference"
     }
   },
   "nutrition": {

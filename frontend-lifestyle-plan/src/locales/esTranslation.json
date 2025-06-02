@@ -10,6 +10,10 @@
     "login": "Iniciar sesión",
     "logout": "Cerrar sesión"
   },
+  "summaryCard": {
+    "title": "Resumen",
+    "noData": "Sin datos"
+  },
   "plannerPage": {
     "title": "¿Qué quieres lograr?",
     "titleReview": "Revisa tu plan"
@@ -17,30 +21,80 @@
   "plannerForm": {
     "buttons": {
       "next": "Siguiente",
-      "back": "Volver"
+      "back": "Volver",
+      "submit": "Generar Plan"
     },
-    "objective": "Objetivo",
-    "restriction": "Restricción",
-    "preference": "Preferencia",
-    "extras": "Extras",
-    "options": {
-      "objective": {
+    "objective": {
+      "title": "Objetivo",
+      "options": {
         "lose-fat": "Perder grasa",
         "gain-muscle": "Ganar músculo",
         "maintain-weight": "Mantener peso"
-      },
-      "restriction": {
+      }
+    },
+    "restriction": {
+      "title": "Restricción",
+      "options": {
         "none": "Ninguna",
         "vegetarian": "Vegetariano",
         "gluten-free": "Sin gluten",
         "dairy-free": "Sin lácteos"
-      },
-      "preference": {
+      }
+    },
+    "preference": {
+      "title": "Preferencia",
+      "options": {
         "latin": "Latina",
         "mediterranean": "Mediterránea",
         "asian": "Asiática",
         "high-protein": "Alta en proteína"
       }
+    },
+    "extras": {
+      "title": "Extras"
+    }
+  },
+  "profilePage": {
+    "title": "Completa tu perfil",
+    "titleReview": "Revisa tu perfil"
+  },
+  "profileForm": {
+    "buttons": {
+      "back": "Volver",
+      "next": "Siguiente",
+      "submit": "Guardar Perfil"
+    },
+    "unitSystem": {
+      "title": "Sistema de Medidas",
+      "options": {
+        "metric": "Métrico (kg, cm)",
+        "imperial": "Imperial (lbs, pulgadas)"
+      }
+    },
+    "gender": {
+      "title": "Género",
+      "options": {
+        "female": "Femenino",
+        "male": "Masculino"
+      }
+    },
+    "weight": {
+      "title": "Peso"
+    },
+    "height": {
+      "title": "Estatura"
+    },
+    "age": {
+      "title": "Edad"
+    },
+    "waist": {
+      "title": "Circunferencia de cintura"
+    },
+    "neck": {
+      "title": "Circunferencia de cuello"
+    },
+    "hip": {
+      "title": "Circunferencia de cadera"
     }
   },
   "nutrition": {

@@ -1,6 +1,7 @@
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
+import { useState } from "react";
 import {
   Controller,
   type Control,
@@ -10,42 +11,49 @@ import {
 } from "react-hook-form";
 
 interface Props<T extends FieldValues> {
-  name: Path<T>;
   control: Control<T>;
+  name: Path<T>;
+  label: string;
   error?: FieldError;
-  title: string;
+  unit?: string;
 }
 
-export const CustomTextArea = <T extends FieldValues>({
-  name,
+export const CustomNumberInput = <T extends FieldValues>({
   control,
+  name,
+  label,
   error,
-  title,
+  unit,
 }: Props<T>) => {
+  const [isTouched, setIsTouched] = useState(false);
   return (
     <motion.div
-      key={`textarea-${title}`}
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
       transition={{ duration: 0.3 }}
+      className="space-y-2"
     >
-      <Label
-        className="text-2xl text-left mb-4 font-semibold"
-        htmlFor={`textarea-${title}`}
-      >
-        {title}
+      <Label htmlFor={name.toString()}>
+        {label} {unit && `(${unit})`}
       </Label>
       <Controller
         name={name}
         control={control}
         render={({ field }) => (
-          <Textarea
-            id={`textarea-${title}`}
-            placeholder={`${title}...`}
+          <Input
             {...field}
-            className="mt-4 resize-none overflow-y-auto h-[5rem]"
-            rows={4}
+            id={name.toString()}
+            type="number"
+            value={field.value ?? ""}
+            onChange={(e) => {
+              const value = e.target.value;
+              field.onChange(value === "" ? undefined : Number(value));
+            }}
+            onBlur={() => {
+              field.onBlur();
+              setIsTouched(true);
+            }}
           />
         )}
       />

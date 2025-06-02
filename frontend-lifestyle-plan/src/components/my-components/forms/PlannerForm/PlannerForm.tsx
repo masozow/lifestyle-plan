@@ -4,15 +4,15 @@ import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { schema_plannerForm, type PlannerFormValues } from "@/schemas";
-import CustomRadiogroup from "../BaseForm/CustomRadiogroup";
-import CustomTextArea from "../BaseForm/CustomTextArea";
+import { CustomRadiogroup, CustomTextArea } from "@/components";
 import SummaryCard from "./SummaryCard";
 import { useTranslation } from "react-i18next";
-import { usePlannerSteps, type FormStep } from "@/hooks";
+import { usePlannerSteps } from "@/hooks";
 
 interface Props {
   submitFunction: (data: PlannerFormValues) => void;
   titleChangeFunction: (title?: string) => void;
+  initialValues?: Partial<PlannerFormValues>;
   plan?: PlannerFormValues | null;
 }
 
@@ -20,19 +20,12 @@ export const PlannerForm = ({
   plan,
   submitFunction,
   titleChangeFunction,
+  initialValues,
 }: Props) => {
   const { t } = useTranslation();
-  const steps = usePlannerSteps();
+  const { steps, getDefaultValues } = usePlannerSteps();
+  const defaultValues = getDefaultValues();
   const [currentStep, setCurrentStep] = useState(0);
-
-  const getDefaultValues = (): PlannerFormValues => {
-    return steps.reduce((acc, step) => {
-      if (step.defaultValue) {
-        return { ...acc, [step.name]: step.defaultValue };
-      }
-      return { ...acc, [step.name]: "" };
-    }, {} as PlannerFormValues);
-  };
 
   const {
     control,
@@ -41,7 +34,10 @@ export const PlannerForm = ({
   } = useForm<PlannerFormValues>({
     resolver: zodResolver(schema_plannerForm),
     mode: "onChange",
-    defaultValues: getDefaultValues(),
+    defaultValues: {
+      ...defaultValues,
+      ...initialValues,
+    },
   });
 
   useEffect(() => {
@@ -49,11 +45,13 @@ export const PlannerForm = ({
       titleChangeFunction(t("plannerPage.titleReview"));
     }
   }, [currentStep, t, titleChangeFunction, steps.length]);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   const nextStep = () => {
-    const newStep = currentStep + 1;
-    setCurrentStep(newStep);
-    if (newStep === steps.length) {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep((prev) => prev + 1);
+    } else {
+      setIsCompleted(true);
       titleChangeFunction(t("plannerPage.titleReview"));
     }
   };
@@ -61,12 +59,7 @@ export const PlannerForm = ({
   const prevStep = () => {
     titleChangeFunction();
     setCurrentStep((prev) => prev - 1);
-  };
-
-  const isRadioStep = (
-    step: FormStep
-  ): step is FormStep & { options: { value: string; label: string }[] } => {
-    return !!step.options;
+    setIsCompleted(false);
   };
 
   return (
@@ -79,27 +72,32 @@ export const PlannerForm = ({
     >
       <div className="min-h-[12rem] flex flex-col justify-center">
         <AnimatePresence mode="wait">
-          {currentStep < steps.length - 1 ? (
-            isRadioStep(steps[currentStep]) && (
-              <CustomRadiogroup<PlannerFormValues>
-                key={steps[currentStep].name}
-                control={control}
-                name={steps[currentStep].name}
-                defaultValue={steps[currentStep].defaultValue || ""}
-                options={steps[currentStep].options}
-                error={errors[steps[currentStep].name]}
-              />
-            )
-          ) : currentStep === steps.length - 1 ? (
-            <CustomTextArea<PlannerFormValues>
-              key="extras"
-              name="extras"
+          {steps[currentStep].type === "radio" ? (
+            <CustomRadiogroup<PlannerFormValues>
+              key={steps[currentStep].name}
               control={control}
-              error={errors.extras}
-              title={steps[currentStep].title}
+              title={`${steps[currentStep].title}`}
+              name={steps[currentStep].name as keyof PlannerFormValues}
+              defaultValue={steps[currentStep].defaultValue || ""}
+              options={steps[currentStep].options || []}
+              error={errors[steps[currentStep].name as keyof PlannerFormValues]}
             />
           ) : (
-            <SummaryCard key="summary" data={plan as PlannerFormValues} />
+            !isCompleted && (
+              <CustomTextArea<PlannerFormValues>
+                key="extras"
+                name="extras"
+                control={control}
+                error={errors.extras}
+                title={steps[currentStep].title}
+              />
+            )
+          )}
+          {isCompleted && (
+            <SummaryCard<PlannerFormValues>
+              data={plan ?? null}
+              translationPrefix="plannerForm"
+            />
           )}
         </AnimatePresence>
       </div>
@@ -116,7 +114,7 @@ export const PlannerForm = ({
           </Button>
         )}
 
-        {currentStep < steps.length ? (
+        {!isCompleted ? (
           <Button
             type="button"
             onClick={nextStep}
@@ -127,7 +125,7 @@ export const PlannerForm = ({
           </Button>
         ) : (
           <Button type="submit" className="text-lg p-4">
-            {t("nutrition.submit")}
+            {t("plannerForm.buttons.submit")}
           </Button>
         )}
       </div>
