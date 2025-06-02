@@ -32,46 +32,49 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public getProfile!: HasOneGetAssociationMixin<Profile>;
 }
 
-User.init({
-  id: {
-    type: DataTypes.INTEGER.UNSIGNED,
-    autoIncrement: true,
-    primaryKey: true,
+User.init(
+  {
+    id: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    phone: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    birthDate: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+    },
+    statusId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    roleId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-  },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  phone: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  birthDate: {
-    type: DataTypes.DATEONLY,
-    allowNull: false,
-  },
-  statusId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  roleId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-}, {
-  sequelize,
-  tableName: "user",
-  timestamps: true,
-});
+  {
+    sequelize,
+    tableName: "user",
+    timestamps: true,
+  }
+);
 
 User.hasOne(Profile, { foreignKey: "userId", as: "profile" });
 Profile.belongsTo(User, { foreignKey: "userId", as: "user" });
