@@ -7,6 +7,7 @@ import Profile from "./models/profile.model.js";
 
 const app = express();
 await sequelize.sync({ alter: true });
+
 //middleware
 app.use(cors());
 app.use(express.json());

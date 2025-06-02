@@ -1,5 +1,6 @@
-import { DataTypes, Model, Optional } from "sequelize";
+import { DataTypes, Model, Optional, BelongsToGetAssociationMixin } from "sequelize";
 import sequelize from "../config/sequelize.js";
+import User from "./user.model.js";
 
 export interface ProfileAttributes {
   id: number;
@@ -11,12 +12,12 @@ export interface ProfileAttributes {
   waist: number;
   neck: number;
   hip?: number | null;
+  userId: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-
-export interface ProfileCreationAttributes extends Optional<ProfileAttributes, "id" | "createdAt" | "updatedAt" | "hip"> {}
+export interface ProfileCreationAttributes extends Optional<ProfileAttributes, "id" | "hip" | "createdAt" | "updatedAt"> {}
 
 class Profile extends Model<ProfileAttributes, ProfileCreationAttributes> implements ProfileAttributes {
   public id!: number;
@@ -28,8 +29,11 @@ class Profile extends Model<ProfileAttributes, ProfileCreationAttributes> implem
   public waist!: number;
   public neck!: number;
   public hip?: number | null;
+  public userId!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+  public getUser!: BelongsToGetAssociationMixin<User>;
 }
 
 Profile.init({
@@ -69,6 +73,11 @@ Profile.init({
   hip: {
     type: DataTypes.FLOAT,
     allowNull: true,
+  },
+  userId: {
+    type: DataTypes.INTEGER.UNSIGNED,
+    allowNull: false,
+    unique: true,
   },
 }, {
   sequelize,
