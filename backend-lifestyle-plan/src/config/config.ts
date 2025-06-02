@@ -1,4 +1,6 @@
-import "dotenv/config";
+import dotenv from "dotenv";
+dotenv.config();
+
 import { Dialect } from "sequelize";
 
 interface DBConfig {
@@ -16,9 +18,17 @@ const config: Record<string, DBConfig> = {
     password: process.env.DB_PASSWORD!,
     database: process.env.DB_NAME!,
     host: process.env.DB_HOST!,
-    port: parseInt(process.env.DB_PORT || "3306"),
+    port: parseInt(process.env.DB_PORT!),
     dialect: "mysql",
   },
 };
+
+console.log("Sequelize config:", {
+  user: process.env.DB_USER,
+  pass: process.env.DB_PASSWORD,
+  db: process.env.DB_NAME,
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+});
 
 export default config;
