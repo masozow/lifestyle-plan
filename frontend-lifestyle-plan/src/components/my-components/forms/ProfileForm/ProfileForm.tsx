@@ -99,6 +99,7 @@ export const ProfileForm = ({
             <CustomRadiogroup<ProfileFormValues>
               key={steps[currentStep].name}
               control={control}
+              title={`${steps[currentStep].title}`}
               name={steps[currentStep].name as keyof ProfileFormValues}
               defaultValue={steps[currentStep].defaultValue || ""}
               options={steps[currentStep].options || []}
