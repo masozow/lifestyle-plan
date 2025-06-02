@@ -37,7 +37,7 @@ export const ProfileForm = ({
     trigger,
   } = useForm<ProfileFormValues>({
     resolver: zodResolver(schema_profileForm),
-    mode: "onChange",
+    mode: "onBlur",
     defaultValues: {
       ...defaultValues,
       ...initialValues,
