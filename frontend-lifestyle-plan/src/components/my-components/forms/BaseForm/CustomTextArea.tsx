@@ -43,6 +43,7 @@ export const CustomTextArea = <T extends FieldValues>({
           <Textarea
             id={`textarea-${title}`}
             placeholder={`${title}...`}
+            autoFocus
             {...field}
             className="mt-4 resize-none overflow-y-auto h-[5rem]"
             rows={4}

@@ -53,6 +53,7 @@ export const CustomNumberInput = <T extends FieldValues>({
               const value = e.target.value;
               field.onChange(value === "" ? undefined : Number(value));
             }}
+            autoFocus
             onBlur={() => {
               field.onBlur();
               setIsTouched(true);
