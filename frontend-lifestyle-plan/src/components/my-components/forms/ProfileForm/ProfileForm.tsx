@@ -105,11 +105,8 @@ export const ProfileForm = ({
               error={errors[steps[currentStep].name as keyof ProfileFormValues]}
             />
           ) : (
-            !(
-              gender === "male" &&
-              steps[currentStep].name === "hip" &&
-              !isCompleted
-            ) && (
+            !(gender === "male" && steps[currentStep].name === "hip") &&
+            !isCompleted && (
               <CustomNumberInput<ProfileFormValues>
                 key={steps[currentStep].name}
                 control={control}
