@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --watch 'src/**/*.ts' --exec \"NODE_NO_WARNINGS=1 tsx --env-file=.env src/index.ts\"",
     "build": "tsc",
-    "migrate": "npm run build && sequelize-cli db:migrate --config dist/config/config.js",
+    "migrate": "npm run build && sequelize-cli db:migrate --env .env --config dist/db/config/config.js --migrations-path dist/db/migrations",
     "start": "node --env-file=.env dist/index.js"
   },
   "keywords": [],

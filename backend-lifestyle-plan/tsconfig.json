@@ -9,5 +9,6 @@
     "types": ["node"],
     "resolveJsonModule": true
   },
-  "include": ["src", "src/migrations"]
+  "include": ["src", "src/db/migrations/**/*", "src/db/config/**/*"]
+  // "exclude": ["src/db/config/config.js"]
 }
