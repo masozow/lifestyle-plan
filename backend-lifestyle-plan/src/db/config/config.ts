@@ -10,6 +10,7 @@ interface DBConfig {
   host: string;
   port: number;
   dialect: Dialect;
+  options: {}
 }
 
 const config: Record<string, DBConfig> = {
@@ -20,6 +21,9 @@ const config: Record<string, DBConfig> = {
     host: process.env.DB_HOST!,
     port: parseInt(process.env.DB_PORT!),
     dialect: "mysql",
+    options: {
+      database:process.env.DB_NAME!,
+    }
   },
 };
 
@@ -29,6 +33,7 @@ console.log("Sequelize config:", {
   db: process.env.DB_NAME,
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
+  database: process.env.DB_NAME
 });
 
 export default config;
