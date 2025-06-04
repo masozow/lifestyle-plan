@@ -1,5 +1,5 @@
 import express from "express";
-import { OpenAI } from "../controllers/openai.controller.js";
+import { OpenAI } from "../controllers/index.js";
 
 const router = express.Router();
 router.post("/sendPrompt", OpenAI.sendPlanPrompt);
