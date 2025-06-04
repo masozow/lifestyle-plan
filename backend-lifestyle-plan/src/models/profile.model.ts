@@ -37,25 +37,25 @@ class Profile
   extends Model<ProfileAttributes, ProfileCreationAttributes>
   implements ProfileAttributes
 {
-  public id!: number;
-  public unitSystem!: "metric" | "imperial";
-  public gender!: "male" | "female";
-  public weight!: number;
-  public height!: number;
-  public age!: number;
-  public waist!: number;
-  public neck!: number;
-  public hip?: number | null;
-  public language!: string;
-  public objective!: string;
-  public restriction?: string;
-  public preference?: string;
-  public extras?: string;
-  public userId!: number;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare id: number;
+  declare unitSystem: "metric" | "imperial";
+  declare gender: "male" | "female";
+  declare weight: number;
+  declare height: number;
+  declare age: number;
+  declare waist: number;
+  declare neck: number;
+  declare hip?: number | null;
+  declare language: string;
+  declare objective: string;
+  declare restriction?: string;
+  declare preference?: string;
+  declare extras?: string;
+  declare userId: number;
+  declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 
-  public getUser!: BelongsToGetAssociationMixin<User>;
+  declare getUser: BelongsToGetAssociationMixin<User>;
 }
 
 Profile.init(

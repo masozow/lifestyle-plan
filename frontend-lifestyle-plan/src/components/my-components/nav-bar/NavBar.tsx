@@ -7,6 +7,9 @@ import {
 
 import { NavLink, Outlet } from "react-router";
 import LanguageMenu from "./LanguageMenu";
+import { Button } from "@/components/ui/button";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 const NavBar = () => {
   return (
     <>
@@ -16,6 +19,31 @@ const NavBar = () => {
         </NavLink>
         <NavigationMenu>
           <NavigationMenuList>
+            <NavigationMenuItem>
+              <Button asChild variant="outline">
+                <NavLink to="/app/register">Register</NavLink>
+              </Button>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Button asChild>
+                <NavLink to="/login">Login</NavLink>
+              </Button>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Button
+                asChild
+                variant="ghost"
+                className="p-2 flex items-center border-1 border-dashed"
+              >
+                <NavLink to="/app/dashboard" className="flex items-center">
+                  <Avatar>
+                    <AvatarImage src="https://github.com/shadcn.png" />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                  <span className="text-md">User</span>
+                </NavLink>
+              </Button>
+            </NavigationMenuItem>
             <NavigationMenuItem>
               <LanguageMenu />
             </NavigationMenuItem>

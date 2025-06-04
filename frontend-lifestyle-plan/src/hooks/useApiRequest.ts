@@ -1,17 +1,16 @@
+// hooks/useApiRequest.ts
 import { saveToServer } from "@/api";
 import { useMutation } from "@tanstack/react-query";
 
-interface UseSubmitProps<T> {
+interface UseApiRequestProps {
   url: string;
-  data: T;
   method: string;
 }
 
-export const useSubmit = <T>({ url,method }: UseSubmitProps<T>) =>
+export const useApiRequest = <T>({ url, method }: UseApiRequestProps) =>
   useMutation({
     mutationFn: async (data: T) => {
-      const res = await saveToServer(url, method, data);
-      return res;
+      return await saveToServer(url, method, data);
     },
     onSuccess: (data) => {
       console.log("✅ Data saved to server:", data);

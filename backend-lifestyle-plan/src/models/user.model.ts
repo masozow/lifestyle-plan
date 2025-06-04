@@ -17,19 +17,19 @@ export interface UserAttributes {
 
 export interface UserCreationAttributes extends Optional<UserAttributes, "id" | "createdAt" | "updatedAt"> {}
 
-class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  public id!: number;
-  public email!: string;
-  public name!: string;
-  public password!: string;
-  public phone!: string;
-  public birthDate!: Date;
-  public statusId!: number;
-  public roleId!: number;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+class User extends Model<UserAttributes, UserCreationAttributes> {
+  declare id: number;
+  declare email: string;
+  declare name: string;
+  declare password: string;
+  declare phone: string;
+  declare birthDate: Date;
+  declare statusId: number;
+  declare roleId: number;
+  declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 
-  public getProfile!: HasOneGetAssociationMixin<Profile>;
+  declare getProfile: HasOneGetAssociationMixin<Profile>;
 }
 
 User.init(
@@ -75,8 +75,5 @@ User.init(
     timestamps: true,
   }
 );
-
-// User.hasOne(Profile, { foreignKey: "userId", as: "profile" });
-// Profile.belongsTo(User, { foreignKey: "userId", as: "user" });
 
 export default User;

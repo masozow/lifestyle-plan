@@ -6,8 +6,8 @@ import { Link } from "react-router";
 const LoginPage = () => {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
-      <div className="flex flex-col gap-4 p-6 md:p-10">
-        <div className="flex sm:justify-center gap-2 justify-start">
+      <div className="flex flex-col gap-4">
+        <div className="flex sm:justify-center gap-2 justify-start mt-10">
           <Link
             to="/"
             className="flex items-center gap-2 font-medium justify-center"
@@ -18,7 +18,7 @@ const LoginPage = () => {
             Acme Inc.
           </Link>
         </div>
-        <div className="flex flex-1 items-start mt-10 sm:mt-0 sm:items-center justify-center">
+        <div className="flex flex-1 items-start sm:mt-0 sm:items-center justify-center">
           <div className="w-full max-w-xs">
             <LoginForm />
           </div>

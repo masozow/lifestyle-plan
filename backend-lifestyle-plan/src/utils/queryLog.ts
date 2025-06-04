@@ -7,7 +7,7 @@ import initDb from "./logDBconfig.js";
  * @param {number} [userId] - Filter logs by user ID (optional).
  * @returns {Promise<Array>} List of logs.
  */
-const queryLog = async (level: string, userId: number): Promise<Array<any>> => {
+const queryLog = async (level?: string, userId?: number): Promise<Array<any>> => {
   try {
     const db = await initDb();
     let logs;
