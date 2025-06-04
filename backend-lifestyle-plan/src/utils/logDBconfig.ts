@@ -4,12 +4,12 @@ import path from "path";
 
 // Database configuration
 const initDb = async (): Promise<Database> => {
-  const dbPath = path.resolve("backend", "logs", "logs.db");
+  const dbPath = path.resolve("src", "db", "logs.db");
   const db = await open({
     filename: dbPath,
     driver: sqlite3.Database,
   });
-
+  console.log("Database location:", dbPath);
   // Create the logs table if it doesn't exist
   await db.exec(`
     CREATE TABLE IF NOT EXISTS logs (

@@ -1,27 +1,49 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
+import sequelize from "./config/sequelize.js";
+
+// Routes
 import openaiRoutes from "./routes/openai.route.js";
 import testRoutes from "./routes/tests.route.js";
-import sequelize from "./config/sequelize.js";
 import profileRoutes from "./routes/profile.route.js";
 import userRoutes from "./routes/user.route.js";
+import authRoutes from "./routes/auth.route.js";
 
 const app = express();
-await sequelize.sync({ alter: true });
 
-//middleware
-app.use(cors());
+// Global middlewares
+app.use(
+  cors({
+    origin: "http://localhost:5173", 
+    credentials: true, 
+  })
+);
 app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser(process.env.JWT_SECRET)); // to sign cookies
 
-//routes
+// Sync database (development mode)
+// await sequelize.sync({ alter: true }); //uncomment only when changes are needed in DB
+
+// Routes
 app.use("/api/openai", openaiRoutes);
-app.use("/api/test",testRoutes);
-app.use("/api",profileRoutes);
-app.use ("/api", userRoutes);
+app.use("/api/test", testRoutes);
+app.use("/api", profileRoutes);
+app.use("/api", userRoutes);
+app.use("/api", authRoutes);
+
+// Global error middleware
+app.use((err, req, res, next) => {
+  console.error("Unexpected error: ", err);
+  res.status(500).json({ error: "Internal Server Error" });
+});
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT} \n`);
+  console.log(`✅ Server is running on port ${PORT}\n`);
 });
 
 export default app;
