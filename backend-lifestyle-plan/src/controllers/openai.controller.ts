@@ -1,4 +1,3 @@
-import openai from "../config/openai.js";
 import { Request, Response } from 'express';
 import { prompt } from "../helpers/openAI/prompt.js";
 import { getCompletion } from "../helpers/openAI/completion.js";

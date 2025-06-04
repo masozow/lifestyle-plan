@@ -21,7 +21,7 @@ const SummaryCard = <T extends Record<string, any>>({
     <Card key="summary" className="flex flex-col gap-4 p-4">
       <CardContent className="grid grid-cols-2 gap-2 overflow-auto text-wrap text-left">
         {Object.entries(data)
-          .filter(([_, value]) => value !== undefined && value !== null)
+          .filter(([, value]) => value !== undefined && value !== null)
           .map(([key, value]) => {
             const fieldTitle = t(`${translationPrefix}.${key}.title`);
             const fieldValue =

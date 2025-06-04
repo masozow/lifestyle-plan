@@ -8,7 +8,8 @@ import { CustomRadiogroup, CustomNumberInput } from "@/components";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import SummaryCard from "../PlannerForm/SummaryCard";
-import { useProfileSteps } from "@/hooks";
+import { useSteps } from "@/hooks";
+import { profileSteps } from "@/config";
 
 interface Props {
   submitFunction: (data: ProfileFormValues) => void;
@@ -24,7 +25,7 @@ export const ProfileForm = ({
   initialValues,
 }: Props) => {
   const { t } = useTranslation();
-  const { steps, getDefaultValues } = useProfileSteps();
+  const { steps, getDefaultValues } = useSteps(profileSteps);
   const defaultValues = getDefaultValues();
   const [currentStep, setCurrentStep] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
@@ -99,6 +100,7 @@ export const ProfileForm = ({
             <CustomRadiogroup<ProfileFormValues>
               key={steps[currentStep].name}
               control={control}
+              title={`${steps[currentStep].title}`}
               name={steps[currentStep].name as keyof ProfileFormValues}
               defaultValue={steps[currentStep].defaultValue || ""}
               options={steps[currentStep].options || []}

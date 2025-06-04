@@ -49,12 +49,14 @@ export const CustomRadiogroup = <T extends FieldValues>({
             value={field.value}
             onValueChange={field.onChange}
             defaultValue={defaultValue}
+            autoFocus
           >
             {options.map((option) => (
               <div key={option.value} className="flex items-center space-x-2">
                 <RadioGroupItem
                   value={option.value}
                   id={`${name.toString()}-${option.value}`}
+                  autoFocus={option.value === defaultValue}
                 />
                 <Label
                   className="cursor-pointer"

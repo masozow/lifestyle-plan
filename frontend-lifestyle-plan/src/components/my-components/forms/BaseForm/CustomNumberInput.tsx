@@ -34,7 +34,10 @@ export const CustomNumberInput = <T extends FieldValues>({
       transition={{ duration: 0.3 }}
       className="space-y-2"
     >
-      <Label htmlFor={name.toString()}>
+      <Label
+        htmlFor={name.toString()}
+        className="text-2xl text-left mb-4 font-semibold"
+      >
         {label} {unit && `(${unit})`}
       </Label>
       <Controller
@@ -50,6 +53,7 @@ export const CustomNumberInput = <T extends FieldValues>({
               const value = e.target.value;
               field.onChange(value === "" ? undefined : Number(value));
             }}
+            autoFocus
             onBlur={() => {
               field.onBlur();
               setIsTouched(true);

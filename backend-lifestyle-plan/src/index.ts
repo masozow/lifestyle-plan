@@ -2,7 +2,11 @@ import express from "express";
 import cors from "cors";
 import openaiRoutes from "./routes/openai.route.js";
 import testRoutes from "./routes/tests.route.js";
+import sequelize from "./config/sequelize.js";
+import profileRoutes from "./routes/profile.route.js";
+
 const app = express();
+await sequelize.sync({ alter: true });
 
 //middleware
 app.use(cors());
@@ -11,6 +15,7 @@ app.use(express.json());
 //routes
 app.use("/api/openai", openaiRoutes);
 app.use("/api/test",testRoutes);
+app.use("/api/profile",profileRoutes);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
