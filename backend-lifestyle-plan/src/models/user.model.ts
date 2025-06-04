@@ -76,7 +76,7 @@ User.init(
   }
 );
 
-User.hasOne(Profile, { foreignKey: "userId", as: "profile" });
-Profile.belongsTo(User, { foreignKey: "userId", as: "user" });
+// User.hasOne(Profile, { foreignKey: "userId", as: "profile" });
+// Profile.belongsTo(User, { foreignKey: "userId", as: "user" });
 
 export default User;
