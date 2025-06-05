@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useApiRequest } from "@/hooks";
 import { schema_loginForm, type LoginFormValues } from "@/schemas";
 import { Button } from "@/components/ui/button";
@@ -96,6 +96,12 @@ export const LoginForm = () => {
           >
             {loginMutation.isPending ? "Logging in..." : "Login"}
           </Button>
+        </div>
+        <div className="text-center text-sm">
+          Don&apos;t have an account?{" "}
+          <Link className="underline underline-offset-4" to="/register">
+            Sign up
+          </Link>
         </div>
       </form>
     </Form>
