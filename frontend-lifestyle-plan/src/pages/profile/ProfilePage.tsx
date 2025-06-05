@@ -4,7 +4,7 @@ import { useProfileStore } from "@/store";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-const ProfilePage = () => {
+export const ProfilePage = () => {
   const { t } = useTranslation();
   const [customTitle, setCustomTitle] = useState<string | undefined>();
   const profile = useProfileStore((state) => state.profile);
@@ -34,5 +34,3 @@ const ProfilePage = () => {
     </div>
   );
 };
-
-export default ProfilePage;

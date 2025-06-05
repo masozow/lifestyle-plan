@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useApiRequest } from "@/hooks";
 import { schema_loginForm, type LoginFormValues } from "@/schemas";
 import { Button } from "@/components/ui/button";
@@ -14,12 +14,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { toast } from "sonner";
+import { X } from "lucide-react";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
 
   const loginMutation = useApiRequest<LoginFormValues>({
-    url: "http://localhost:3001/api/login",
+    url: `${import.meta.env.VITE_BACKEND_BASE_URL}/api/login`,
     method: "POST",
   });
 
@@ -37,15 +39,34 @@ export const LoginForm = () => {
 
   useEffect(() => {
     if (loginMutation.isSuccess) {
+      toast.success(loginMutation.data.message, {
+        action: (
+          <Button
+            variant="ghost"
+            className="self-end font-bold"
+            onClick={() => toast.dismiss()}
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        ),
+      });
       navigate("/app/dashboard");
+    } else if (loginMutation.isError) {
+      toast.error(loginMutation.error.message);
     }
-  }, [loginMutation.isSuccess, navigate]);
+  }, [
+    loginMutation.isSuccess,
+    loginMutation.isError,
+    navigate,
+    loginMutation?.data?.message,
+    loginMutation?.error?.message,
+  ]);
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-6"
+        className="flex flex-col gap-6 justify-start"
       >
         <div className="flex flex-col items-center gap-2 text-center">
           <h1 className="text-2xl font-bold">Login to your account</h1>
@@ -96,6 +117,12 @@ export const LoginForm = () => {
           >
             {loginMutation.isPending ? "Logging in..." : "Login"}
           </Button>
+        </div>
+        <div className="text-center text-sm">
+          Don&apos;t have an account?{" "}
+          <Link className="underline underline-offset-4" to="/register">
+            Sign up
+          </Link>
         </div>
       </form>
     </Form>

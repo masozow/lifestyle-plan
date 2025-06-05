@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-const PlannerPage = () => {
+export const PlannerPage = () => {
   const { t } = useTranslation();
   const [customTitle, setCustomTitle] = useState<string | undefined>();
   const plan = usePlanStore((state) => state.plan);
@@ -39,4 +39,3 @@ const PlannerPage = () => {
     </motion.div>
   );
 };
-export default PlannerPage;
