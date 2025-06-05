@@ -5,7 +5,7 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 
-import { NavLink, Outlet } from "react-router";
+import { NavLink } from "react-router";
 import LanguageMenu from "./LanguageMenu";
 import { Button } from "@/components/ui/button";
 
@@ -53,7 +53,6 @@ const NavBar = () => {
           </NavigationMenuList>
         </NavigationMenu>
       </div>
-      <Outlet />
     </>
   );
 };

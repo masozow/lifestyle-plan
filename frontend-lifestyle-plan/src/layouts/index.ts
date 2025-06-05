@@ -1,2 +1,2 @@
-export * from "./AuthLayout";
-export * from "./AppLayout";
+export * from "./auth-layout/AuthLayout";
+export * from "./app-layout/AppLayout";

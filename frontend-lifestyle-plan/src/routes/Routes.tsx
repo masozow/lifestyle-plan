@@ -1,28 +1,28 @@
-import App from "@/App";
-import NavBar from "@/components/my-components/nav-bar/NavBar";
-import DashboardPage from "@/pages/dashboard/DashboardPage";
+import { createBrowserRouter } from "react-router";
+import { AuthLayout, AppLayout } from "@/layouts";
+
 import LandingPage from "@/pages/landing/LandingPage";
 import LoginPage from "@/pages/login/LoginPage";
 import PlannerPage from "@/pages/planner/PlannerPage";
+import DashboardPage from "@/pages/dashboard/DashboardPage";
 import ProfilePage from "@/pages/profile/ProfilePage";
-import { createBrowserRouter } from "react-router";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <AuthLayout />,
     children: [
       { path: "", element: <LandingPage /> },
       { path: "login", element: <LoginPage /> },
-      {
-        path: "app",
-        element: <NavBar />,
-        children: [
-          { path: "", element: <PlannerPage /> },
-          { path: "profile", element: <ProfilePage /> },
-          { path: "dashboard", element: <DashboardPage /> },
-        ],
-      },
+    ],
+  },
+  {
+    path: "/app",
+    element: <AppLayout />,
+    children: [
+      { path: "", element: <PlannerPage /> },
+      { path: "dashboard", element: <DashboardPage /> },
+      { path: "profile", element: <ProfilePage /> },
     ],
   },
 ]);

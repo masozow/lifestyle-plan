@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 const LandingPage = () => {
   const { t } = useTranslation();
   return (
-    <div className="container flex flex-col justify-center gap-12 pt-4 px-4 mx-auto sm:flex-row lg:px-40">
+    <div className="container flex flex-col justify-center items-center gap-12 pt-10 px-4 mx-auto sm:flex-row lg:px-40">
       <div className="flex flex-col w-full m-2 lg:m-5 xl:m-10 lg:mt:16 md:w-1/2 lg:w-1/3 xl:w-1/2">
         <motion.h1
           className="text-4xl font-bold text-center md:text-5xl lg:text-6xl lg:max-w-md sm:text-left"
