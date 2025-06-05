@@ -1,6 +1,6 @@
 import { ProfileForm } from "@/components";
 import type { ProfileFormValues } from "@/schemas";
-import { useProfileStore } from "@/store";
+import { useAuthStore, useProfileStore } from "@/store";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -9,12 +9,12 @@ export const ProfilePage = () => {
   const [customTitle, setCustomTitle] = useState<string | undefined>();
   const profile = useProfileStore((state) => state.profile);
   const setProfile = useProfileStore((state) => state.setProfile);
-
+  const { credentials } = useAuthStore((state) => state);
   const onSubmit = (data: ProfileFormValues) => {
     setProfile(data);
     console.log("Profile data set in Zustand:", data);
   };
-
+  console.log("Credentials from Zustand:", credentials!);
   const handleFormTitleChange = (title?: string) => {
     setCustomTitle(title);
   };

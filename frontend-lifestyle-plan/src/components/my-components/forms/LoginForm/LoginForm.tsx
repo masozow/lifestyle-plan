@@ -16,10 +16,11 @@ import {
 } from "@/components/ui/form";
 import { toast } from "sonner";
 import { X } from "lucide-react";
+import { useAuthStore } from "@/store";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
-
+  const { setCredentials } = useAuthStore();
   const loginMutation = useApiRequest<LoginFormValues>({
     url: `${import.meta.env.VITE_BACKEND_BASE_URL}/api/login`,
     method: "POST",
@@ -39,6 +40,7 @@ export const LoginForm = () => {
 
   useEffect(() => {
     if (loginMutation.isSuccess) {
+      setCredentials(form.getValues("email"), form.getValues("password"));
       toast.success(loginMutation.data.message, {
         action: (
           <Button
@@ -60,6 +62,8 @@ export const LoginForm = () => {
     navigate,
     loginMutation?.data?.message,
     loginMutation?.error?.message,
+    form,
+    setCredentials,
   ]);
 
   return (
