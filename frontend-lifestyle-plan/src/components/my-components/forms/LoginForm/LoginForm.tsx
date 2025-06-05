@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "sonner";
+import { X } from "lucide-react";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
@@ -38,7 +39,17 @@ export const LoginForm = () => {
 
   useEffect(() => {
     if (loginMutation.isSuccess) {
-      toast.success(loginMutation.data.message);
+      toast.success(loginMutation.data.message, {
+        action: (
+          <Button
+            variant="ghost"
+            className="self-end font-bold"
+            onClick={() => toast.dismiss()}
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        ),
+      });
       navigate("/app/dashboard");
     } else if (loginMutation.isError) {
       toast.error(loginMutation.error.message);

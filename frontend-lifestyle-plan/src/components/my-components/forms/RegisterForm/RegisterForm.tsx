@@ -13,14 +13,21 @@ import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router";
 import { useApiRequest } from "@/hooks";
 import { schema_registerForm, type RegisterFormValues } from "@/schemas";
-import { useEffect } from "react";
 import { toast } from "sonner";
+import { X } from "lucide-react";
+import { useAuthStore } from "@/store";
 
 export const RegisterForm = () => {
   const navigate = useNavigate();
+  const { setCredentials } = useAuthStore();
 
   const registerMutation = useApiRequest<RegisterFormValues>({
     url: `${import.meta.env.VITE_BACKEND_BASE_URL}/api/user`,
+    method: "POST",
+  });
+
+  const loginMutation = useApiRequest({
+    url: `${import.meta.env.VITE_BACKEND_BASE_URL}/api/login`,
     method: "POST",
   });
 
@@ -37,28 +44,47 @@ export const RegisterForm = () => {
     },
   });
 
-  const onSubmit = (data: RegisterFormValues) => {
-    registerMutation.mutate({
-      ...data,
-      statusId: 1,
-      roleId: 2,
-    });
-  };
+  const onSubmit = async (data: RegisterFormValues) => {
+    const { email, password } = data;
+    setCredentials(email, password);
 
-  useEffect(() => {
-    if (registerMutation.isSuccess) {
-      navigate("/login");
-      toast.success(registerMutation.data.message);
-    } else if (registerMutation.isError) {
-      toast.error(registerMutation.error.message);
+    try {
+      const registerResult = await registerMutation.mutateAsync({
+        ...data,
+        statusId: 1,
+        roleId: 2,
+      });
+
+      toast.success(
+        registerResult.message || "Registration successful! Logging in...",
+        {
+          action: (
+            <Button
+              onClick={() => toast.dismiss()}
+              variant="ghost"
+              className="font-bold"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          ),
+        }
+      );
+
+      const loginResult = await loginMutation.mutateAsync({ email, password });
+      if (loginResult.success) {
+        toast.success(loginResult.message || "Login successful!");
+        navigate("/app/profile");
+      } else {
+        toast.error(loginResult.error || "Login failed");
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("An unknown error occurred during registration or login.");
+      }
     }
-  }, [
-    registerMutation.isSuccess,
-    registerMutation.isError,
-    navigate,
-    registerMutation.data.message,
-    registerMutation?.error?.message,
-  ]);
+  };
 
   return (
     <Form {...form}>
@@ -72,12 +98,12 @@ export const RegisterForm = () => {
 
         <FormField
           control={form.control}
-          name="email"
+          name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>Full Name</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="you@example.com" {...field} />
+                <Input placeholder="John Doe" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -86,12 +112,12 @@ export const RegisterForm = () => {
 
         <FormField
           control={form.control}
-          name="name"
+          name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Full Name</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="John Doe" {...field} />
+                <Input type="email" placeholder="you@example.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -139,12 +165,6 @@ export const RegisterForm = () => {
             </FormItem>
           )}
         />
-
-        {registerMutation.isError && (
-          <p className="text-sm text-red-600 text-center">
-            {registerMutation.error.message}
-          </p>
-        )}
 
         <Button
           type="submit"
