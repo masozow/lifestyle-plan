@@ -23,7 +23,9 @@ export const AuthFormWrapper = ({
             <div className="flex h-6 w-6 sm:h-15 sm:w-15 items-center justify-center rounded-md bg-primary text-primary-foreground">
               <Cherry className="size-4 sm:size-10" />
             </div>
-            Acme Inc.
+            <p className="text-2xl font-bold">
+              <span className="text-primary">Fit</span>app
+            </p>
           </Link>
         </div>
         <div className="flex flex-1 items-start sm:mt-0 sm:items-center justify-center">
