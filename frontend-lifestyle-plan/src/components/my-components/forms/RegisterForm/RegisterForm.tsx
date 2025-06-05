@@ -14,12 +14,13 @@ import { useNavigate } from "react-router";
 import { useApiRequest } from "@/hooks";
 import { schema_registerForm, type RegisterFormValues } from "@/schemas";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 export const RegisterForm = () => {
   const navigate = useNavigate();
 
   const registerMutation = useApiRequest<RegisterFormValues>({
-    url: "http://localhost:3001/api/register",
+    url: `${import.meta.env.VITE_BACKEND_BASE_URL}/api/user`,
     method: "POST",
   });
 
@@ -47,8 +48,17 @@ export const RegisterForm = () => {
   useEffect(() => {
     if (registerMutation.isSuccess) {
       navigate("/login");
+      toast.success(registerMutation.data.message);
+    } else if (registerMutation.isError) {
+      toast.error(registerMutation.error.message);
     }
-  }, [registerMutation.isSuccess, navigate]);
+  }, [
+    registerMutation.isSuccess,
+    registerMutation.isError,
+    navigate,
+    registerMutation.data.message,
+    registerMutation?.error?.message,
+  ]);
 
   return (
     <Form {...form}>

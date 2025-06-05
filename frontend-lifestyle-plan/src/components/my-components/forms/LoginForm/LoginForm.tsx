@@ -14,12 +14,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { toast } from "sonner";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
 
   const loginMutation = useApiRequest<LoginFormValues>({
-    url: "http://localhost:3001/api/login",
+    url: `${import.meta.env.VITE_BACKEND_BASE_URL}/api/login`,
     method: "POST",
   });
 
@@ -37,9 +38,18 @@ export const LoginForm = () => {
 
   useEffect(() => {
     if (loginMutation.isSuccess) {
+      toast.success(loginMutation.data.message);
       navigate("/app/dashboard");
+    } else if (loginMutation.isError) {
+      toast.error(loginMutation.error.message);
     }
-  }, [loginMutation.isSuccess, navigate]);
+  }, [
+    loginMutation.isSuccess,
+    loginMutation.isError,
+    navigate,
+    loginMutation?.data?.message,
+    loginMutation?.error?.message,
+  ]);
 
   return (
     <Form {...form}>

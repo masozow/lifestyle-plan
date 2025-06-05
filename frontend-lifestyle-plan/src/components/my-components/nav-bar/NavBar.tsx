@@ -21,7 +21,7 @@ const NavBar = () => {
           <NavigationMenuList>
             <NavigationMenuItem>
               <Button asChild variant="outline">
-                <NavLink to="/app/register">Register</NavLink>
+                <NavLink to="/register">Register</NavLink>
               </Button>
             </NavigationMenuItem>
             <NavigationMenuItem>
