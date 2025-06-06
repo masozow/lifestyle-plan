@@ -16,10 +16,11 @@ import {
 } from "@/components/ui/form";
 import { toast } from "sonner";
 import { X } from "lucide-react";
-import { useAuthStore } from "@/store";
+import { useAuthStore, useSessionStore } from "@/store";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
+  const { fetchSession } = useSessionStore();
   const { setCredentials } = useAuthStore();
   const loginMutation = useApiRequest<LoginFormValues>({
     url: `${import.meta.env.VITE_BACKEND_BASE_URL}/api/login`,
@@ -40,19 +41,23 @@ export const LoginForm = () => {
 
   useEffect(() => {
     if (loginMutation.isSuccess) {
-      setCredentials(form.getValues("email"), form.getValues("password"));
-      toast.success(loginMutation.data.message, {
-        action: (
-          <Button
-            variant="ghost"
-            className="self-end font-bold"
-            onClick={() => toast.dismiss()}
-          >
-            <X className="h-4 w-4" />
-          </Button>
-        ),
-      });
-      navigate("/app/dashboard");
+      const loginLogic = async () => {
+        setCredentials(form.getValues("email"), form.getValues("password"));
+        await fetchSession();
+        toast.success(loginMutation.data.message, {
+          action: (
+            <Button
+              variant="ghost"
+              className="self-end font-bold"
+              onClick={() => toast.dismiss()}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          ),
+        });
+        navigate("/app/dashboard");
+      };
+      loginLogic();
     } else if (loginMutation.isError) {
       toast.error(loginMutation.error.message);
     }
@@ -64,6 +69,7 @@ export const LoginForm = () => {
     loginMutation?.error?.message,
     form,
     setCredentials,
+    fetchSession,
   ]);
 
   return (

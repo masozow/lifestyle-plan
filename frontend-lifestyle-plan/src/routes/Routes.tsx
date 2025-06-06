@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router";
-import { AuthLayout, AppLayout } from "@/layouts";
+import { AuthLayout, ProtectedLayout } from "@/layouts";
 
 import {
   LandingPage,
@@ -22,7 +22,8 @@ export const router = createBrowserRouter([
   },
   {
     path: "/app",
-    element: <AppLayout />,
+    // element: <AppLayout/> //if routes shouldn't be protected
+    element: <ProtectedLayout />,
     children: [
       { path: "", element: <PlannerPage /> },
       { path: "dashboard", element: <DashboardPage /> },

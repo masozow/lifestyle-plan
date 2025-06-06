@@ -1,5 +1,5 @@
 import { Outlet } from "react-router";
-import NavBar from "@/components/my-components/nav-bar/NavBar";
+import { NavBar } from "@/components";
 import styles from "./AppLayout.module.css";
 
 export const AppLayout = () => {

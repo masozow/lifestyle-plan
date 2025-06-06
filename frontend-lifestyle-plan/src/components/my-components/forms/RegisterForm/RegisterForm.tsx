@@ -15,12 +15,12 @@ import { useApiRequest } from "@/hooks";
 import { schema_registerForm, type RegisterFormValues } from "@/schemas";
 import { toast } from "sonner";
 import { X } from "lucide-react";
-import { useAuthStore } from "@/store";
+import { useAuthStore, useSessionStore } from "@/store";
 
 export const RegisterForm = () => {
   const navigate = useNavigate();
   const { setCredentials } = useAuthStore();
-
+  const { fetchSession } = useSessionStore();
   const registerMutation = useApiRequest<RegisterFormValues>({
     url: `${import.meta.env.VITE_BACKEND_BASE_URL}/api/user`,
     method: "POST",
@@ -71,7 +71,9 @@ export const RegisterForm = () => {
       );
 
       const loginResult = await loginMutation.mutateAsync({ email, password });
+
       if (loginResult.success) {
+        await fetchSession(); // 👈 Esto DEBE estar después del login exitoso
         toast.success(loginResult.message || "Login successful!");
         navigate("/app/profile");
       } else {

@@ -1,18 +1,25 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { toast } from "sonner";
+import { getFromServer } from "@/api";
+
+type FetchResponse = {
+  success: string;
+  message: string;
+};
 
 interface UserSession {
-  ID: number;
-  NOMBRE: string;
-  NOMBRE_ROL: string;
-  ID_ROL: number;
+  id: number;
+  name: string;
+  email: string;
+  roleId: number;
 }
 
 interface SessionStore {
   user: UserSession | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  hasTriedFetching: boolean;
   fetchSession: () => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -22,38 +29,52 @@ export const useSessionStore = create<SessionStore>()(
     (set) => ({
       user: null,
       isAuthenticated: false,
-      isLoading: true,
+      isLoading: false,
+      hasTriedFetching: false,
 
       fetchSession: async () => {
-        try {
-          set({ isLoading: true });
-          const res = await fetch(
-            `${import.meta.env.VITE_BACKEND_BASE_URL}/api/usuarios/datos-token`,
-            {
-              credentials: "include",
-            }
-          );
+  try {
+    set({ isLoading: true });
 
-          if (!res.ok) throw new Error("Unauthorized");
+    const data = await getFromServer(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/session`) as FetchResponse;
 
-          const data = await res.json();
-          const userData = data?.data;
+    if (typeof data.message !== "string") {
+      throw new Error("Expected message to be a JSON string");
+    }
 
-          set({
-            user: userData,
-            isAuthenticated: true,
-            isLoading: false,
-          });
-        } catch (error: any) {
-          console.warn("No session found:", error.message);
-          set({ user: null, isAuthenticated: false, isLoading: false });
-        }
-      },
+    const parsedMessage = JSON.parse(data.message);
+
+    const userData = {
+      id: parsedMessage.id,
+      name: parsedMessage.name,
+      email: parsedMessage.email,
+      roleId: parsedMessage.roleId,
+    };
+
+      set({
+        user: userData,
+        isAuthenticated: true,
+        isLoading: false,
+        hasTriedFetching: true,
+      });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.warn("No session found:", error.message);
+        set({
+          user: null,
+          isAuthenticated: false,
+          isLoading: false,
+          hasTriedFetching: true,
+        });
+      }
+    }
+  },
+
 
       logout: async () => {
         try {
           await fetch(
-            `${import.meta.env.VITE_BACKEND_BASE_URL}/api/usuarios/logout`,
+            `${import.meta.env.VITE_BACKEND_BASE_URL}/api/users/logout`,
             {
               method: "POST",
               credentials: "include",
@@ -68,7 +89,7 @@ export const useSessionStore = create<SessionStore>()(
       },
     }),
     {
-      name: "session-store", 
+      name: "session-store",
     }
   )
 );

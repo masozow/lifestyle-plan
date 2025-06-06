@@ -1,11 +1,11 @@
-export const saveToServer = async <T>(url: string, method: string, data: T): Promise<any> => {
-  const response = await fetch(url, {
+export const getFromServer = async (url: string): Promise<any> => {
+    const method = "GET";
+    const response = await fetch(url, {
     method: method,
      headers: {
       "Content-Type": "application/json",
     },
     credentials: "include", 
-    body: JSON.stringify(data || {}),
   });
 
   if (!response.ok) {
