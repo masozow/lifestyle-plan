@@ -1,14 +1,11 @@
 import { ProfileForm } from "@/components";
-import { useAuthStore } from "@/store";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export const ProfilePage = () => {
   const { t } = useTranslation();
   const [customTitle, setCustomTitle] = useState<string | undefined>();
-  const { credentials } = useAuthStore((state) => state);
 
-  console.log("Credentials from Zustand:", credentials!);
   const handleFormTitleChange = (title?: string) => {
     setCustomTitle(title);
   };

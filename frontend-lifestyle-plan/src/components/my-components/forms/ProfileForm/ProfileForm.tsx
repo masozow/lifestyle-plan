@@ -8,9 +8,10 @@ import { CustomRadiogroup, CustomNumberInput } from "@/components";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import SummaryCard from "../PlannerForm/SummaryCard";
-import { useSteps } from "@/hooks";
+import { useApiRequest, useSteps } from "@/hooks";
 import { profileSteps } from "@/config";
-import { useProfileStore } from "@/store";
+import { useProfileStore, useSessionStore } from "@/store";
+import { API_ENDPOINTS } from "@/lib/backendURLS";
 
 interface Props {
   titleChangeFunction: (title?: string) => void;
@@ -24,17 +25,23 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
   const defaultValues = getDefaultValues();
   const [currentStep, setCurrentStep] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
+  const profileMutation = useApiRequest<ProfileFormValues & { userId: number }>(
+    {
+      url: API_ENDPOINTS.profile,
+      method: "POST",
+    }
+  );
+
+  const { user } = useSessionStore((state) => state);
   const onSubmit = (data: ProfileFormValues) => {
-    setProfile(data);
-    console.log("Profile data set in Zustand:", data);
+    if (user?.id) {
+      profileMutation.mutate({ userId: user.id, ...data });
+    } else {
+      console.error("No user found");
+    }
   };
-  const {
-    control,
-    handleSubmit,
-    watch,
-    formState: { errors },
-    trigger,
-  } = useForm<ProfileFormValues>({
+
+  const form = useForm<ProfileFormValues>({
     resolver: zodResolver(schema_profileForm),
     mode: "onBlur",
     defaultValues: {
@@ -42,6 +49,14 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
       ...initialValues,
     },
   });
+
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    trigger,
+  } = form;
 
   const unitSystem = watch("unitSystem");
   const gender = watch("gender");
@@ -83,7 +98,15 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
     setCurrentStep((prev) => prev - 1);
     setIsCompleted(false);
   };
-
+  useEffect(() => {
+    if (profileMutation.isSuccess) {
+      const dataFromForm = form.getValues();
+      setProfile(dataFromForm);
+    }
+  }, [profileMutation.isSuccess, form, setProfile]);
+  useEffect(() => {
+    console.log("Profile from store: ", profile);
+  }, [profile]);
   return (
     <motion.form
       onSubmit={handleSubmit(onSubmit)}
@@ -154,8 +177,9 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
         ) : (
           <Button
             type="submit"
-            className={cn("text-lg p-4", errors && "cursor-not-allowed")}
-            disabled={Object.keys(errors).length > 0}
+            className={cn("text-lg p-4")}
+            // className={cn("text-lg p-4", errors && "cursor-not-allowed")}
+            // disabled={Object.keys(errors).length > 0}
           >
             {t("profileForm.buttons.submit")}
           </Button>
