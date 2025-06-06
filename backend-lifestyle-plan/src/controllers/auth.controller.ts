@@ -122,8 +122,39 @@ const logout = async (req: Request, res: Response) => {
     );
   }
 };
+const session = async (req: Request, res: Response) => {
+  try {
+    const user = req.user; // Viene desde checkAuth
+    if (!user) {
+      return res.status(401).json(
+        await errorAndLogHandler({
+          level: errorLevels.warn,
+          message: "User not authenticated",
+        })
+      );
+    }
+
+    return res.status(200).json(
+      await errorAndLogHandler({
+        level: errorLevels.info,
+        message: JSON.stringify(user),
+        // userId: user.id,
+        userId:0,
+        shouldSaveLog: true,
+      })
+    );
+  } catch (error: any) {
+    return res.status(500).json(
+      await errorAndLogHandler({
+        level: errorLevels.error,
+        message: "Session check failed: " + error.message,
+      })
+    );
+  }
+};
 
 export const AuthController = {
   login,
   logout,
+  session,
 };
