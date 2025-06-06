@@ -71,13 +71,6 @@
         "imperial": "Imperial (lbs, pulgadas)"
       }
     },
-    "gender": {
-      "title": "Género",
-      "options": {
-        "female": "Femenino",
-        "male": "Masculino"
-      }
-    },
     "weight": {
       "title": "Peso"
     },

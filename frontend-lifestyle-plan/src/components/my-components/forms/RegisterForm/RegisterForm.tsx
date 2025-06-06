@@ -16,11 +16,14 @@ import { schema_registerForm, type RegisterFormValues } from "@/schemas";
 import { toast } from "sonner";
 import { X } from "lucide-react";
 import { useAuthStore, useSessionStore } from "@/store";
+import { CustomRadiogroup } from "@/components";
+import { useEffect } from "react";
 
 export const RegisterForm = () => {
   const navigate = useNavigate();
   const { setCredentials } = useAuthStore();
   const { fetchSession } = useSessionStore();
+
   const registerMutation = useApiRequest<RegisterFormValues>({
     url: `${import.meta.env.VITE_BACKEND_BASE_URL}/api/user`,
     method: "POST",
@@ -41,8 +44,19 @@ export const RegisterForm = () => {
       birthDate: "",
       statusId: 1,
       roleId: 2,
+      gender: "male",
     },
   });
+
+  useEffect(() => {
+    if (loginMutation.isSuccess) {
+      const handleSessionFetch = async () => {
+        await fetchSession();
+        navigate("/app/profile");
+      };
+      handleSessionFetch();
+    }
+  }, [loginMutation.isSuccess, fetchSession, navigate]);
 
   const onSubmit = async (data: RegisterFormValues) => {
     const { email, password } = data;
@@ -70,14 +84,12 @@ export const RegisterForm = () => {
         }
       );
 
-      const loginResult = await loginMutation.mutateAsync({ email, password });
+      await loginMutation.mutateAsync({ email, password });
 
-      if (loginResult.success) {
-        await fetchSession(); // 👈 Esto DEBE estar después del login exitoso
-        toast.success(loginResult.message || "Login successful!");
-        navigate("/app/profile");
+      if (loginMutation.isSuccess) {
+        toast.success("Login successful!");
       } else {
-        toast.error(loginResult.error || "Login failed");
+        toast.error(loginMutation.error?.message || "Login failed");
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -147,27 +159,38 @@ export const RegisterForm = () => {
             <FormItem>
               <FormLabel>Phone</FormLabel>
               <FormControl>
-                <Input type="tel" placeholder="1234567890" {...field} />
+                <Input type="tel" placeholder="55544433" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-
-        <FormField
-          control={form.control}
-          name="birthDate"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Date of Birth</FormLabel>
-              <FormControl>
-                <Input type="date" placeholder="YYYY-MM-DD" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
+        <div className="grid grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="birthDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Date of Birth</FormLabel>
+                <FormControl>
+                  <Input type="date" placeholder="YYYY-MM-DD" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <CustomRadiogroup<RegisterFormValues>
+            control={form.control}
+            title="Gender"
+            name="gender"
+            defaultValue=""
+            options={[
+              { label: "Male", value: "male" },
+              { label: "Female", value: "female" },
+            ]}
+            error={form.formState.errors.gender}
+          />
+        </div>
         <Button
           type="submit"
           className="w-full"

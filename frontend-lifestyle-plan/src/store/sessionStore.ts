@@ -11,6 +11,7 @@ type FetchResponse = {
 interface UserSession {
   id: number;
   name: string;
+  gender: string;
   email: string;
   roleId: number;
 }
@@ -49,6 +50,7 @@ export const useSessionStore = create<SessionStore>()(
       name: parsedMessage.name,
       email: parsedMessage.email,
       roleId: parsedMessage.roleId,
+      gender: parsedMessage.gender
     };
 
       set({

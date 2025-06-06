@@ -1,6 +1,10 @@
-import { DataTypes, Model, Optional, HasOneGetAssociationMixin } from "sequelize";
+import {
+  DataTypes,
+  Model,
+  Optional,
+  HasManyGetAssociationsMixin,
+} from "sequelize";
 import sequelize from "../config/sequelize.js";
-import Profile from "./profile.model.js";
 
 export interface UserAttributes {
   id: number;
@@ -9,6 +13,7 @@ export interface UserAttributes {
   password: string;
   phone: string;
   birthDate: Date;
+  gender: "male" | "female";
   statusId: number;
   roleId: number;
   createdAt?: Date;
@@ -17,19 +22,22 @@ export interface UserAttributes {
 
 export interface UserCreationAttributes extends Optional<UserAttributes, "id" | "createdAt" | "updatedAt"> {}
 
-class User extends Model<UserAttributes, UserCreationAttributes> {
+class User extends Model<UserAttributes, UserCreationAttributes>
+  implements UserAttributes {
   declare id: number;
   declare email: string;
   declare name: string;
   declare password: string;
   declare phone: string;
   declare birthDate: Date;
+  declare gender: "male" | "female";
   declare statusId: number;
   declare roleId: number;
   declare readonly createdAt: Date;
   declare readonly updatedAt: Date;
 
-  declare getProfile: HasOneGetAssociationMixin<Profile>;
+  declare getProfiles: HasManyGetAssociationsMixin<any>;
+  declare getPlans: HasManyGetAssociationsMixin<any>;
 }
 
 User.init(
@@ -58,6 +66,10 @@ User.init(
     },
     birthDate: {
       type: DataTypes.DATEONLY,
+      allowNull: false,
+    },
+    gender: {
+      type: DataTypes.ENUM("male", "female"),
       allowNull: false,
     },
     statusId: {
