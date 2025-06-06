@@ -45,7 +45,26 @@
     }
   };
 
+  const getByUserID = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+      const profile = await Profile.findOne({ where: { userId: id } });
+      res.status(200).json({ success: true, data: profile });
+    } catch (error) {
+      res.status(500).json(
+        await errorAndLogHandler({
+          level: errorLevels.error,
+          message: `Error fetching the profile: ${id} ` + error.message,
+          // userId: req.user.id,
+          userId:0,
+          genericId: id,
+        })
+      );
+    }
+  };
+
   export const ProfileController = {
     create,
-    getAll
+    getAll,
+    getByUserID
   };

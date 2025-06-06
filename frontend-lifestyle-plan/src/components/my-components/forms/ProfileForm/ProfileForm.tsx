@@ -10,31 +10,29 @@ import { cn } from "@/lib/utils";
 import SummaryCard from "../PlannerForm/SummaryCard";
 import { useSteps } from "@/hooks";
 import { profileSteps } from "@/config";
+import { useProfileStore } from "@/store";
 
 interface Props {
-  submitFunction: (data: ProfileFormValues) => void;
   titleChangeFunction: (title?: string) => void;
   initialValues?: Partial<ProfileFormValues>;
-  profile: ProfileFormValues | null;
 }
 
-export const ProfileForm = ({
-  profile,
-  submitFunction,
-  titleChangeFunction,
-  initialValues,
-}: Props) => {
+export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
   const { t } = useTranslation();
+  const { profile, setProfile } = useProfileStore((state) => state);
   const { steps, getDefaultValues } = useSteps(profileSteps);
   const defaultValues = getDefaultValues();
   const [currentStep, setCurrentStep] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
-
+  const onSubmit = (data: ProfileFormValues) => {
+    setProfile(data);
+    console.log("Profile data set in Zustand:", data);
+  };
   const {
     control,
     handleSubmit,
     watch,
-    formState: { errors, touchedFields, isValid },
+    formState: { errors },
     trigger,
   } = useForm<ProfileFormValues>({
     resolver: zodResolver(schema_profileForm),
@@ -88,7 +86,7 @@ export const ProfileForm = ({
 
   return (
     <motion.form
-      onSubmit={handleSubmit(submitFunction)}
+      onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col justify-between gap-6"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
