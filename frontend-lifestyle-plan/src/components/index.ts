@@ -1,6 +1,6 @@
 export * from "./my-components/forms/PlannerForm/PlannerForm.tsx";
 export * from "./my-components/forms/LoginForm/LoginForm.tsx";
-export * from "./my-components/nav-bar/NavBar.tsx";
+export * from "@/components/my-components/nav-bar/NavBar.tsx";
 export * from "./my-components/forms/PlannerForm/SummaryCard.tsx";
 export * from "./my-components/nav-bar/LanguageMenu.tsx";
 export * from "./my-components/forms/ProfileForm/ProfileForm.tsx";
@@ -8,4 +8,6 @@ export * from "./my-components/forms/BaseForm/CustomNumberInput.tsx";
 export * from "./my-components/forms/BaseForm/CustomRadiogroup.tsx";
 export * from "./my-components/forms/BaseForm/CustomTextArea.tsx";
 export * from "./my-components/forms/RegisterForm/RegisterForm.tsx";
+export * from "@/components/my-components/session/SessionInitializer";
+export * from "@/components/theme/ThemeProvider";
 // export * from "./my-components/forms/BaseForm/CustomInput.tsx";

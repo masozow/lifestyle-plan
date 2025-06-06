@@ -4,7 +4,6 @@ import { comparePassword } from "../utils/encryption.js";
 import { tokenSign, verifyToken } from "../utils/generateToken.js";
 import { errorAndLogHandler, errorLevels } from "../utils/errorHandler.js";
 
-
 /**
  * Authenticates a user and issues a JWT token.
  * @param req - Request with body containing `email` and `password`.
@@ -30,7 +29,6 @@ const login = async (req: Request, res: Response) => {
         })
       );
     }
-    
 
     const isMatch = await comparePassword(password, user.password);
 
@@ -76,7 +74,6 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
-
 /**
  * Logs out the user by clearing the JWT token cookie.
  * @param req - Request with the JWT token cookie.
@@ -116,8 +113,45 @@ const logout = async (req: Request, res: Response) => {
       await errorAndLogHandler({
         level: errorLevels.error,
         message: "Logout error: " + error.message,
-        // userId: req.user?.id,
-        userId:0
+        userId: 0
+      })
+    );
+  }
+};
+
+/**
+ * Checks the user's session.
+ * @param req - Request containing user information.
+ * @param res - Response with a JSON response containing user session details or an error message.
+ *
+ * @throws {Error} If the user is not authenticated, an error is thrown with a 401 status code.
+ * @throws {Error} If an error occurs during session checking, an error is thrown with a 500 status code.
+ */
+const session = async (req: Request, res: Response) => {
+  try {
+    const user = req.user; // Comes from checkAuth
+    if (!user) {
+      return res.status(401).json(
+        await errorAndLogHandler({
+          level: errorLevels.warn,
+          message: "User not authenticated",
+        })
+      );
+    }
+
+    return res.status(200).json(
+      await errorAndLogHandler({
+        level: errorLevels.info,
+        message: JSON.stringify(user),
+        userId: 0,
+        shouldSaveLog: true,
+      })
+    );
+  } catch (error: any) {
+    return res.status(500).json(
+      await errorAndLogHandler({
+        level: errorLevels.error,
+        message: "Session check failed: " + error.message,
       })
     );
   }
@@ -126,4 +160,6 @@ const logout = async (req: Request, res: Response) => {
 export const AuthController = {
   login,
   logout,
+  session,
 };
+

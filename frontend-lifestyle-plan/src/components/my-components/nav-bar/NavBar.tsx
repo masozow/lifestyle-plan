@@ -10,7 +10,12 @@ import LanguageMenu from "./LanguageMenu";
 import { Button } from "@/components/ui/button";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-const NavBar = () => {
+import type { JSX } from "react";
+
+interface Props {
+  userName?: string;
+}
+export const NavBar = ({ userName }: Props): JSX.Element => {
   return (
     <>
       <div className="flex justify-between fixed top-0 left-0 w-full px-4 py-2 backdrop-blur-md bg-background/50 dark:bg-background-dark/50">
@@ -40,7 +45,7 @@ const NavBar = () => {
                     <AvatarImage src="https://github.com/shadcn.png" />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
-                  <span className="text-md">User</span>
+                  <span className="text-md">{userName || "User"}</span>
                 </NavLink>
               </Button>
             </NavigationMenuItem>
@@ -56,4 +61,3 @@ const NavBar = () => {
     </>
   );
 };
-export default NavBar;

@@ -1,5 +1,7 @@
+import { useSessionStore } from "@/store";
+
 export const DashboardPage = () => {
-  return <div className="h-screen mt-10">DashboardPage</div>;
+  const { user } = useSessionStore();
+  console.log("User from Zustand:", user);
+  return <div className="h-screen mt-10">DashboardPage: </div>;
 };
-
-
