@@ -1,3 +1,4 @@
+import { diffYears } from "@formkit/tempo";
 import { z } from "zod";
 
 export const schema_registerForm = z.object({
@@ -5,7 +6,12 @@ export const schema_registerForm = z.object({
   email: z.string().email(),
   password: z.string().min(6),
   phone: z.string().min(8),
-  birthDate: z.string(),
+  birthDate: z.string().refine((value) => {
+    const age = diffYears(new Date(), new Date(value));
+    return age >= 18;
+  }, {
+    message: "Must be at least 18 years old",
+  }),
   gender: z.enum(["male", "female"]), // ✅ Agregado
   statusId: z.number(),
   roleId: z.number(),
