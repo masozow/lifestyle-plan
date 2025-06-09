@@ -1,4 +1,6 @@
 {
+  "phone_invalid_format": "El teléfono debe contener solo dígitos.",
+  "birthdate_min_age": "Debes tener al menos 18 años.",
   "landingPage": {
     "title": "Planifica tus comidas diarias sin estrés.",
     "subtitle1": "Establece tus metas y ajusta tus comidas a tu estilo de vida.",

@@ -1,4 +1,6 @@
 {
+  "phone_invalid_format": "Phone must contain only digits.",
+  "birthdate_min_age": "You must be at least 18 years old.",
   "landingPage": {
     "title": "Plan your daily meals with no stress.",
     "subtitle1": "Set your goals and adjust your meals to fit your lifestyle.",
