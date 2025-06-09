@@ -54,11 +54,7 @@ export const errorAndLogHandler = async ({
   const messageContainsUniqueRestriction = message
     .toString()
     .toLowerCase()
-    .includes("unique") ||
-    message
-      .toString()
-      .toLowerCase()
-      .includes("sequelizeuniqueconstrainterror");
+    .includes("unique");
   const messageContainsStock = message
     .toString()
     .toLowerCase()
