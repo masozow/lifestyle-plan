@@ -21,11 +21,11 @@ export const profileSteps: StepConfig[] = [
     titleKey: "profileForm.height.title",
     type: "number",
   },
-  {
-    name: "age",
-    titleKey: "profileForm.age.title",
-    type: "number",
-  },
+  // {
+  //   name: "age",
+  //   titleKey: "profileForm.age.title",
+  //   type: "number",
+  // },
   {
     name: "waist",
     titleKey: "profileForm.waist.title",

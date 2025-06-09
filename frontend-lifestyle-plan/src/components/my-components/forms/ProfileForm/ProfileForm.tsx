@@ -23,13 +23,17 @@ interface Props {
 export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
   const { t } = useTranslation();
   const { setProfile } = useProfileStore();
-  const { steps, getDefaultValues } = useSteps(profileSteps);
+  const { user } = useSessionStore();
+
+  const { steps, getDefaultValues } = useSteps(
+    profileSteps,
+    user?.gender === "male" ? "hip" : null
+  );
+
   const defaultValues = getDefaultValues();
   const [currentStep, setCurrentStep] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
   const [showSubmit, setShowSubmit] = useState(false);
-
-  const { user } = useSessionStore();
 
   const profileMutation = useApiRequest<ProfileFormValues & { userId: number }>(
     {
@@ -61,7 +65,7 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
   const getUnit = (field: string) => {
     if (field === "weight") return unitSystem === "metric" ? "kg" : "lbs";
     if (field === "height") return unitSystem === "metric" ? "cm" : "inches";
-    if (field === "age") return "";
+    // if (field === "age") return "";
     return unitSystem === "metric" ? "cm" : "inches";
   };
 
@@ -162,7 +166,6 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
               error={errors[steps[currentStep].name as keyof ProfileFormValues]}
             />
           ) : (
-            !(user?.gender === "male" && steps[currentStep].name === "hip") &&
             !isCompleted && (
               <CustomNumberInput<ProfileFormValues>
                 key={steps[currentStep].name}
