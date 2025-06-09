@@ -27,7 +27,8 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
   const defaultValues = getDefaultValues();
   const [currentStep, setCurrentStep] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
-  const [canSubmit, setCanSubmit] = useState(false);
+  const [showSubmit, setShowSubmit] = useState(false);
+
   const { user } = useSessionStore();
 
   const profileMutation = useApiRequest<ProfileFormValues & { userId: number }>(
@@ -88,15 +89,15 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
         setCurrentStep((prev) => prev + 1);
       } else {
         setIsCompleted(true);
-        setCanSubmit(true);
         titleChangeFunction(t("profilePage.titleReview"));
+        setTimeout(() => setShowSubmit(true), 0);
       }
     }
   };
 
   const prevStep = () => {
     setIsCompleted(false);
-    setCanSubmit(false);
+    setShowSubmit(false);
     titleChangeFunction();
     setCurrentStep((prev) => prev - 1);
   };
@@ -134,6 +135,8 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
   }, [
     profileMutation.isSuccess,
     profileMutation.isError,
+    profileMutation.error?.message,
+    profileMutation.data?.message,
     getValues,
     setProfile,
   ]);
@@ -193,8 +196,7 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
             {t("profileForm.buttons.back")}
           </Button>
         )}
-
-        {!canSubmit ? (
+        {!isCompleted || !showSubmit ? (
           <Button
             type="button"
             onClick={handleNext}
@@ -206,7 +208,11 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
             {t("profileForm.buttons.next")}
           </Button>
         ) : (
-          <Button type="submit" className={cn("text-lg p-4")}>
+          <Button
+            type="submit"
+            className={cn("text-lg p-4")}
+            disabled={profileMutation.isPending || profileMutation.isSuccess}
+          >
             {t("profileForm.buttons.submit")}
           </Button>
         )}
