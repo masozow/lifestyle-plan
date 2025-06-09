@@ -54,7 +54,11 @@ export const errorAndLogHandler = async ({
   const messageContainsUniqueRestriction = message
     .toString()
     .toLowerCase()
-    .includes("unique");
+    .includes("unique") ||
+    message
+      .toString()
+      .toLowerCase()
+      .includes("sequelizeuniqueconstrainterror");
   const messageContainsStock = message
     .toString()
     .toLowerCase()
@@ -89,7 +93,7 @@ export const errorAndLogHandler = async ({
     success,
     message: messageContainsError
       ? messageContainsUniqueRestriction
-        ? "Error: A record with that name already exists"
+        ? "Error: A record with that data already exists"
         : messageContainsStock
         ? "Error: Insufficient stock to complete the operation"
         : "An error occurred."

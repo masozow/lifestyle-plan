@@ -154,6 +154,7 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
     getValues,
     setProfile,
     navigate,
+    age,
   ]);
 
   return (

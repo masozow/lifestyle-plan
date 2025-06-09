@@ -59,6 +59,7 @@ export const RegisterForm = () => {
   }, [loginMutation.isSuccess, fetchSession, navigate]);
 
   const onSubmit = async (data: RegisterFormValues) => {
+    console.log("Form values: ", data);
     const { email, password } = data;
     setCredentials(email, password);
 
@@ -85,12 +86,6 @@ export const RegisterForm = () => {
       );
 
       await loginMutation.mutateAsync({ email, password });
-
-      if (loginMutation.isSuccess) {
-        toast.success("Login successful!");
-      } else {
-        toast.error(loginMutation.error?.message || "Login failed");
-      }
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);

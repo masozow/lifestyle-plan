@@ -12,7 +12,7 @@ export const schema_registerForm = z.object({
   }, {
     message: "Must be at least 18 years old",
   }),
-  gender: z.enum(["male", "female"]), // ✅ Agregado
+  gender: z.enum(["male", "female"]),
   statusId: z.number(),
   roleId: z.number(),
 });
