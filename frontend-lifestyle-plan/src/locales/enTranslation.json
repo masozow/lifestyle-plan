@@ -71,13 +71,6 @@
         "imperial": "Imperial (lbs, inches)"
       }
     },
-    "gender": {
-      "title": "Gender",
-      "options": {
-        "female": "Female",
-        "male": "Male"
-      }
-    },
     "weight": {
       "title": "Weight"
     },

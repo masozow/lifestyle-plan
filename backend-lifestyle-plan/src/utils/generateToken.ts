@@ -6,6 +6,7 @@ export interface UserTokenPayload {
   email: string;
   name: string;
   roleId: number;
+  gender: "male" | "female";
 }
 
 /**

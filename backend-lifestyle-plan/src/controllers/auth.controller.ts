@@ -46,6 +46,7 @@ const login = async (req: Request, res: Response) => {
       email: user.email,
       name: user.name,
       roleId: user.roleId,
+      gender: user.gender,
     });
 
     res.cookie("authToken", token, {

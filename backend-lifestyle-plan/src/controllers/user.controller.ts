@@ -60,8 +60,25 @@ const getAll = async (req: Request, res: Response) => {
     );
   }
 };
-
+const getByID = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+      const user = await User.findByPk(id);
+      res.status(200).json({ success: true, data: user });
+    } catch (error) {
+      res.status(500).json(
+        await errorAndLogHandler({
+          level: errorLevels.error,
+          message: `Error fetching the user: ${id} ` + error.message,
+          // userId: req.user.id,
+          userId:0,
+          genericId: id,
+        })
+      );
+    }
+  };
 export const UserController = {
   create,
   getAll,
+  getByID
 };

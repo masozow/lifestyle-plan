@@ -12,16 +12,6 @@ export const profileSteps: StepConfig[] = [
     type: "radio",
   },
   {
-    name: "gender",
-    titleKey: "profileForm.gender.title",
-    options: [
-      { value: "female", labelKey: "profileForm.gender.options.female" },
-      { value: "male", labelKey: "profileForm.gender.options.male" },
-    ],
-    defaultValue: "female",
-    type: "radio",
-  },
-  {
     name: "weight",
     titleKey: "profileForm.weight.title",
     type: "number",
@@ -31,11 +21,11 @@ export const profileSteps: StepConfig[] = [
     titleKey: "profileForm.height.title",
     type: "number",
   },
-  {
-    name: "age",
-    titleKey: "profileForm.age.title",
-    type: "number",
-  },
+  // {
+  //   name: "age",
+  //   titleKey: "profileForm.age.title",
+  //   type: "number",
+  // },
   {
     name: "waist",
     titleKey: "profileForm.waist.title",

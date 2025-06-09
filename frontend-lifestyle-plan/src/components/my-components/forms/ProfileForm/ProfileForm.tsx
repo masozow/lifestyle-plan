@@ -8,35 +8,41 @@ import { CustomRadiogroup, CustomNumberInput } from "@/components";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import SummaryCard from "../PlannerForm/SummaryCard";
-import { useSteps } from "@/hooks";
+import { useApiRequest, useSteps } from "@/hooks";
 import { profileSteps } from "@/config";
+import { useProfileStore, useSessionStore } from "@/store";
+import { API_ENDPOINTS } from "@/lib/backendURLS";
+import { toast } from "sonner";
+import { X } from "lucide-react";
 
 interface Props {
-  submitFunction: (data: ProfileFormValues) => void;
   titleChangeFunction: (title?: string) => void;
   initialValues?: Partial<ProfileFormValues>;
-  profile: ProfileFormValues | null;
 }
 
-export const ProfileForm = ({
-  profile,
-  submitFunction,
-  titleChangeFunction,
-  initialValues,
-}: Props) => {
+export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
   const { t } = useTranslation();
-  const { steps, getDefaultValues } = useSteps(profileSteps);
+  const { setProfile } = useProfileStore();
+  const { user } = useSessionStore();
+
+  const { steps, getDefaultValues } = useSteps(
+    profileSteps,
+    user?.gender === "male" ? "hip" : null
+  );
+
   const defaultValues = getDefaultValues();
   const [currentStep, setCurrentStep] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [showSubmit, setShowSubmit] = useState(false);
 
-  const {
-    control,
-    handleSubmit,
-    watch,
-    formState: { errors, touchedFields, isValid },
-    trigger,
-  } = useForm<ProfileFormValues>({
+  const profileMutation = useApiRequest<ProfileFormValues & { userId: number }>(
+    {
+      url: API_ENDPOINTS.profile,
+      method: "POST",
+    }
+  );
+
+  const form = useForm<ProfileFormValues>({
     resolver: zodResolver(schema_profileForm),
     mode: "onBlur",
     defaultValues: {
@@ -45,50 +51,103 @@ export const ProfileForm = ({
     },
   });
 
+  const {
+    control,
+    handleSubmit,
+    watch,
+    getValues,
+    formState: { errors },
+    trigger,
+  } = form;
+
   const unitSystem = watch("unitSystem");
-  const gender = watch("gender");
 
   const getUnit = (field: string) => {
     if (field === "weight") return unitSystem === "metric" ? "kg" : "lbs";
     if (field === "height") return unitSystem === "metric" ? "cm" : "inches";
-    if (field === "age") return "";
+    // if (field === "age") return "";
     return unitSystem === "metric" ? "cm" : "inches";
   };
 
-  useEffect(() => {
-    if (currentStep === steps.length) {
-      titleChangeFunction(t("profilePage.titleReview"));
+  const onSubmit = async (data: ProfileFormValues) => {
+    if (user?.id) {
+      try {
+        await profileMutation.mutateAsync({ ...data, userId: user.id });
+      } catch (error) {
+        console.error("Error during profile mutation:", error);
+      }
+    } else {
+      toast.error("User session is missing. Please log in again.");
     }
-  }, [currentStep, t, titleChangeFunction, steps.length]);
+  };
+
   const isStepValid = async () => {
     const currentField = steps[currentStep].name;
     await trigger(currentField as keyof ProfileFormValues);
     return !errors[currentField as keyof ProfileFormValues];
   };
 
-  const nextStep = () => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep((prev) => prev + 1);
-    } else {
-      setIsCompleted(true);
-      titleChangeFunction(t("profilePage.titleReview"));
-    }
-  };
   const handleNext = async () => {
     if (await isStepValid()) {
-      nextStep();
+      if (currentStep < steps.length - 1) {
+        setCurrentStep((prev) => prev + 1);
+      } else {
+        setIsCompleted(true);
+        titleChangeFunction(t("profilePage.titleReview"));
+        setTimeout(() => setShowSubmit(true), 0);
+      }
     }
   };
 
   const prevStep = () => {
+    setIsCompleted(false);
+    setShowSubmit(false);
     titleChangeFunction();
     setCurrentStep((prev) => prev - 1);
-    setIsCompleted(false);
   };
+
+  useEffect(() => {
+    if (profileMutation.isSuccess) {
+      const formData = getValues();
+      toast.success(profileMutation.data?.message || "Profile created", {
+        action: (
+          <Button
+            variant="ghost"
+            className="font-bold"
+            onClick={() => toast.dismiss()}
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        ),
+      });
+      setProfile(formData);
+    }
+
+    if (profileMutation.isError) {
+      toast.error(profileMutation.error?.message || "An error occurred", {
+        action: (
+          <Button
+            variant="ghost"
+            className="font-bold"
+            onClick={() => toast.dismiss()}
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        ),
+      });
+    }
+  }, [
+    profileMutation.isSuccess,
+    profileMutation.isError,
+    profileMutation.error?.message,
+    profileMutation.data?.message,
+    getValues,
+    setProfile,
+  ]);
 
   return (
     <motion.form
-      onSubmit={handleSubmit(submitFunction)}
+      onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col justify-between gap-6"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -100,14 +159,13 @@ export const ProfileForm = ({
             <CustomRadiogroup<ProfileFormValues>
               key={steps[currentStep].name}
               control={control}
-              title={`${steps[currentStep].title}`}
+              title={steps[currentStep].title}
               name={steps[currentStep].name as keyof ProfileFormValues}
               defaultValue={steps[currentStep].defaultValue || ""}
               options={steps[currentStep].options || []}
               error={errors[steps[currentStep].name as keyof ProfileFormValues]}
             />
           ) : (
-            !(gender === "male" && steps[currentStep].name === "hip") &&
             !isCompleted && (
               <CustomNumberInput<ProfileFormValues>
                 key={steps[currentStep].name}
@@ -123,7 +181,7 @@ export const ProfileForm = ({
           )}
           {isCompleted && (
             <SummaryCard<ProfileFormValues>
-              data={profile ?? null}
+              data={getValues()}
               translationPrefix="profileForm"
             />
           )}
@@ -135,14 +193,13 @@ export const ProfileForm = ({
           <Button
             type="button"
             onClick={prevStep}
-            className="text-lg p-4"
             variant="outline"
+            className="text-lg p-4"
           >
             {t("profileForm.buttons.back")}
           </Button>
         )}
-
-        {!isCompleted ? (
+        {!isCompleted || !showSubmit ? (
           <Button
             type="button"
             onClick={handleNext}
@@ -156,8 +213,8 @@ export const ProfileForm = ({
         ) : (
           <Button
             type="submit"
-            className={cn("text-lg p-4", errors && "cursor-not-allowed")}
-            disabled={Object.keys(errors).length > 0}
+            className={cn("text-lg p-4")}
+            disabled={profileMutation.isPending || profileMutation.isSuccess}
           >
             {t("profileForm.buttons.submit")}
           </Button>
