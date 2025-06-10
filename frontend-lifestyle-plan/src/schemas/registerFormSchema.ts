@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import { diffYears } from "@formkit/tempo";
 import { z } from "zod";
 
@@ -5,12 +6,12 @@ export const schema_registerForm = z.object({
   name: z.string().min(2),
   email: z.string().email(),
   password: z.string().min(6),
-  phone: z.string().min(8).regex(/^\d+$/, { message: "phone_invalid_format" }), // Use a translation key
+  phone: z.string().min(8).regex(/^\d+$/, {   message: i18n.t('zod.phone_invalid_format', { defaultValue: 'Phone must contain only digits.' })  }),
   birthDate: z.string().refine((value) => {
     const age = diffYears(new Date(), new Date(value));
     return age >= 18;
   }, {
-    message: "birthdate_min_age",
+    message: i18n.t('zod.birthdate_min_age', { defaultValue: 'You must be at least 18 years old.' }),
   }),
   gender: z.enum(["male", "female"]),
   statusId: z.number(),

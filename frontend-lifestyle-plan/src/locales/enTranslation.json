@@ -1,6 +1,8 @@
 {
-  "phone_invalid_format": "Phone must contain only digits.",
-  "birthdate_min_age": "You must be at least 18 years old.",
+  "zod": {
+    "phone_invalid_format": "Phone must contain only digits.",
+    "birthdate_min_age": "You must be at least 18 years old."
+  },
   "landingPage": {
     "title": "Plan your daily meals with no stress.",
     "subtitle1": "Set your goals and adjust your meals to fit your lifestyle.",
@@ -90,6 +92,37 @@
     },
     "hip": {
       "title": "Hip Circumference"
+    }
+  },
+  "registerPage":{
+    "title": "Create your account"
+  },
+  "registerForm":{
+    "buttons": {
+      "back": "Back",
+      "next": "Next",
+      "submit": "Register"
+    },
+    "name":{
+      "title": "Name"
+    },
+    "email": {
+      "title": "Email"
+    },
+    "password": {
+      "title": "Password"
+    },
+    "passwordConfirmation": {
+      "title": "Password Confirmation"
+    },
+    "phone":{
+      "title": "Phone"
+    },
+    "birthDate": {
+      "title": "Birth Date"
+    },
+    "gender": {
+      "title": "Gender"
     }
   },
   "nutrition": {

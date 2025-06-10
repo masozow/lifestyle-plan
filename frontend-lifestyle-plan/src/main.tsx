@@ -1,6 +1,6 @@
-import "@/lib/i18n";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import "@/lib/i18n";
 import "./index.css";
 import { RouterProvider } from "react-router";
 import { router } from "./routes/Routes.tsx";
