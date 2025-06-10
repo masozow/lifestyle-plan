@@ -14,6 +14,7 @@ interface Props<T extends FieldValues> {
   control: Control<T>;
   error?: FieldError;
   title: string;
+  autoFocus?: boolean;
 }
 
 export const CustomTextArea = <T extends FieldValues>({
@@ -21,6 +22,7 @@ export const CustomTextArea = <T extends FieldValues>({
   control,
   error,
   title,
+  autoFocus = false,
 }: Props<T>) => {
   return (
     <motion.div
@@ -43,7 +45,7 @@ export const CustomTextArea = <T extends FieldValues>({
           <Textarea
             id={`textarea-${title}`}
             placeholder={`${title}...`}
-            autoFocus
+            autoFocus={autoFocus}
             {...field}
             className="mt-4 resize-none overflow-y-auto h-[5rem]"
             rows={4}

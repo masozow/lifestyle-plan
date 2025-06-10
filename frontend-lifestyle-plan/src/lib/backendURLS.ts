@@ -6,6 +6,7 @@ export const API_ENDPOINTS = {
   logout: `${BASE_URL}/api/logout`,
   user: `${BASE_URL}/api/user`,
   session: `${BASE_URL}/api/session`,
+  plan: `${BASE_URL}/api/plan`,
 } as const;
 
 // Tipado automático

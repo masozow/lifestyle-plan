@@ -1,7 +1,7 @@
 // import { RegisterForm } from "@/components";
 import landing_image from "../landing/landing_image.png";
 import { AuthFormWrapper } from "@/layouts";
-import { RegisterFormSteps } from "@/components/my-components/forms/RegisterForm/RegisterFormSteps";
+import { RegisterFormSteps } from "@/components";
 
 export const RegisterPage = () => {
   return (

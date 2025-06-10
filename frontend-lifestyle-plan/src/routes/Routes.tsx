@@ -28,6 +28,7 @@ export const router = createBrowserRouter([
       { path: "", element: <PlannerPage /> },
       { path: "dashboard", element: <DashboardPage /> },
       { path: "profile", element: <ProfilePage /> },
+      { path: "planner", element: <PlannerPage /> },
     ],
   },
 ]);

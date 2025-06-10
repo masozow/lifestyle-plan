@@ -130,7 +130,7 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
         ),
       });
       setProfile({ ...formData, age: age });
-      navigate("/app/dashboard");
+      navigate("/app/planner");
     }
 
     if (profileMutation.isError) {

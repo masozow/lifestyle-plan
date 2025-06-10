@@ -20,6 +20,7 @@ import { CustomRadiogroup } from "@/components";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { registerGroupedSteps } from "@/config/stepsForForms/registerSteps";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const RegisterFormSteps = () => {
   const navigate = useNavigate();
@@ -57,15 +58,16 @@ export const RegisterFormSteps = () => {
       gender: "male",
     },
   });
+
   const {
     control,
     handleSubmit,
     formState: { errors },
     trigger,
   } = form;
+
   useEffect(() => {
-    const isLastStep = currentStep === steps.length - 1;
-    if (isLastStep) {
+    if (currentStep === steps.length - 1) {
       setTimeout(() => {
         setShowSubmit(true);
       }, 0);
@@ -117,10 +119,8 @@ export const RegisterFormSteps = () => {
     ] as (keyof RegisterFormValues)[];
     const isValid = await trigger(currentFields);
 
-    if (isValid) {
-      if (currentStep < steps.length - 1) {
-        setCurrentStep((prev) => prev + 1);
-      }
+    if (isValid && currentStep < steps.length - 1) {
+      setCurrentStep((prev) => prev + 1);
     }
   };
 
@@ -128,7 +128,6 @@ export const RegisterFormSteps = () => {
     setCurrentStep((prev) => prev - 1);
     setShowSubmit(false);
   };
-  console.log("confirmPassword error:", errors.confirmPassword);
 
   return (
     <Form {...form}>
@@ -140,39 +139,51 @@ export const RegisterFormSteps = () => {
           <h1 className="text-2xl font-bold">Create your account</h1>
         </div>
 
-        <div className="space-y-4">
-          {steps[currentStep].map((step) => (
-            <FormField
-              key={step.name}
-              control={control}
-              name={step.name as keyof RegisterFormValues}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{step.title}</FormLabel>
-                  <FormControl>
-                    {step.type === "radio" ? (
-                      <CustomRadiogroup<RegisterFormValues>
-                        control={control}
-                        title={step.title}
-                        name={step.name as keyof RegisterFormValues}
-                        options={step.options || []}
-                        defaultValue={step.defaultValue || ""}
-                        error={errors[step.name as keyof RegisterFormValues]}
-                      />
-                    ) : (
-                      <Input
-                        type={step.type === "password" ? "password" : step.type}
-                        placeholder={step.title}
-                        {...field}
-                      />
-                    )}
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ))}
-        </div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentStep}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.4 }}
+            className="space-y-4"
+          >
+            {steps[currentStep].map((step, index) => (
+              <FormField
+                key={step.name}
+                control={control}
+                name={step.name as keyof RegisterFormValues}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{step.title}</FormLabel>
+                    <FormControl>
+                      {step.type === "radio" ? (
+                        <CustomRadiogroup<RegisterFormValues>
+                          control={control}
+                          title={step.title}
+                          name={step.name as keyof RegisterFormValues}
+                          options={step.options || []}
+                          defaultValue={step.defaultValue || ""}
+                          error={errors[step.name as keyof RegisterFormValues]}
+                        />
+                      ) : (
+                        <Input
+                          type={
+                            step.type === "password" ? "password" : step.type
+                          }
+                          placeholder={step.title}
+                          autoFocus={index === 0}
+                          {...field}
+                        />
+                      )}
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ))}
+          </motion.div>
+        </AnimatePresence>
 
         <div className="flex justify-between">
           {currentStep > 0 ? (
