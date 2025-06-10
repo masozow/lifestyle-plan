@@ -37,6 +37,7 @@ export const RegisterForm = () => {
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(schema_registerForm),
+    mode: "onBlur",
     defaultValues: {
       email: "",
       name: "",

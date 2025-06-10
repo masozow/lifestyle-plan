@@ -1,4 +1,4 @@
-export type StepType  = 'radio'| 'number'| 'textarea';
+export type StepType  = 'radio'| 'number'| 'textarea' | 'email' | 'password' | 'text' | 'date';
 
 export type Step = {
   name: string;

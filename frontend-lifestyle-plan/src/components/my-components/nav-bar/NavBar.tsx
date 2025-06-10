@@ -24,31 +24,41 @@ export const NavBar = ({ userName }: Props): JSX.Element => {
         </NavLink>
         <NavigationMenu>
           <NavigationMenuList>
-            <NavigationMenuItem>
-              <Button asChild variant="outline">
-                <NavLink to="/register">Register</NavLink>
-              </Button>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Button asChild>
-                <NavLink to="/login">Login</NavLink>
-              </Button>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Button
-                asChild
-                variant="ghost"
-                className="p-2 flex items-center border-1 border-dashed"
-              >
-                <NavLink to="/app/dashboard" className="flex items-center">
-                  <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                  <span className="text-md">{userName || "User"}</span>
-                </NavLink>
-              </Button>
-            </NavigationMenuItem>
+            {!userName && (
+              <NavigationMenuItem>
+                <Button asChild variant="outline">
+                  <NavLink to="/register">Register</NavLink>
+                </Button>
+              </NavigationMenuItem>
+            )}
+            {!userName && (
+              <NavigationMenuItem>
+                <Button asChild>
+                  <NavLink to="/login">Login</NavLink>
+                </Button>
+              </NavigationMenuItem>
+            )}
+            {userName && (
+              <NavigationMenuItem>
+                <Button
+                  asChild
+                  variant="ghost"
+                  className="p-2 flex items-center border-1 border-dashed"
+                >
+                  <NavLink to="/app/dashboard" className="flex items-center">
+                    <Avatar>
+                      <AvatarImage src="https://github.com/shadcn.png" />
+                      <AvatarFallback>
+                        {userName?.split(" ")[0][0] || "User"}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-md">
+                      {userName?.split(" ")[0] || "User"}
+                    </span>
+                  </NavLink>
+                </Button>
+              </NavigationMenuItem>
+            )}
             <NavigationMenuItem>
               <LanguageMenu />
             </NavigationMenuItem>

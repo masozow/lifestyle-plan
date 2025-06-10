@@ -1,6 +1,7 @@
-import { RegisterForm } from "@/components";
+// import { RegisterForm } from "@/components";
 import landing_image from "../landing/landing_image.png";
 import { AuthFormWrapper } from "@/layouts";
+import { RegisterFormSteps } from "@/components/my-components/forms/RegisterForm/RegisterFormSteps";
 
 export const RegisterPage = () => {
   return (
@@ -8,7 +9,8 @@ export const RegisterPage = () => {
       landing_image_url={landing_image}
       landing_image_alt="Woman cooking"
     >
-      <RegisterForm />
+      <RegisterFormSteps />
+      {/* <RegisterForm /> */}
     </AuthFormWrapper>
   );
 };
