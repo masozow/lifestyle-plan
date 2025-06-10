@@ -1,7 +1,8 @@
 {
   "zod": {
     "phone_invalid_format": "Phone must contain only digits.",
-    "birthdate_min_age": "You must be at least 18 years old."
+    "birthdate_min_age": "You must be at least 18 years old.",
+    "password_mismatch": "Passwords do not match"
   },
   "landingPage": {
     "title": "Plan your daily meals with no stress.",

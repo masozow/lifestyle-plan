@@ -41,6 +41,7 @@ export const RegisterForm = () => {
       email: "",
       name: "",
       password: "",
+      confirmPassword: "",
       phone: "",
       birthDate: "",
       statusId: 1,
@@ -152,6 +153,19 @@ export const RegisterForm = () => {
           )}
         />
 
+        <FormField
+          control={form.control}
+          name="confirmPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confirm Password</FormLabel>
+              <FormControl>
+                <Input type="password" placeholder="********" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="phone"
