@@ -6,7 +6,7 @@ export const schema_registerForm = z.object({
   name: z.string().min(2),
   email: z.string().email(),
   password: z.string().min(6),
-  confirmPassword: z.string(), // Add confirmPassword field
+  confirmPassword: z.string(),
   phone: z.string().min(8).regex(/^\d+$/, {
     message: i18n.t('zod.phone_invalid_format', { 
       defaultValue: 'Phone must contain only digits.' 

@@ -46,10 +46,31 @@ export const RegisterFormSteps = () => {
     mode: "onBlur",
     defaultValues: {
       ...getDefaultValues(),
+      email: "",
+      name: "",
+      password: "",
+      confirmPassword: "",
+      phone: "",
+      birthDate: "",
       statusId: 1,
       roleId: 2,
+      gender: "male",
     },
   });
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    trigger,
+  } = form;
+  useEffect(() => {
+    const isLastStep = currentStep === steps.length - 1;
+    if (isLastStep) {
+      setTimeout(() => {
+        setShowSubmit(true);
+      }, 0);
+    }
+  }, [currentStep, steps.length]);
 
   useEffect(() => {
     if (loginMutation.isSuccess) {
@@ -94,15 +115,11 @@ export const RegisterFormSteps = () => {
     const currentFields = fieldNamesPerStep[
       currentStep
     ] as (keyof RegisterFormValues)[];
-    const isValid = await form.trigger(currentFields);
+    const isValid = await trigger(currentFields);
 
     if (isValid) {
       if (currentStep < steps.length - 1) {
         setCurrentStep((prev) => prev + 1);
-      } else {
-        setTimeout(() => {
-          setShowSubmit(true);
-        }, 0);
       }
     }
   };
@@ -111,11 +128,12 @@ export const RegisterFormSteps = () => {
     setCurrentStep((prev) => prev - 1);
     setShowSubmit(false);
   };
+  console.log("confirmPassword error:", errors.confirmPassword);
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-6 justify-start"
       >
         <div className="text-center">
@@ -126,7 +144,7 @@ export const RegisterFormSteps = () => {
           {steps[currentStep].map((step) => (
             <FormField
               key={step.name}
-              control={form.control}
+              control={control}
               name={step.name as keyof RegisterFormValues}
               render={({ field }) => (
                 <FormItem>
@@ -134,16 +152,12 @@ export const RegisterFormSteps = () => {
                   <FormControl>
                     {step.type === "radio" ? (
                       <CustomRadiogroup<RegisterFormValues>
-                        control={form.control}
+                        control={control}
                         title={step.title}
                         name={step.name as keyof RegisterFormValues}
                         options={step.options || []}
                         defaultValue={step.defaultValue || ""}
-                        error={
-                          form.formState.errors[
-                            step.name as keyof RegisterFormValues
-                          ]
-                        }
+                        error={errors[step.name as keyof RegisterFormValues]}
                       />
                     ) : (
                       <Input
@@ -175,7 +189,14 @@ export const RegisterFormSteps = () => {
           )}
 
           {!showSubmit ? (
-            <Button type="button" onClick={handleNext} className="text-lg p-4">
+            <Button
+              type="button"
+              onClick={handleNext}
+              className="text-lg p-4"
+              disabled={steps[currentStep].some(
+                (step) => !!errors[step.name as keyof RegisterFormValues]
+              )}
+            >
               Next
             </Button>
           ) : (
