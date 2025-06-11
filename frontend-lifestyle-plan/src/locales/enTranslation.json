@@ -10,6 +10,15 @@
     "subtitle2": "Provide feedback and track your progress.",
     "button": "Get started"
   },
+  "newUserPage":{
+    "title":"You haven't created a new plan yet, what you wanna do?"
+  },
+  "newUserForm":{
+    "buttons": {
+      "secondary": "Go to dashboard",
+      "primary": "Create new plan"
+    }
+  },
   "navBar": {
     "languageMenu": "Language",
     "login": "Login",

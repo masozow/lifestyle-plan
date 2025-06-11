@@ -1,0 +1,141 @@
+{
+  "language": "es",
+  "daily_calorie_target": 1800,
+  "macro_ratios": {
+    "protein": 0.25,
+    "carbs": 0.55,
+    "fat": 0.2
+  },
+  "unit_system": "metric",
+  "units": {
+    "macro": {
+      "protein": "g",
+      "carbs": "g",
+      "fat": "g",
+      "energy": "kcal"
+    },
+    "portion": "g"
+  },
+  "weekly_plan": [
+    {
+      "day": "Lunes",
+      "meals": [
+        {
+          "meal": "Desayuno",
+          "food": "Avena con frutas y frutos secos",
+          "portion": 300,
+          "macro": {
+            "protein": 20,
+            "carbs": 40,
+            "fat": 10,
+            "energy": 400
+          }
+        },
+        {
+          "meal": "Almuerzo",
+          "food": "Ensalada de pollo con aguacate y aceitunas",
+          "portion": 400,
+          "macro": {
+            "protein": 40,
+            "carbs": 20,
+            "fat": 20,
+            "energy": 500
+          }
+        },
+        {
+          "meal": "Cena",
+          "food": "Pescado al horno con quinoa y brócoli",
+          "portion": 500,
+          "macro": {
+            "protein": 50,
+            "carbs": 30,
+            "fat": 15,
+            "energy": 600
+          }
+        },
+        {
+          "meal": "Merienda 1",
+          "food": "Frutas frescas con yogur natural",
+          "portion": 200,
+          "macro": {
+            "protein": 15,
+            "carbs": 30,
+            "fat": 0,
+            "energy": 150
+          }
+        },
+        {
+          "meal": "Merienda 2",
+          "food": "Palitos de zanahoria con hummus",
+          "portion": 100,
+          "macro": {
+            "protein": 5,
+            "carbs": 10,
+            "fat": 10,
+            "energy": 100
+          }
+        }
+      ]
+    },
+    {
+      "day": "Martes",
+      "meals": [
+        {
+          "meal": "Desayuno",
+          "food": "Tortilla de espinacas con aguacate y pan integral",
+          "portion": 350,
+          "macro": {
+            "protein": 25,
+            "carbs": 30,
+            "fat": 15,
+            "energy": 450
+          }
+        },
+        {
+          "meal": "Almuerzo",
+          "food": "Pollo a la plancha con ensalada de lechuga y tomate",
+          "portion": 450,
+          "macro": {
+            "protein": 45,
+            "carbs": 10,
+            "fat": 20,
+            "energy": 550
+          }
+        },
+        {
+          "meal": "Cena",
+          "food": "Tofu al horno con arroz integral y guisantes",
+          "portion": 550,
+          "macro": {
+            "protein": 35,
+            "carbs": 40,
+            "fat": 15,
+            "energy": 650
+          }
+        },
+        {
+          "meal": "Merienda 1",
+          "food": "Batido de proteínas con plátano y almendras",
+          "portion": 250,
+          "macro": {
+            "protein": 20,
+            "carbs": 30,
+            "fat": 10,
+            "energy": 200
+          }
+        },
+        {
+          "meal": "Merienda 2",
+          "food": "Galletas integrales con mantequilla de maní",
+          "portion": 150,
+          "macro": {
+            "protein": 8,
+            "carbs": 20,
+            "fat": 16,
+            "energy": 220
+          }
+        }
+      ]
+    }
+  ]
+}
