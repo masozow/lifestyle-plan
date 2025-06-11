@@ -11,4 +11,5 @@ export * from "./my-components/forms/RegisterForm/RegisterForm.tsx";
 export * from "@/components/my-components/session/SessionInitializer";
 export * from "@/components/theme/ThemeProvider";
 export * from "@/components/my-components/forms/RegisterForm/RegisterFormSteps.tsx"
+export * from "@/components/my-components/dashboard/Dashboard.tsx";
 // export * from "./my-components/forms/BaseForm/CustomInput.tsx";
