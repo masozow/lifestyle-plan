@@ -7,39 +7,108 @@ import { schema_plannerForm, type PlannerFormValues } from "@/schemas";
 import { CustomRadiogroup, CustomTextArea } from "@/components";
 import SummaryCard from "./SummaryCard";
 import { useTranslation } from "react-i18next";
-import { useSteps } from "@/hooks";
+import { useApiRequest, useSteps } from "@/hooks";
 import { plannerSteps } from "@/config";
+import { usePlanStore, useSessionStore } from "@/store";
+import { useNavigate } from "react-router";
+import { API_ENDPOINTS } from "@/lib/backendURLS";
+import { toast } from "sonner";
+import { X } from "lucide-react";
 
 interface Props {
-  submitFunction: (data: PlannerFormValues) => void;
   titleChangeFunction: (title?: string) => void;
   initialValues?: Partial<PlannerFormValues>;
-  plan?: PlannerFormValues | null;
 }
 
-export const PlannerForm = ({
-  plan,
-  submitFunction,
-  titleChangeFunction,
-  initialValues,
-}: Props) => {
+export const PlannerForm = ({ titleChangeFunction, initialValues }: Props) => {
   const { t } = useTranslation();
   const { steps, getDefaultValues } = useSteps(plannerSteps);
   const defaultValues = getDefaultValues();
+  const { user } = useSessionStore();
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
+  const { plan, setPlan } = usePlanStore((state) => state);
+  const [showSubmit, setShowSubmit] = useState(false);
+  const plannerMutation = useApiRequest<PlannerFormValues & { userId: number }>(
+    {
+      url: API_ENDPOINTS.plan,
+      method: "POST",
+    }
+  );
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<PlannerFormValues>({
+  const onSubmit = async (data: PlannerFormValues) => {
+    if (user?.id) {
+      try {
+        const result = await plannerMutation.mutateAsync({
+          ...data,
+          userId: user.id,
+        });
+        console.log("Mutation started:", result);
+      } catch (error) {
+        console.error("Error during plan mutation:", error);
+      }
+    } else {
+      toast.error("User session is missing. Please log in again.");
+    }
+  };
+
+  const form = useForm<PlannerFormValues>({
     resolver: zodResolver(schema_plannerForm),
-    mode: "onChange",
+    mode: "onBlur",
     defaultValues: {
       ...defaultValues,
       ...initialValues,
     },
   });
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+    trigger,
+  } = form;
+
+  useEffect(() => {
+    if (plannerMutation.isSuccess) {
+      const formData = getValues();
+      toast.success(plannerMutation.data?.message || "Profile created", {
+        action: (
+          <Button
+            variant="ghost"
+            className="font-bold"
+            onClick={() => toast.dismiss()}
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        ),
+      });
+      setPlan({ ...formData });
+      navigate("/app/dashboard");
+    }
+
+    if (plannerMutation.isError) {
+      toast.error(plannerMutation.error?.message || "An error occurred", {
+        action: (
+          <Button
+            variant="ghost"
+            className="font-bold"
+            onClick={() => toast.dismiss()}
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        ),
+      });
+    }
+  }, [
+    plannerMutation.isSuccess,
+    plannerMutation.isError,
+    plannerMutation.error?.message,
+    plannerMutation.data?.message,
+    getValues,
+    setPlan,
+    navigate,
+  ]);
 
   useEffect(() => {
     if (currentStep === steps.length) {
@@ -47,13 +116,18 @@ export const PlannerForm = ({
     }
   }, [currentStep, t, titleChangeFunction, steps.length]);
   const [isCompleted, setIsCompleted] = useState(false);
+  const nextStep = async () => {
+    const isValid = await trigger(
+      steps[currentStep].name as keyof PlannerFormValues
+    );
+    if (!isValid) return;
 
-  const nextStep = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep((prev) => prev + 1);
     } else {
       setIsCompleted(true);
       titleChangeFunction(t("plannerPage.titleReview"));
+      setTimeout(() => setShowSubmit(true), 0);
     }
   };
 
@@ -61,11 +135,12 @@ export const PlannerForm = ({
     titleChangeFunction();
     setCurrentStep((prev) => prev - 1);
     setIsCompleted(false);
+    setShowSubmit(false);
   };
 
   return (
     <motion.form
-      onSubmit={handleSubmit(submitFunction)}
+      onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col justify-between"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -91,6 +166,7 @@ export const PlannerForm = ({
                 control={control}
                 error={errors.extras}
                 title={steps[currentStep].title}
+                autoFocus={true}
               />
             )
           )}
@@ -115,13 +191,8 @@ export const PlannerForm = ({
           </Button>
         )}
 
-        {!isCompleted ? (
-          <Button
-            type="button"
-            onClick={nextStep}
-            className="text-lg p-4"
-            disabled={Object.keys(errors).length > 0}
-          >
+        {!isCompleted || !showSubmit ? (
+          <Button type="button" onClick={nextStep} className="text-lg p-4">
             {t("plannerForm.buttons.next")}
           </Button>
         ) : (

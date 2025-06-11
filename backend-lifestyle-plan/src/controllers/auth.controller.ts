@@ -17,10 +17,6 @@ const login = async (req: Request, res: Response) => {
 
   try {
     const user = await User.findOne({ where: { email } });
-    console.log("Email:", email);
-    console.log("User from DB:", user);
-    console.log("Password from DB:", user?.password);
-    console.log("Password from request:", password);
     if (!user || typeof user.password !== "string") {
       return res.status(404).json(
         await errorAndLogHandler({
@@ -46,6 +42,7 @@ const login = async (req: Request, res: Response) => {
       email: user.email,
       name: user.name,
       roleId: user.roleId,
+      birthDate: user.birthDate,
       gender: user.gender,
     });
 

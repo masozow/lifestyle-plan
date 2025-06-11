@@ -18,6 +18,7 @@ import { X } from "lucide-react";
 import { useAuthStore, useSessionStore } from "@/store";
 import { CustomRadiogroup } from "@/components";
 import { useEffect } from "react";
+import i18n from "@/lib/i18n";
 
 export const RegisterForm = () => {
   const navigate = useNavigate();
@@ -36,10 +37,12 @@ export const RegisterForm = () => {
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(schema_registerForm),
+    mode: "onBlur",
     defaultValues: {
       email: "",
       name: "",
       password: "",
+      confirmPassword: "",
       phone: "",
       birthDate: "",
       statusId: 1,
@@ -47,7 +50,11 @@ export const RegisterForm = () => {
       gender: "male",
     },
   });
-
+  useEffect(() => {
+    console.log("i18n ready status:", i18n.isInitialized);
+    console.log("Current language:", i18n.language);
+    console.log("Sample translation:", i18n.t("zod:phone_invalid_format"));
+  }, []);
   useEffect(() => {
     if (loginMutation.isSuccess) {
       const handleSessionFetch = async () => {
@@ -59,6 +66,7 @@ export const RegisterForm = () => {
   }, [loginMutation.isSuccess, fetchSession, navigate]);
 
   const onSubmit = async (data: RegisterFormValues) => {
+    console.log("Form values: ", data);
     const { email, password } = data;
     setCredentials(email, password);
 
@@ -85,12 +93,6 @@ export const RegisterForm = () => {
       );
 
       await loginMutation.mutateAsync({ email, password });
-
-      if (loginMutation.isSuccess) {
-        toast.success("Login successful!");
-      } else {
-        toast.error(loginMutation.error?.message || "Login failed");
-      }
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -152,6 +154,19 @@ export const RegisterForm = () => {
           )}
         />
 
+        <FormField
+          control={form.control}
+          name="confirmPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confirm Password</FormLabel>
+              <FormControl>
+                <Input type="password" placeholder="********" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="phone"

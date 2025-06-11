@@ -32,11 +32,14 @@ const create = async (req: Request, res: Response) => {
       })
     );
   } catch (error) {
+    console.log("Error creating user:", error);
     return res.status(400).json(
       await errorAndLogHandler({
         level: errorLevels.error,
-        message: "Error creating user: " + (error as Error).message,
+        message:
+          `Error creating user: ${typeof error === "string" ? error: JSON.stringify(error as Record<string, unknown>)}`,
         userId: 0,
+        shouldSaveLog: true,
       })
     );
   }

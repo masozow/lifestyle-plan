@@ -13,6 +13,7 @@ interface UserSession {
   name: string;
   gender: string;
   email: string;
+  birthDate: Date;
   roleId: number;
 }
 
@@ -50,6 +51,7 @@ export const useSessionStore = create<SessionStore>()(
       name: parsedMessage.name,
       email: parsedMessage.email,
       roleId: parsedMessage.roleId,
+      birthDate: parsedMessage.birthDate,
       gender: parsedMessage.gender
     };
 

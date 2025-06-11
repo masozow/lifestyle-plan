@@ -14,6 +14,8 @@ import { useProfileStore, useSessionStore } from "@/store";
 import { API_ENDPOINTS } from "@/lib/backendURLS";
 import { toast } from "sonner";
 import { X } from "lucide-react";
+import { useNavigate } from "react-router";
+import { date, diffYears } from "@formkit/tempo";
 
 interface Props {
   titleChangeFunction: (title?: string) => void;
@@ -34,6 +36,7 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
   const [showSubmit, setShowSubmit] = useState(false);
+  const navigate = useNavigate();
 
   const profileMutation = useApiRequest<ProfileFormValues & { userId: number }>(
     {
@@ -41,13 +44,14 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
       method: "POST",
     }
   );
-
+  const age = diffYears(new Date(), date(user?.birthDate)) || 18;
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(schema_profileForm),
     mode: "onBlur",
     defaultValues: {
       ...defaultValues,
       ...initialValues,
+      age: age,
     },
   });
 
@@ -72,7 +76,12 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
   const onSubmit = async (data: ProfileFormValues) => {
     if (user?.id) {
       try {
-        await profileMutation.mutateAsync({ ...data, userId: user.id });
+        const result = await profileMutation.mutateAsync({
+          ...data,
+          userId: user.id,
+          age: age,
+        });
+        console.log("Mutation started:", result);
       } catch (error) {
         console.error("Error during profile mutation:", error);
       }
@@ -120,7 +129,8 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
           </Button>
         ),
       });
-      setProfile(formData);
+      setProfile({ ...formData, age: age });
+      navigate("/app/planner");
     }
 
     if (profileMutation.isError) {
@@ -143,6 +153,8 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
     profileMutation.data?.message,
     getValues,
     setProfile,
+    navigate,
+    age,
   ]);
 
   return (

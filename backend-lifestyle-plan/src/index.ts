@@ -10,6 +10,7 @@ import testRoutes from "./routes/tests.route.js";
 import profileRoutes from "./routes/profile.route.js";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
+import planRoutes from "./routes/plan.route.js";
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use("/api/test", testRoutes);
 app.use("/api", profileRoutes);
 app.use("/api", userRoutes);
 app.use("/api", authRoutes);
+app.use("/api", planRoutes);
 
 // Global error middleware
 app.use((err, req, res, next) => {
