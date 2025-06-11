@@ -4,3 +4,5 @@ export * from "./register/RegisterPage.tsx";
 export * from "./planner/PlannerPage.tsx";
 export * from "./dashboard/DashboardPage.tsx";
 export * from "./profile/ProfilePage.tsx";
+export * from "./new-user/NewUserPage.tsx";
+export * from "./meal-plan/MealPlanPage.tsx";

@@ -10,6 +10,15 @@
     "subtitle2": "Provee retroalimentación y rastrea tu progreso.",
     "button": "Iniciemos"
   },
+  "newUserPage":{
+    "title": "Aún no has creado un nuevo plan ¿qué quieres hacer?"
+  },
+  "newUserForm":{
+    "buttons": {
+      "secondary": "Ir al dashboard",
+      "primary": "Crear un nuevo plan"
+    }
+  },
   "navBar": {
     "languageMenu": "Idioma",
     "login": "Iniciar sesión",
