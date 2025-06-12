@@ -5,6 +5,8 @@ import { checkAuth } from "../middleware/auth.middleware.js";
 const router = express.Router();
 
 router.post("/plan",checkAuth, PlanController.create);
+router.get("/plan/:userId", PlanController.getByUserID);
 router.get("/plan", PlanController.getAll);
+
 
 export default router;

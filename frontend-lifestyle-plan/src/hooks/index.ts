@@ -4,3 +4,4 @@ export * from "@/hooks/useApiRequest";
 export * from "@/hooks/useSteps.ts";
 export * from "@/hooks/useGroupedSteps.ts";
 export * from "@/hooks/useMealPlanSync.ts";
+export * from "@/hooks/useApiGet.ts";

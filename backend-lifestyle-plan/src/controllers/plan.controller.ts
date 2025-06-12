@@ -53,9 +53,12 @@ const getAll = async (req: Request, res: Response) => {
 };
 
 const getByUserID = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { userId } = req.params;
   try {
-    const plan = await Plan.findOne({ where: { userId: id } });
+    const plan = await Plan.findOne({
+      where: { userId: userId },
+      order: [['updatedAt', 'DESC']],
+    });
     return res.status(200).json({ success: true, data: plan });
   } catch (error) {
     return res.status(500).json(
@@ -63,7 +66,7 @@ const getByUserID = async (req: Request, res: Response) => {
         level: errorLevels.error,
         message: "Error fetching plan by user ID: " + (error as Error).message,
         userId: req.user?.id || 0,
-        genericId: id,
+        genericId: userId,
       })
     );
   }

@@ -6,3 +6,4 @@ export * from "./dashboard/DashboardPage.tsx";
 export * from "./profile/ProfilePage.tsx";
 export * from "./new-plan/NewPlanPage.tsx";
 export * from "./meal-plan/MealPlanPage.tsx";
+export * from "./planner/ObjectivesPage.tsx";

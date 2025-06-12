@@ -15,4 +15,6 @@ export * from "@/components/my-components/dashboard/Dashboard.tsx";
 export * from "@/components/my-components/forms/NewPlanForm/NewPlanForm.tsx";
 export * from "@/components/my-components/MealPlanForm/MealPlanForm.tsx";
 export * from "@/components/my-components/dashboard/DashboardHome.tsx";
+export * from "@/components/my-components/cards/DataCard.tsx";
+export * from "@/components/my-components/Objectives.tsx";
 // export * from "./my-components/forms/BaseForm/CustomInput.tsx";

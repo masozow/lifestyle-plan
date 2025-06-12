@@ -10,6 +10,7 @@ import {
   MealPlanPage,
   NewPlanPage,
   DashboardPage,
+  ObjectivesPage,
 } from "@/pages";
 import DashboardHome from "@/components/my-components/dashboard/DashboardHome";
 
@@ -36,6 +37,7 @@ export const router = createBrowserRouter([
           { path: "planner", element: <PlannerPage /> },
           { path: "new-plan", element: <NewPlanPage /> },
           { path: "meal-plan", element: <MealPlanPage /> },
+          { path: "objectives", element: <ObjectivesPage /> },
         ],
       },
     ],
