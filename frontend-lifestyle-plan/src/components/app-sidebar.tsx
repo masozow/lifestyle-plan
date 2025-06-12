@@ -4,6 +4,7 @@ import {
   IconDashboard,
   IconHelp,
   IconList,
+  IconPlus,
   IconSearch,
   IconSettings,
   IconUsers,
@@ -21,15 +22,17 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Link } from "react-router";
+import { NavLink } from "react-router";
 import { Cherry } from "lucide-react";
 import { useSessionStore } from "@/store";
+import LanguageMenu from "./my-components/nav-bar/LanguageMenu";
+import { ModeToggle } from "./theme/mode-toggle";
 
 const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "/app/dashboard",
+      url: "",
       icon: IconDashboard,
     },
   ],
@@ -55,11 +58,35 @@ const data = {
       name: "Profile",
       url: "#",
       icon: IconUsers,
+      children: [
+        {
+          name: "New profile",
+          url: "profile",
+          icon: IconPlus,
+        },
+        {
+          name: "View",
+          url: "#",
+          icon: IconSearch,
+        },
+      ],
     },
     {
       name: "Meal Plan",
       url: "#",
       icon: IconList,
+      children: [
+        {
+          name: "New Meal Plan",
+          url: "new-plan",
+          icon: IconPlus,
+        },
+        {
+          name: "View",
+          url: "meal-plan",
+          icon: IconSearch,
+        },
+      ],
     },
     {
       name: "Progress",
@@ -80,7 +107,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5 py-0.5 !text-left"
             >
-              <Link
+              <NavLink
                 to="/"
                 className="flex items-center gap-2 font-medium justify-center"
               >
@@ -88,7 +115,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <p className="text-2xl font-bold">
                   <span className="text-primary">Fit</span>app
                 </p>
-              </Link>
+              </NavLink>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -98,6 +125,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavDocuments items={data.documents} title="Options" />
       </SidebarContent>
       <SidebarFooter>
+        <LanguageMenu />
+        <ModeToggle />
         <NavUser
           user={{
             name: user?.name || "user",

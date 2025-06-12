@@ -13,6 +13,7 @@ export const NewPlanForm = () => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const age = diffYears(date(user?.birthDate), new Date());
+    //still  needs to get language, and see what will be done when there are no extras:
     console.log({
       ...plan,
       userId: user?.id,
@@ -20,6 +21,7 @@ export const NewPlanForm = () => {
       gender: user?.gender,
       ...profile,
     });
+
     // setTimeout(() => {
     //   navigate("/app/meal-plan");
     // }, 0);
@@ -45,9 +47,7 @@ export const NewPlanForm = () => {
             className="text-lg px-4 py-8"
             asChild
           >
-            <Link to="/app/dashboard">
-              {t("newPlanForm.buttons.secondary")}
-            </Link>
+            <Link to="/app">{t("newPlanForm.buttons.secondary")}</Link>
           </Button>
 
           <Button type="submit" className="text-lg px-4 py-8">
