@@ -31,7 +31,7 @@ export const Profile = () => {
     enabled: !!userId,
   });
 
-  if (isLoading) return <div>Loading objectives...</div>;
+  if (isLoading) return <div>Loading profile...</div>;
   if (isError) return <div>Error: {(error as Error).message}</div>;
 
   const plan = data?.data;

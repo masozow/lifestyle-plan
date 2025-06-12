@@ -1,6 +1,5 @@
 import * as React from "react";
 import {
-  Icon2fa,
   IconChartArea,
   IconCheckbox,
   IconDashboard,
@@ -29,7 +28,6 @@ import { Cherry } from "lucide-react";
 import { useSessionStore } from "@/store";
 import LanguageMenu from "./my-components/nav-bar/LanguageMenu";
 import { ModeToggle } from "./theme/mode-toggle";
-import { url } from "inspector";
 
 const data = {
   navMain: [
@@ -69,7 +67,7 @@ const data = {
         },
         {
           name: "View",
-          url: "#",
+          url: "view-profile",
           icon: IconSearch,
         },
       ],

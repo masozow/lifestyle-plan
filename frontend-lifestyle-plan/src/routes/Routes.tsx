@@ -11,6 +11,7 @@ import {
   NewPlanPage,
   DashboardPage,
   ObjectivesPage,
+  ViewProfilePage,
 } from "@/pages";
 import DashboardHome from "@/components/my-components/dashboard/DashboardHome";
 
@@ -34,6 +35,7 @@ export const router = createBrowserRouter([
         children: [
           { path: "", element: <DashboardHome /> },
           { path: "profile", element: <ProfilePage /> },
+          { path: "view-profile", element: <ViewProfilePage /> },
           { path: "planner", element: <PlannerPage /> },
           { path: "new-plan", element: <NewPlanPage /> },
           { path: "meal-plan", element: <MealPlanPage /> },
