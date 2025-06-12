@@ -56,7 +56,8 @@
   const getByUserID = async (req: Request, res: Response) => {
     const { userId } = req.params;
     try {
-      const profile = await Profile.findOne({ where: { userId: userId } });
+      const profile = await Profile.findOne({ where: { userId: userId },  order: [['updatedAt', 'DESC']],
+    });
       res.status(200).json({ success: true, data: profile });
     } catch (error) {
       res.status(500).json(

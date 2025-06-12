@@ -45,7 +45,7 @@ export const Profile = () => {
     >
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Objectives</CardTitle>
+          <CardTitle className="text-2xl">Profile</CardTitle>
           <div className="w-full border-b border-gray-200 mt-2"></div>
         </CardHeader>
         <CardContent>
