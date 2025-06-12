@@ -84,7 +84,7 @@ export const PlannerForm = ({ titleChangeFunction, initialValues }: Props) => {
         ),
       });
       setPlan({ ...formData });
-      navigate("/app/dashboard");
+      navigate("/app/new-plan");
     }
 
     if (plannerMutation.isError) {

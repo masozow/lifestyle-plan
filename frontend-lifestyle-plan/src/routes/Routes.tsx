@@ -8,8 +8,8 @@ import {
   DashboardPage,
   ProfilePage,
   RegisterPage,
-  NewUserPage,
   MealPlanPage,
+  NewPlanPage,
 } from "@/pages";
 
 export const router = createBrowserRouter([
@@ -31,7 +31,7 @@ export const router = createBrowserRouter([
       { path: "dashboard", element: <DashboardPage /> },
       { path: "profile", element: <ProfilePage /> },
       { path: "planner", element: <PlannerPage /> },
-      { path: "new-user", element: <NewUserPage /> },
+      { path: "new-plan", element: <NewPlanPage /> },
       { path: "meal-plan", element: <MealPlanPage /> },
     ],
   },

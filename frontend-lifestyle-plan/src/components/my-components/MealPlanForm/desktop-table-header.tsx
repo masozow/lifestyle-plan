@@ -1,6 +1,6 @@
 import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-export function DesktopTableHeader() {
+export const DesktopTableHeader = () => {
   return (
     <TableHeader>
       <TableRow>
@@ -16,4 +16,4 @@ export function DesktopTableHeader() {
       </TableRow>
     </TableHeader>
   );
-}
+};

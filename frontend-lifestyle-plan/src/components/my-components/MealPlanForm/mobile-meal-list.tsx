@@ -37,13 +37,13 @@ interface MobileMealListProps {
   onEdit: (index: number) => void;
 }
 
-export function MobileMealList({
+export const MobileMealList = ({
   meals,
   mealStatuses,
   units,
   onToggleComplete,
   onEdit,
-}: MobileMealListProps) {
+}: MobileMealListProps) => {
   return (
     <div className="md:hidden space-y-4">
       {meals.map((meal, index) => (
@@ -60,4 +60,4 @@ export function MobileMealList({
       ))}
     </div>
   );
-}
+};

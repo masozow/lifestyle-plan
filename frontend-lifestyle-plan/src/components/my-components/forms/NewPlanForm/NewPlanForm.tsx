@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
-export const NewUserForm = () => {
+export const NewPlanForm = () => {
   const { t } = useTranslation();
 
   return (
@@ -26,13 +26,11 @@ export const NewUserForm = () => {
             className="text-lg px-4 py-8"
             asChild
           >
-            <Link to="/app/dashboard">
-              {t("newUserForm.buttons.secondary")}
-            </Link>
+            <Link to="/app/dashboard">{t(".buttons.secondary")}</Link>
           </Button>
 
           <Button type="button" className="text-lg px-4 py-8" asChild>
-            <Link to="/app/meal-plan"> {t("newUserForm.buttons.primary")}</Link>
+            <Link to="/app/meal-plan"> {t(".buttons.primary")}</Link>
           </Button>
         </div>
       </motion.div>

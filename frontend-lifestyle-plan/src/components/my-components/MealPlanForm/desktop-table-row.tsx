@@ -39,7 +39,7 @@ interface DesktopTableRowProps {
   onEdit: () => void;
 }
 
-export function DesktopTableRow({
+export const DesktopTableRow = ({
   meal,
   isCompleted,
   hasReplacement,
@@ -47,7 +47,7 @@ export function DesktopTableRow({
   units,
   onToggleComplete,
   onEdit,
-}: DesktopTableRowProps) {
+}: DesktopTableRowProps) => {
   return (
     <TableRow className={isCompleted ? "" : "bg-red-50 dark:bg-red-950/20"}>
       <TableCell>
@@ -88,4 +88,4 @@ export function DesktopTableRow({
       </TableCell>
     </TableRow>
   );
-}
+};

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Utensils, Calculator } from "lucide-react";
+import { Utensils, Calculator, Wifi, WifiOff, Save } from "lucide-react";
 
 import {
   Card,
@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { EditMealDialog } from "./edit-meal-dialog";
 import { DesktopMealTable } from "./desktop-meal-table";
 import { MobileMealList } from "./mobile-meal-list";
@@ -20,7 +21,10 @@ import {
   createEditingMeal,
   calculateMacroPercentages,
 } from "../helpers/meal-plan-form-helper-functions";
+import { useMealPlanStore, useSessionStore } from "@/store";
+import { useMealPlanSync } from "@/hooks";
 import mockupData from "./mockupData.json";
+import { API_ENDPOINTS } from "@/lib/backendURLS";
 
 const mealPlanData = mockupData;
 
@@ -33,26 +37,43 @@ interface ReplacementMeal {
   protein: number;
 }
 
-interface MealStatus {
-  [key: string]: {
-    completed: boolean;
-    replacement?: ReplacementMeal;
-  };
+interface Macro {
+  protein: number;
+  carbs: number;
+  fat: number;
+  energy: number;
+}
+
+interface Meal {
+  meal: string;
+  food: string;
+  portion: number;
+  macro: Macro;
 }
 
 export const MealPlanForm = () => {
-  const [mealStatus, setMealStatus] = useState<MealStatus>({});
+  const { user } = useSessionStore();
+  //change this for the actual endpoint
+  const apiEndPoint = API_ENDPOINTS.plan;
+  const { mealStatus, setMealStatus } = useMealPlanStore();
+  const { syncToServer, hasUnsyncedChanges } = useMealPlanSync(
+    user?.id,
+    apiEndPoint
+  );
+  const [isSyncing, setIsSyncing] = useState(false);
+
   const [editingMeal, setEditingMeal] = useState<{
     day: string;
     mealIndex: number;
-    meal: any;
+    meal: Meal;
   } | null>(null);
 
   const handleToggleMealStatus = (day: string, mealIndex: number) => {
-    setMealStatus((prev) => toggleMealStatusHelper(prev, day, mealIndex));
+    const newMealStatus = toggleMealStatusHelper(mealStatus, day, mealIndex);
+    setMealStatus(newMealStatus);
   };
 
-  const handleOpenEditDialog = (day: string, mealIndex: number, meal: any) => {
+  const handleOpenEditDialog = (day: string, mealIndex: number, meal: Meal) => {
     setEditingMeal(createEditingMeal(day, mealIndex, meal));
   };
 
@@ -63,15 +84,20 @@ export const MealPlanForm = () => {
   const handleSaveReplacementMeal = (data: ReplacementMeal) => {
     if (!editingMeal) return;
 
-    setMealStatus((prev) =>
-      saveReplacementMealHelper(
-        prev,
-        editingMeal.day,
-        editingMeal.mealIndex,
-        data
-      )
+    const newMealStatus = saveReplacementMealHelper(
+      mealStatus,
+      editingMeal.day,
+      editingMeal.mealIndex,
+      data
     );
+    setMealStatus(newMealStatus);
     handleCloseEditDialog();
+  };
+
+  const handleSyncToServer = async () => {
+    setIsSyncing(true);
+    await syncToServer();
+    setIsSyncing(false);
   };
 
   const macroPercentages = calculateMacroPercentages(mealPlanData.macro_ratios);
@@ -80,10 +106,39 @@ export const MealPlanForm = () => {
     <div className="container mx-auto p-4 md:p-6 space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Utensils className="h-6 w-6" />
-            Weekly Meal Plan
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Utensils className="h-6 w-6" />
+              <CardTitle>Weekly Meal Plan</CardTitle>
+            </div>
+            <div className="flex items-center gap-2">
+              {isSyncing ? (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  <Wifi className="h-3 w-3 animate-pulse" />
+                  Syncing...
+                </Badge>
+              ) : hasUnsyncedChanges ? (
+                <>
+                  <Badge
+                    variant="destructive"
+                    className="flex items-center gap-1"
+                  >
+                    <WifiOff className="h-3 w-3" />
+                    Unsaved changes
+                  </Badge>
+                  <Button size="sm" onClick={handleSyncToServer}>
+                    <Save className="h-3 w-3 mr-1" />
+                    Sync
+                  </Button>
+                </>
+              ) : (
+                <Badge variant="default" className="flex items-center gap-1">
+                  <Wifi className="h-3 w-3" />
+                  Synced
+                </Badge>
+              )}
+            </div>
+          </div>
           <CardDescription>
             Daily Target: {mealPlanData.daily_calorie_target}{" "}
             {mealPlanData.units.macro.energy} | Protein:{" "}
@@ -121,7 +176,7 @@ export const MealPlanForm = () => {
                       Actual
                     </span>
                     <Badge
-                      variant="default"
+                      variant="secondary"
                       className="flex items-center gap-1"
                     >
                       <Calculator className="h-3 w-3" />

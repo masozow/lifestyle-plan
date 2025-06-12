@@ -1,5 +1,3 @@
-"use client";
-
 import { Pencil } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -48,7 +46,7 @@ interface MobileMealCardProps {
   onEdit: () => void;
 }
 
-export function MobileMealCard({
+export const MobileMealCard = ({
   meal,
   isCompleted,
   hasReplacement,
@@ -56,7 +54,7 @@ export function MobileMealCard({
   units,
   onToggleComplete,
   onEdit,
-}: MobileMealCardProps) {
+}: MobileMealCardProps) => {
   return (
     <Card
       className={
@@ -133,4 +131,4 @@ export function MobileMealCard({
       </CardContent>
     </Card>
   );
-}
+};
