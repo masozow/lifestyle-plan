@@ -12,6 +12,13 @@ export * from "@/components/my-components/session/SessionInitializer";
 export * from "@/components/theme/ThemeProvider";
 export * from "@/components/my-components/forms/RegisterForm/RegisterFormSteps.tsx"
 export * from "@/components/my-components/dashboard/Dashboard.tsx";
-export * from "@/components/my-components/forms/NewUserForm/NewUserForm.tsx";
+export * from "@/components/my-components/forms/NewPlanForm/NewPlanForm.tsx";
 export * from "@/components/my-components/MealPlanForm/MealPlanForm.tsx";
+export * from "@/components/my-components/dashboard/DashboardHome.tsx";
+export * from "@/components/my-components/cards/DataCard.tsx";
+export * from "@/components/my-components/visualizers/Objectives.tsx";
+export * from "@/components/my-components/Profile.tsx";
+export * from "@/components/theme/mode-toggle.tsx";
+export * from "@/components/my-components/nav-bar/LanguageMenu.tsx";
+export * from "@/components/my-components/loaders/CustomSpinner.tsx";
 // export * from "./my-components/forms/BaseForm/CustomInput.tsx";

@@ -1,22 +1,16 @@
-export const getFromServer = async (url: string): Promise<any> => {
-    const method = "GET";
-    const response = await fetch(url, {
-    method: method,
-     headers: {
+export const getFromServer = async <T >(url: string): Promise<T> => {
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
       "Content-Type": "application/json",
     },
-    credentials: "include", 
+    credentials: "include",
   });
 
   if (!response.ok) {
     const error = await response.json();
-    const errorMessage = error?.message || response.statusText;
-    const errorToThrow = new Error(errorMessage);
-    if (import.meta.env.ENVIRONMENT === "development") {
-      console.error("Error saving data to server:", errorToThrow);
-    }
-    throw errorToThrow;
+    throw new Error(error?.message || response.statusText);
   }
+
   return response.json();
 };
-

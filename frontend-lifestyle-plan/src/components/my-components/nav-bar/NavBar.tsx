@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/navigation-menu";
 
 import { NavLink } from "react-router";
-import LanguageMenu from "./LanguageMenu";
+import { LanguageMenu } from "@/components";
 import { Button } from "@/components/ui/button";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

@@ -1,23 +1,33 @@
 import { Request, Response } from 'express';
 import { prompt } from "../helpers/openAI/prompt.js";
 import { getCompletion } from "../helpers/openAI/completion.js";
-import mockDataToShapeFrontend  from '../db/mockDataToShapeFrontend.json' with { type: 'json' };;
+import mockDataToShapeFrontend  from '../db/mockDataToShapeFrontend.json' with { type: 'json' };import { errorAndLogHandler, errorLevels } from '../utils/index.js';
+;
 const sendPlanPrompt = async (req: Request, res: Response) => {
-  const { 
-    objective, 
-    restriction, 
-    preference, 
-    extras,
-    language,
-    unitSystem,
-    weight,
-    height,
-    age,
-    waist,
-    neck,
-    hip,
-    gender
-  } = req.body;
+    const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json(
+          await errorAndLogHandler({
+            level: errorLevels.warn,
+            message: "Unauthorized: Missing user ID from token",
+          })
+        );
+      }
+    const { 
+      objective, 
+      restriction, 
+      preference, 
+      extras,
+      language,
+      unitSystem,
+      weight,
+      height,
+      age,
+      waist,
+      neck,
+      hip,
+      gender
+    } = req.body;
 
   if (!unitSystem||!language||!weight || !height || !age || !waist || !neck || !gender || !objective) {
     res.status(400).json({ 

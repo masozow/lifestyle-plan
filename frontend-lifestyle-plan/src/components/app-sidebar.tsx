@@ -1,9 +1,11 @@
 import * as React from "react";
 import {
   IconChartArea,
+  IconCheckbox,
   IconDashboard,
   IconHelp,
   IconList,
+  IconPlus,
   IconSearch,
   IconSettings,
   IconUsers,
@@ -21,7 +23,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Link } from "react-router";
+import { NavLink } from "react-router";
 import { Cherry } from "lucide-react";
 import { useSessionStore } from "@/store";
 
@@ -29,7 +31,7 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "/app/dashboard",
+      url: "",
       icon: IconDashboard,
     },
   ],
@@ -55,11 +57,52 @@ const data = {
       name: "Profile",
       url: "#",
       icon: IconUsers,
+      children: [
+        {
+          name: "New profile",
+          url: "profile",
+          icon: IconPlus,
+        },
+        {
+          name: "View",
+          url: "view-profile",
+          icon: IconSearch,
+        },
+      ],
     },
     {
       name: "Meal Plan",
       url: "#",
       icon: IconList,
+      children: [
+        {
+          name: "New",
+          url: "new-plan",
+          icon: IconPlus,
+        },
+        {
+          name: "View",
+          url: "meal-plan",
+          icon: IconSearch,
+        },
+      ],
+    },
+    {
+      name: "Objectives",
+      url: "#",
+      icon: IconCheckbox,
+      children: [
+        {
+          name: "New",
+          url: "planner",
+          icon: IconPlus,
+        },
+        {
+          name: "View",
+          url: "objectives",
+          icon: IconSearch,
+        },
+      ],
     },
     {
       name: "Progress",
@@ -80,7 +123,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5 py-0.5 !text-left"
             >
-              <Link
+              <NavLink
                 to="/"
                 className="flex items-center gap-2 font-medium justify-center"
               >
@@ -88,7 +131,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <p className="text-2xl font-bold">
                   <span className="text-primary">Fit</span>app
                 </p>
-              </Link>
+              </NavLink>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

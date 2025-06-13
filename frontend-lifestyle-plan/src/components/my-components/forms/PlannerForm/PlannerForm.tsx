@@ -29,19 +29,19 @@ export const PlannerForm = ({ titleChangeFunction, initialValues }: Props) => {
   const [currentStep, setCurrentStep] = useState(0);
   const { plan, setPlan } = usePlanStore((state) => state);
   const [showSubmit, setShowSubmit] = useState(false);
-  const plannerMutation = useApiRequest<PlannerFormValues & { userId: number }>(
-    {
-      url: API_ENDPOINTS.plan,
-      method: "POST",
-    }
-  );
+  const plannerMutation = useApiRequest<PlannerFormValues>({
+    url: API_ENDPOINTS.plan,
+    method: "POST",
+  });
 
   const onSubmit = async (data: PlannerFormValues) => {
+    console.log("onSubmit", {
+      ...data,
+    });
     if (user?.id) {
       try {
         const result = await plannerMutation.mutateAsync({
           ...data,
-          userId: user.id,
         });
         console.log("Mutation started:", result);
       } catch (error) {
@@ -71,7 +71,6 @@ export const PlannerForm = ({ titleChangeFunction, initialValues }: Props) => {
 
   useEffect(() => {
     if (plannerMutation.isSuccess) {
-      const formData = getValues();
       toast.success(plannerMutation.data?.message || "Profile created", {
         action: (
           <Button
@@ -83,12 +82,11 @@ export const PlannerForm = ({ titleChangeFunction, initialValues }: Props) => {
           </Button>
         ),
       });
-      setPlan({ ...formData });
-      navigate("/app/dashboard");
+      navigate("/app/new-plan");
     }
 
     if (plannerMutation.isError) {
-      toast.error(plannerMutation.error?.message || "An error occurred", {
+      toast.error(plannerMutation.error?.message, {
         action: (
           <Button
             variant="ghost"
@@ -106,7 +104,6 @@ export const PlannerForm = ({ titleChangeFunction, initialValues }: Props) => {
     plannerMutation.error?.message,
     plannerMutation.data?.message,
     getValues,
-    setPlan,
     navigate,
   ]);
 
@@ -126,6 +123,8 @@ export const PlannerForm = ({ titleChangeFunction, initialValues }: Props) => {
       setCurrentStep((prev) => prev + 1);
     } else {
       setIsCompleted(true);
+      const formData = getValues();
+      setPlan(formData);
       titleChangeFunction(t("plannerPage.titleReview"));
       setTimeout(() => setShowSubmit(true), 0);
     }

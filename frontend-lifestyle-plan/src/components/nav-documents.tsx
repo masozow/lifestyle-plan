@@ -1,4 +1,4 @@
-import { IconDots, IconPlus, IconSearch, type Icon } from "@tabler/icons-react";
+import { IconDots, type Icon } from "@tabler/icons-react";
 
 import {
   DropdownMenu,
@@ -15,11 +15,13 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { NavLink } from "react-router";
 
 export interface NavDocumentItem {
   name: string;
   url: string;
   icon: Icon;
+  children?: NavDocumentItem[];
 }
 
 export function NavDocuments({
@@ -59,14 +61,14 @@ export function NavDocuments({
                   side={isMobile ? "bottom" : "right"}
                   align={isMobile ? "end" : "start"}
                 >
-                  <DropdownMenuItem>
-                    <IconPlus />
-                    <span>New</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <IconSearch />
-                    <span>View</span>
-                  </DropdownMenuItem>
+                  {item.children?.map((child) => (
+                    <DropdownMenuItem key={child.name} asChild>
+                      <NavLink key={child.name} to={child.url}>
+                        <child.icon />
+                        <span>{child.name}</span>
+                      </NavLink>
+                    </DropdownMenuItem>
+                  ))}
                 </DropdownMenuContent>
               </DropdownMenu>
             )}

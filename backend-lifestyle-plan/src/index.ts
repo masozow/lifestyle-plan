@@ -12,6 +12,7 @@ import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
 import planRoutes from "./routes/plan.route.js";
 import promptRoutes from "./routes/userPrompt.route.js";
+import sequelize from "./config/sequelize.js";
 
 const app = express();
 

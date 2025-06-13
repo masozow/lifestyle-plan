@@ -10,10 +10,10 @@
     "subtitle2": "Provee retroalimentación y rastrea tu progreso.",
     "button": "Iniciemos"
   },
-  "newUserPage":{
-    "title": "Aún no has creado un nuevo plan ¿qué quieres hacer?"
+  "newPlanPage":{
+    "title": "¿Quieres crear un nuevo plan usando nuestro asistene de IA?"
   },
-  "newUserForm":{
+  "newPlanForm":{
     "buttons": {
       "secondary": "Ir al dashboard",
       "primary": "Crear un nuevo plan"
@@ -69,7 +69,7 @@
     }
   },
   "profilePage": {
-    "title": "Completa tu perfil",
+    "title": "Crea un nuevo perfil",
     "titleReview": "Revisa tu perfil"
   },
   "profileForm": {

@@ -39,13 +39,13 @@ interface DesktopMealTableProps {
   onEdit: (index: number) => void;
 }
 
-export function DesktopMealTable({
+export const DesktopMealTable = ({
   meals,
   mealStatuses,
   units,
   onToggleComplete,
   onEdit,
-}: DesktopMealTableProps) {
+}: DesktopMealTableProps) => {
   return (
     <div className="hidden md:block">
       <Table>
@@ -67,4 +67,4 @@ export function DesktopMealTable({
       </Table>
     </div>
   );
-}
+};

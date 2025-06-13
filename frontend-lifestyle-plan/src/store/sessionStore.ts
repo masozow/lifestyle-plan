@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { toast } from "sonner";
 import { getFromServer } from "@/api";
+import { API_ENDPOINTS } from "@/lib/backendURLS";
 
 type FetchResponse = {
   success: string;
@@ -78,7 +79,7 @@ export const useSessionStore = create<SessionStore>()(
       logout: async () => {
         try {
           await fetch(
-            `${import.meta.env.VITE_BACKEND_BASE_URL}/api/users/logout`,
+            API_ENDPOINTS.logout,
             {
               method: "POST",
               credentials: "include",

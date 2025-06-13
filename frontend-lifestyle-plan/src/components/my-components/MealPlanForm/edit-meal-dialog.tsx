@@ -1,5 +1,3 @@
-"use client";
-
 import { useForm } from "react-hook-form";
 import { Check, X } from "lucide-react";
 
@@ -49,13 +47,13 @@ interface EditMealDialogProps {
   };
 }
 
-export function EditMealDialog({
+export const EditMealDialog = ({
   isOpen,
   onClose,
   onSave,
   meal,
   units,
-}: EditMealDialogProps) {
+}: EditMealDialogProps) => {
   const { register, handleSubmit, reset } = useForm<ReplacementMeal>();
 
   const handleClose = () => {
@@ -155,4 +153,4 @@ export function EditMealDialog({
       </DialogContent>
     </Dialog>
   );
-}
+};

@@ -14,9 +14,9 @@ const create = async (req: Request, res: Response) => {
         })
       );
     }
-
+    console.log(" 🚀 plan.controller line 17:", { file: "plan.controller.ts", function: "create" }, { ...req.body, userId} );
     const plan = await Plan.create({ ...req.body, userId });
-
+    console.log(" 🚀 plan.controller line 20 plan value:", { file: "plan.controller.ts", function: "create" }, plan );
     res.status(201).json(
       await errorAndLogHandler({
         level: errorLevels.info,
@@ -27,6 +27,7 @@ const create = async (req: Request, res: Response) => {
       })
     );
   } catch (error) {
+    console.log(" 🚀 plan.controller line 26:", { file: "plan.controller.ts", function: "create" }, "Error creating plan:", error);
     return res.status(400).json(
       await errorAndLogHandler({
         level: errorLevels.error,
@@ -53,9 +54,12 @@ const getAll = async (req: Request, res: Response) => {
 };
 
 const getByUserID = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { userId } = req.params;
   try {
-    const plan = await Plan.findOne({ where: { userId: id } });
+    const plan = await Plan.findOne({
+      where: { userId: userId },
+      order: [['updatedAt', 'DESC']],
+    });
     return res.status(200).json({ success: true, data: plan });
   } catch (error) {
     return res.status(500).json(
@@ -63,7 +67,7 @@ const getByUserID = async (req: Request, res: Response) => {
         level: errorLevels.error,
         message: "Error fetching plan by user ID: " + (error as Error).message,
         userId: req.user?.id || 0,
-        genericId: id,
+        genericId: userId,
       })
     );
   }
