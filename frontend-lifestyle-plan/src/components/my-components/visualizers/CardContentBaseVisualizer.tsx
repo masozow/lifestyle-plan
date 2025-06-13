@@ -1,8 +1,8 @@
-import { useApiGet } from "@/hooks";
+import { useApiGet, useLocale } from "@/hooks";
 import { useSessionStore } from "@/store";
 import { CardContent } from "../../ui/card";
 import { Badge } from "../../ui/badge";
-
+import { format } from "@formkit/tempo";
 import { CustomSpinner } from "@/components";
 
 interface Props {
@@ -13,7 +13,7 @@ export const CardContentBaseVisualizer = <T extends Record<string, unknown>>({
 }: Props) => {
   const { user } = useSessionStore();
   const userId = user?.id;
-
+  const { locale } = useLocale();
   const { data, isLoading, isError, error } = useApiGet<{
     success: boolean;
     data: T;
@@ -51,8 +51,11 @@ export const CardContentBaseVisualizer = <T extends Record<string, unknown>>({
                 {key.charAt(0).toUpperCase() + key.slice(1)}
               </p>
               <Badge variant="outline" className="col-span-3 text-md">
-                {String(value).replace("-", " ").charAt(0).toUpperCase() +
-                  String(value).replace("-", " ").slice(1)}
+                {key.toLowerCase().includes("date")
+                  ? format(String(value), { date: "long" }, locale)
+                  : String(value)
+                      .replace("-", " ")
+                      .replace(/^\w/, (c) => c.toUpperCase())}
               </Badge>
             </div>
           ))}
