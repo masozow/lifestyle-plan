@@ -4,28 +4,43 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router";
 import { diffYears, date } from "@formkit/tempo";
+import type { LocaleCode } from "@/locales/localesTypes";
+import { useApiRequest } from "@/hooks";
+import { API_ENDPOINTS } from "@/lib/backendURLS";
+import { useEffect } from "react";
 export const NewPlanForm = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const { plan, setPlan } = usePlanStore((state) => state);
-  const { profile, setProfile } = useProfileStore();
+  const { plan } = usePlanStore((state) => state);
+  const { profile } = useProfileStore();
   const { user } = useSessionStore();
+  const locale = i18n.language as LocaleCode;
+  const newPlanMutation = useApiRequest({
+    url: `${API_ENDPOINTS.openai}/sendPrompt`,
+    method: "POST",
+  });
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const age = diffYears(date(user?.birthDate), new Date());
     //still  needs to get language, and see what will be done when there are no extras:
-    console.log({
+    const payLoad = {
       ...plan,
-      userId: user?.id,
       age: age,
       gender: user?.gender,
       ...profile,
-    });
-
-    // setTimeout(() => {
-    //   navigate("/app/meal-plan");
-    // }, 0);
+      language: locale,
+    };
+    console.log(payLoad);
+    newPlanMutation.mutate(payLoad);
   };
+
+  useEffect(() => {
+    if (newPlanMutation.isSuccess) {
+      setTimeout(() => {
+        navigate("/app/meal-plan");
+      }, 0);
+    }
+  }, [navigate, newPlanMutation.isSuccess]);
   return (
     <motion.form
       className="flex flex-col justify-between gap-6"

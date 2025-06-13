@@ -8,6 +8,7 @@ export const API_ENDPOINTS = {
   session: `${BASE_URL}/api/session`,
   plan: `${BASE_URL}/api/plan`,
   openai: `${BASE_URL}/api/openai`,
+  openaiResponse: `${BASE_URL}/api/openai-response`,
 } as const;
 
 // Tipado automático
