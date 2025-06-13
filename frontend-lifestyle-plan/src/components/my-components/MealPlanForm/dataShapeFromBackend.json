@@ -1,0 +1,456 @@
+{
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "userPromptId": 5,
+            "userId": 1,
+            "response": {
+                "meta": {
+                    "model": "llama-3.3-70b-versatile",
+                    "generated_at": "2025-06-13T22:36:34.419Z"
+                },
+                "units": {
+                    "macro": {
+                        "fat": "g",
+                        "carbs": "g",
+                        "energy": "kcal",
+                        "protein": "g"
+                    },
+                    "portion": "g"
+                },
+                "unit_system": "metric",
+                "weekly_plan": [
+                    {
+                        "day": "Lunes",
+                        "meals": [
+                            {
+                                "food": "Avena con frutas y nueces",
+                                "meal": "Desayuno",
+                                "macro": {
+                                    "fat": 12,
+                                    "carbs": 45,
+                                    "energy": 420,
+                                    "protein": 25
+                                },
+                                "portion": 300
+                            },
+                            {
+                                "food": "Pechuga de pollo a la plancha con arroz integral y verduras",
+                                "meal": "Almuerzo",
+                                "macro": {
+                                    "fat": 15,
+                                    "carbs": 50,
+                                    "energy": 550,
+                                    "protein": 40
+                                },
+                                "portion": 400
+                            },
+                            {
+                                "food": "Salmón a la plancha con patatas asadas y brócoli",
+                                "meal": "Cena",
+                                "macro": {
+                                    "fat": 18,
+                                    "carbs": 30,
+                                    "energy": 480,
+                                    "protein": 35
+                                },
+                                "portion": 350
+                            },
+                            {
+                                "food": "Yogur griego con frutas y nueces",
+                                "meal": "Merienda 1",
+                                "macro": {
+                                    "fat": 8,
+                                    "carbs": 25,
+                                    "energy": 250,
+                                    "protein": 20
+                                },
+                                "portion": 200
+                            },
+                            {
+                                "food": "Batido de proteínas con leche de almendras y plátano",
+                                "meal": "Merienda 2",
+                                "macro": {
+                                    "fat": 10,
+                                    "carbs": 30,
+                                    "energy": 320,
+                                    "protein": 30
+                                },
+                                "portion": 250
+                            }
+                        ]
+                    },
+                    {
+                        "day": "Martes",
+                        "meals": [
+                            {
+                                "food": "Huevos revueltos con espinacas y aguacate",
+                                "meal": "Desayuno",
+                                "macro": {
+                                    "fat": 15,
+                                    "carbs": 10,
+                                    "energy": 280,
+                                    "protein": 20
+                                },
+                                "portion": 250
+                            },
+                            {
+                                "food": "Tacos de pescado con lechuga y tomate",
+                                "meal": "Almuerzo",
+                                "macro": {
+                                    "fat": 18,
+                                    "carbs": 25,
+                                    "energy": 420,
+                                    "protein": 30
+                                },
+                                "portion": 350
+                            },
+                            {
+                                "food": "Pechuga de pollo al curry con arroz integral y zanahorias",
+                                "meal": "Cena",
+                                "macro": {
+                                    "fat": 20,
+                                    "carbs": 40,
+                                    "energy": 520,
+                                    "protein": 35
+                                },
+                                "portion": 400
+                            },
+                            {
+                                "food": "Manzana con almendras",
+                                "meal": "Merienda 1",
+                                "macro": {
+                                    "fat": 8,
+                                    "carbs": 20,
+                                    "energy": 160,
+                                    "protein": 4
+                                },
+                                "portion": 150
+                            },
+                            {
+                                "food": "Batido de proteínas con leche de soja y fresa",
+                                "meal": "Merienda 2",
+                                "macro": {
+                                    "fat": 10,
+                                    "carbs": 25,
+                                    "energy": 280,
+                                    "protein": 25
+                                },
+                                "portion": 200
+                            }
+                        ]
+                    },
+                    {
+                        "day": "Miércoles",
+                        "meals": [
+                            {
+                                "food": "Avena con plátano y miel",
+                                "meal": "Desayuno",
+                                "macro": {
+                                    "fat": 10,
+                                    "carbs": 45,
+                                    "energy": 350,
+                                    "protein": 10
+                                },
+                                "portion": 300
+                            },
+                            {
+                                "food": "Salmón a la plancha con quinoa y brócoli",
+                                "meal": "Almuerzo",
+                                "macro": {
+                                    "fat": 20,
+                                    "carbs": 30,
+                                    "energy": 500,
+                                    "protein": 35
+                                },
+                                "portion": 400
+                            },
+                            {
+                                "food": "Pechuga de pollo a la plancha con patatas asadas y espinacas",
+                                "meal": "Cena",
+                                "macro": {
+                                    "fat": 15,
+                                    "carbs": 25,
+                                    "energy": 420,
+                                    "protein": 30
+                                },
+                                "portion": 350
+                            },
+                            {
+                                "food": "Yogur griego con frutas y granola",
+                                "meal": "Merienda 1",
+                                "macro": {
+                                    "fat": 10,
+                                    "carbs": 30,
+                                    "energy": 280,
+                                    "protein": 20
+                                },
+                                "portion": 250
+                            },
+                            {
+                                "food": "Batido de proteínas con leche de almendras y plátano",
+                                "meal": "Merienda 2",
+                                "macro": {
+                                    "fat": 10,
+                                    "carbs": 25,
+                                    "energy": 280,
+                                    "protein": 25
+                                },
+                                "portion": 200
+                            }
+                        ]
+                    },
+                    {
+                        "day": "Jueves",
+                        "meals": [
+                            {
+                                "food": "Huevos revueltos con champiñones y espinacas",
+                                "meal": "Desayuno",
+                                "macro": {
+                                    "fat": 15,
+                                    "carbs": 10,
+                                    "energy": 280,
+                                    "protein": 20
+                                },
+                                "portion": 250
+                            },
+                            {
+                                "food": "Tacos de carne con lechuga y tomate",
+                                "meal": "Almuerzo",
+                                "macro": {
+                                    "fat": 20,
+                                    "carbs": 30,
+                                    "energy": 520,
+                                    "protein": 35
+                                },
+                                "portion": 400
+                            },
+                            {
+                                "food": "Pechuga de pollo al curry con arroz integral y zanahorias",
+                                "meal": "Cena",
+                                "macro": {
+                                    "fat": 20,
+                                    "carbs": 40,
+                                    "energy": 520,
+                                    "protein": 35
+                                },
+                                "portion": 400
+                            },
+                            {
+                                "food": "Manzana con almendras",
+                                "meal": "Merienda 1",
+                                "macro": {
+                                    "fat": 8,
+                                    "carbs": 20,
+                                    "energy": 160,
+                                    "protein": 4
+                                },
+                                "portion": 150
+                            },
+                            {
+                                "food": "Batido de proteínas con leche de soja y fresa",
+                                "meal": "Merienda 2",
+                                "macro": {
+                                    "fat": 10,
+                                    "carbs": 25,
+                                    "energy": 280,
+                                    "protein": 25
+                                },
+                                "portion": 200
+                            }
+                        ]
+                    },
+                    {
+                        "day": "Viernes",
+                        "meals": [
+                            {
+                                "food": "Avena con plátano y miel",
+                                "meal": "Desayuno",
+                                "macro": {
+                                    "fat": 10,
+                                    "carbs": 45,
+                                    "energy": 350,
+                                    "protein": 10
+                                },
+                                "portion": 300
+                            },
+                            {
+                                "food": "Salmón a la plancha con quinoa y brócoli",
+                                "meal": "Almuerzo",
+                                "macro": {
+                                    "fat": 20,
+                                    "carbs": 30,
+                                    "energy": 500,
+                                    "protein": 35
+                                },
+                                "portion": 400
+                            },
+                            {
+                                "food": "Pechuga de pollo a la plancha con patatas asadas y espinacas",
+                                "meal": "Cena",
+                                "macro": {
+                                    "fat": 15,
+                                    "carbs": 25,
+                                    "energy": 420,
+                                    "protein": 30
+                                },
+                                "portion": 350
+                            },
+                            {
+                                "food": "Yogur griego con frutas y granola",
+                                "meal": "Merienda 1",
+                                "macro": {
+                                    "fat": 10,
+                                    "carbs": 30,
+                                    "energy": 280,
+                                    "protein": 20
+                                },
+                                "portion": 250
+                            },
+                            {
+                                "food": "Batido de proteínas con leche de almendras y plátano",
+                                "meal": "Merienda 2",
+                                "macro": {
+                                    "fat": 10,
+                                    "carbs": 25,
+                                    "energy": 280,
+                                    "protein": 25
+                                },
+                                "portion": 200
+                            }
+                        ]
+                    },
+                    {
+                        "day": "Sábado",
+                        "meals": [
+                            {
+                                "food": "Huevos revueltos con champiñones y espinacas",
+                                "meal": "Desayuno",
+                                "macro": {
+                                    "fat": 15,
+                                    "carbs": 10,
+                                    "energy": 280,
+                                    "protein": 20
+                                },
+                                "portion": 250
+                            },
+                            {
+                                "food": "Tacos de carne con lechuga y tomate",
+                                "meal": "Almuerzo",
+                                "macro": {
+                                    "fat": 20,
+                                    "carbs": 30,
+                                    "energy": 520,
+                                    "protein": 35
+                                },
+                                "portion": 400
+                            },
+                            {
+                                "food": "Pechuga de pollo al curry con arroz integral y zanahorias",
+                                "meal": "Cena",
+                                "macro": {
+                                    "fat": 20,
+                                    "carbs": 40,
+                                    "energy": 520,
+                                    "protein": 35
+                                },
+                                "portion": 400
+                            },
+                            {
+                                "food": "Manzana con almendras",
+                                "meal": "Merienda 1",
+                                "macro": {
+                                    "fat": 8,
+                                    "carbs": 20,
+                                    "energy": 160,
+                                    "protein": 4
+                                },
+                                "portion": 150
+                            },
+                            {
+                                "food": "Batido de proteínas con leche de soja y fresa",
+                                "meal": "Merienda 2",
+                                "macro": {
+                                    "fat": 10,
+                                    "carbs": 25,
+                                    "energy": 280,
+                                    "protein": 25
+                                },
+                                "portion": 200
+                            }
+                        ]
+                    },
+                    {
+                        "day": "Domingo",
+                        "meals": [
+                            {
+                                "food": "Avena con plátano y miel",
+                                "meal": "Desayuno",
+                                "macro": {
+                                    "fat": 10,
+                                    "carbs": 45,
+                                    "energy": 350,
+                                    "protein": 10
+                                },
+                                "portion": 300
+                            },
+                            {
+                                "food": "Salmón a la plancha con quinoa y brócoli",
+                                "meal": "Almuerzo",
+                                "macro": {
+                                    "fat": 20,
+                                    "carbs": 30,
+                                    "energy": 500,
+                                    "protein": 35
+                                },
+                                "portion": 400
+                            },
+                            {
+                                "food": "Pechuga de pollo a la plancha con patatas asadas y espinacas",
+                                "meal": "Cena",
+                                "macro": {
+                                    "fat": 15,
+                                    "carbs": 25,
+                                    "energy": 420,
+                                    "protein": 30
+                                },
+                                "portion": 350
+                            },
+                            {
+                                "food": "Yogur griego con frutas y granola",
+                                "meal": "Merienda 1",
+                                "macro": {
+                                    "fat": 10,
+                                    "carbs": 30,
+                                    "energy": 280,
+                                    "protein": 20
+                                },
+                                "portion": 250
+                            },
+                            {
+                                "food": "Batido de proteínas con leche de almendras y plátano",
+                                "meal": "Merienda 2",
+                                "macro": {
+                                    "fat": 10,
+                                    "carbs": 25,
+                                    "energy": 280,
+                                    "protein": 25
+                                },
+                                "portion": 200
+                            }
+                        ]
+                    }
+                ],
+                "macro_ratios": {
+                    "fat": 0.2,
+                    "carbs": 0.45,
+                    "protein": 0.35
+                },
+                "daily_calorie_target": 2500
+            },
+            "createdAt": "2025-06-13T22:36:34.000Z",
+            "updatedAt": "2025-06-13T22:36:34.000Z"
+        }
+    ]
+}
