@@ -64,18 +64,16 @@ const getAll = async (req: Request, res: Response) => {
   }
 };
 const getByID = async (req: Request, res: Response) => {
-    const { id } = req.params;
+    const { userId } = req.params;
     try {
-      const user = await User.findByPk(id);
+      const user = await User.findByPk(userId);
       res.status(200).json({ success: true, data: user });
     } catch (error) {
       res.status(500).json(
         await errorAndLogHandler({
           level: errorLevels.error,
-          message: `Error fetching the user: ${id} ` + error.message,
-          // userId: req.user.id,
-          userId:0,
-          genericId: id,
+          message: `Error fetching the user: ${userId} ` + error.message,
+          userId: Number(userId) ||0
         })
       );
     }

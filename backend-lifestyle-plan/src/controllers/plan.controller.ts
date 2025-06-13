@@ -14,9 +14,9 @@ const create = async (req: Request, res: Response) => {
         })
       );
     }
-    console.log(" 🚀 plan.controller line 17:", { file: "plan.controller.ts", function: "create" }, { ...req.body, userId} );
+    
     const plan = await Plan.create({ ...req.body, userId });
-    console.log(" 🚀 plan.controller line 20 plan value:", { file: "plan.controller.ts", function: "create" }, plan );
+    
     res.status(201).json(
       await errorAndLogHandler({
         level: errorLevels.info,
@@ -27,7 +27,6 @@ const create = async (req: Request, res: Response) => {
       })
     );
   } catch (error) {
-    console.log(" 🚀 plan.controller line 26:", { file: "plan.controller.ts", function: "create" }, "Error creating plan:", error);
     return res.status(400).json(
       await errorAndLogHandler({
         level: errorLevels.error,

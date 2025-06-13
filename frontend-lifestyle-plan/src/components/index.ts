@@ -16,9 +16,12 @@ export * from "@/components/my-components/forms/NewPlanForm/NewPlanForm.tsx";
 export * from "@/components/my-components/MealPlanForm/MealPlanForm.tsx";
 export * from "@/components/my-components/dashboard/DashboardHome.tsx";
 export * from "@/components/my-components/cards/DataCard.tsx";
-export * from "@/components/my-components/visualizers/Objectives.tsx";
-export * from "@/components/my-components/Profile.tsx";
+export * from "@/components/my-components/visualizers/ObjectivesCard.tsx";
+export * from "@/components/my-components/visualizers/MealList.tsx";
+export * from "@/components/my-components/visualizers/ProfileCard.tsx";
 export * from "@/components/theme/mode-toggle.tsx";
 export * from "@/components/my-components/nav-bar/LanguageMenu.tsx";
 export * from "@/components/my-components/loaders/CustomSpinner.tsx";
+export * from "@/components/my-components/visualizers/CardContentBaseVisualizer.tsx"
+export * from "@/components/my-components/visualizers/UserCard.tsx";
 // export * from "./my-components/forms/BaseForm/CustomInput.tsx";

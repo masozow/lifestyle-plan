@@ -1,7 +1,7 @@
-import { ProfileCard } from "@/components";
+import { UserCard } from "@/components";
 import { motion } from "motion/react";
 
-export const ViewProfilePage = () => {
+export const UserPage = () => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -9,7 +9,7 @@ export const ViewProfilePage = () => {
       transition={{ duration: 0.5, ease: "easeInOut" }}
       className="w-1/2 mx-auto mt-10"
     >
-      <ProfileCard />
+      <UserCard />
     </motion.div>
   );
 };
