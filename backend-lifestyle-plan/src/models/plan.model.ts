@@ -62,7 +62,6 @@ Plan.init(
     userId: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
-      unique: true,
     },
   },
   {

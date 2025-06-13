@@ -1,8 +1,8 @@
 import { useApiGet } from "@/hooks";
 import { API_ENDPOINTS } from "@/lib/backendURLS";
 import { useSessionStore } from "@/store";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Badge } from "../ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
+import { Badge } from "../../ui/badge";
 import { motion } from "motion/react";
 
 type Plan = {

@@ -7,10 +7,9 @@ import {
 import { useLocale } from "@/hooks";
 import { availableLocales, type LocaleCode } from "@/locales/localesTypes";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
-const LanguageMenu = (): JSX.Element => {
+export const LanguageMenu = () => {
   const { locale, changeLocale } = useLocale();
   const { t } = useTranslation();
 
@@ -36,5 +35,3 @@ const LanguageMenu = (): JSX.Element => {
     </DropdownMenu>
   );
 };
-
-export default LanguageMenu;

@@ -26,8 +26,6 @@ import {
 import { NavLink } from "react-router";
 import { Cherry } from "lucide-react";
 import { useSessionStore } from "@/store";
-import LanguageMenu from "./my-components/nav-bar/LanguageMenu";
-import { ModeToggle } from "./theme/mode-toggle";
 
 const data = {
   navMain: [
@@ -143,8 +141,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavDocuments items={data.documents} title="Options" />
       </SidebarContent>
       <SidebarFooter>
-        <LanguageMenu />
-        <ModeToggle />
         <NavUser
           user={{
             name: user?.name || "user",
