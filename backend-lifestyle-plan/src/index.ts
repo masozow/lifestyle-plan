@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
-
+import sequelize from "./config/sequelize.js";
 
 // Routes
 import openaiRoutes from "./routes/openai.route.js";
@@ -12,7 +12,8 @@ import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
 import planRoutes from "./routes/plan.route.js";
 import promptRoutes from "./routes/userPrompt.route.js";
-import sequelize from "./config/sequelize.js";
+import userMealProgressRoutes from "./routes/userMealProgress.route.js";
+import openAIResponseRoutes from "./routes/openAIResponse.route.js";
 
 const app = express();
 
@@ -39,6 +40,8 @@ app.use("/api", userRoutes);
 app.use("/api", authRoutes);
 app.use("/api", planRoutes);
 app.use("/api", promptRoutes);
+app.use("/api", userMealProgressRoutes);
+app.use("/api", openAIResponseRoutes);
 
 // Global error middleware
 app.use((err, req, res, next) => {

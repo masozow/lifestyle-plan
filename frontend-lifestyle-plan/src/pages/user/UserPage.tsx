@@ -1,17 +1,15 @@
-import { MealPlanForm } from "@/components";
+import { UserCard } from "@/components";
 import { motion } from "motion/react";
 
-export const MealPlanPage = () => {
+export const UserPage = () => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeInOut" }}
-      className="w-full mx-auto pt-10 sm:pt-1"
+      className="w-90 sm:w-1/2 mx-auto mt-10"
     >
-      <MealPlanForm />
+      <UserCard />
     </motion.div>
   );
 };
-
-export default MealPlanPage;

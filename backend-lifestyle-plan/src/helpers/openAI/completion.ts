@@ -45,5 +45,5 @@ export const getCompletion = async (
   });
   const responseText = completion?.choices[0]?.message?.content;
   console.log("Data from groq:",responseText);
-  return responseText.replace(/```json/g, '').replace(/```/g, '').trim();
+  return responseText;
 };

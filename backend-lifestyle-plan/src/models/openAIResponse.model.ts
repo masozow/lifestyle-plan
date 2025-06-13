@@ -5,13 +5,13 @@ import {
   BelongsToGetAssociationMixin,
 } from "sequelize";
 import sequelize from "../config/sequelize.js";
-import User from "./user.model.js";
 import UserPrompt from "./userPrompt.model.js";
 
 export interface OpenAIResponseAttributes {
   id: number;
   userPromptId: number;
-  response: object; // Raw full OpenAI JSON response
+  userId: number;
+  response: object;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -19,12 +19,13 @@ export interface OpenAIResponseAttributes {
 export interface OpenAIResponseCreationAttributes
   extends Optional<OpenAIResponseAttributes, "id" | "createdAt" | "updatedAt"> {}
 
-class OpenAIResponse extends Model<
-  OpenAIResponseAttributes,
-  OpenAIResponseCreationAttributes
-> implements OpenAIResponseAttributes {
+class OpenAIResponse
+  extends Model<OpenAIResponseAttributes, OpenAIResponseCreationAttributes>
+  implements OpenAIResponseAttributes
+{
   declare id: number;
   declare userPromptId: number;
+  declare userId: number;
   declare response: object;
   declare readonly createdAt: Date;
   declare readonly updatedAt: Date;
@@ -40,6 +41,10 @@ OpenAIResponse.init(
       primaryKey: true,
     },
     userPromptId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: false,
+    },
+    userId: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
     },
