@@ -55,7 +55,7 @@ export const LoginForm = () => {
             </Button>
           ),
         });
-        navigate("/app/dashboard");
+        navigate("/app");
       };
       loginLogic();
     } else if (loginMutation.isError) {

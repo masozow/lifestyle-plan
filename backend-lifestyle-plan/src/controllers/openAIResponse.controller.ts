@@ -19,13 +19,14 @@ const getAll = async (_req: Request, res: Response) => {
 
 const getByUserId = async (req: Request, res: Response) => {
   const { userId } = req.params;
+  console.log("~ log from OpenAIResponseController ~ line 19 userId:", userId);
   try {
-    const responses = await OpenAIResponse.findAll({
+    const response = await OpenAIResponse.findOne({
       where: { userId },
       order: [["createdAt", "DESC"]],
     });
-
-    return res.status(200).json({ success: true, data: responses });
+    console.log("~ log from OpenAIResponseController ~ line 27 response:", response);
+    return res.status(200).json({ success: true, data: response });
   } catch (error) {
     return res.status(500).json(
       await errorAndLogHandler({

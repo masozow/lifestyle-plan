@@ -76,6 +76,6 @@ export const useMealPlanSync = (userId: number | undefined, apiEndpoint: string)
 
   return {
     syncToServer,
-    hasUnsyncedChanges: hasUnsyncedChanges(),
+    hasUnsyncedChanges: hasUnsyncedChanges,
   }
 }

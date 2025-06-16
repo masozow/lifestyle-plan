@@ -22,7 +22,6 @@ export const NewPlanForm = () => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const age = diffYears(date(user?.birthDate), new Date());
-    //still  needs to get language, and see what will be done when there are no extras:
     const payLoad = {
       ...plan,
       age: age,

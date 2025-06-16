@@ -33,6 +33,18 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
   clearCredentials: () => set({ credentials: null }),
 
+/**
+ * Attempts to log in using the provided mutation function.
+ * Retrieves the current credentials from the store state.
+ * 
+ * @param loginMutation - The mutation function used to perform the login operation.
+ * 
+ * @returns An object indicating the success status and an optional error message.
+ * If credentials are not set, returns an error message.
+ * If the login operation is successful, updates the state to set `isLoggedIn` to true.
+ * If an error occurs during the login operation, returns the error message.
+ */
+
   login: async (loginMutation) => {
     const { credentials } = useAuthStore.getState();
     if (!credentials) {

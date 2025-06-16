@@ -1,6 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Utensils, Calculator, Wifi, WifiOff, Save } from "lucide-react";
-
+import type {
+  DayPlan,
+  Meal,
+  OpenAIResponseFromServer,
+  Units,
+} from "@/types/openAIPlan";
+import { useApiGet } from "@/hooks";
 import {
   Card,
   CardContent,
@@ -23,10 +29,8 @@ import {
 } from "../helpers/meal-plan-form-helper-functions";
 import { useMealPlanStore, useSessionStore } from "@/store";
 import { useMealPlanSync } from "@/hooks";
-import mockupData from "./mockupData.json";
 import { API_ENDPOINTS } from "@/lib/backendURLS";
-
-const mealPlanData = mockupData;
+import { CustomSpinner } from "@/components";
 
 interface ReplacementMeal {
   title: string;
@@ -37,36 +41,58 @@ interface ReplacementMeal {
   protein: number;
 }
 
-interface Macro {
-  protein: number;
-  carbs: number;
-  fat: number;
-  energy: number;
-}
-
-interface Meal {
-  meal: string;
-  food: string;
-  portion: number;
-  macro: Macro;
-}
-
 export const MealPlanForm = () => {
   const { user } = useSessionStore();
-  //change this for the actual endpoint
-  const apiEndPoint = API_ENDPOINTS.plan;
+  const userId = user?.id;
+  const apiEndPoint = `${API_ENDPOINTS.openaiResponse}/${userId}`;
+  console.log("API endpoint:", apiEndPoint);
+  //for submitting info to server, other endpoint is needed
   const { mealStatus, setMealStatus } = useMealPlanStore();
-  const { syncToServer, hasUnsyncedChanges } = useMealPlanSync(
-    user?.id,
-    apiEndPoint
-  );
   const [isSyncing, setIsSyncing] = useState(false);
-
   const [editingMeal, setEditingMeal] = useState<{
     day: string;
     mealIndex: number;
     meal: Meal;
   } | null>(null);
+
+  useEffect(() => {
+    if (!userId) {
+      console.warn("⚠️ No userId detected — query is not triggered.");
+    }
+  }, [userId]);
+
+  const { data, isLoading, isError, error } = useApiGet<{
+    success: boolean;
+    data: OpenAIResponseFromServer;
+  }>({
+    url: apiEndPoint,
+    enabled: !!userId,
+  });
+  console.log("Data from server:", data);
+  const responseData = data?.data?.response;
+
+  const { syncToServer, hasUnsyncedChanges } = useMealPlanSync(
+    userId && responseData ? userId : undefined,
+    responseData ? `${API_ENDPOINTS.userMealProgress}/${userId}` : ""
+  );
+
+  if (isLoading) return <CustomSpinner />;
+
+  if (
+    isError ||
+    !responseData ||
+    !responseData.macro_ratios ||
+    !responseData.weekly_plan
+  ) {
+    return (
+      <div className="text-red-500">
+        Error: {error?.message || "Invalid response structure"}
+      </div>
+    );
+  }
+
+  const { daily_calorie_target, macro_ratios, units, weekly_plan } =
+    responseData;
 
   const handleToggleMealStatus = (day: string, mealIndex: number) => {
     const newMealStatus = toggleMealStatusHelper(mealStatus, day, mealIndex);
@@ -83,7 +109,6 @@ export const MealPlanForm = () => {
 
   const handleSaveReplacementMeal = (data: ReplacementMeal) => {
     if (!editingMeal) return;
-
     const newMealStatus = saveReplacementMealHelper(
       mealStatus,
       editingMeal.day,
@@ -100,7 +125,7 @@ export const MealPlanForm = () => {
     setIsSyncing(false);
   };
 
-  const macroPercentages = calculateMacroPercentages(mealPlanData.macro_ratios);
+  const macroPercentages = calculateMacroPercentages(macro_ratios);
 
   return (
     <div className="container mx-auto p-4 md:p-6 space-y-6">
@@ -117,7 +142,7 @@ export const MealPlanForm = () => {
                   <Wifi className="h-3 w-3 animate-pulse" />
                   Syncing...
                 </Badge>
-              ) : hasUnsyncedChanges ? (
+              ) : hasUnsyncedChanges() ? (
                 <>
                   <Badge
                     variant="destructive"
@@ -140,15 +165,14 @@ export const MealPlanForm = () => {
             </div>
           </div>
           <CardDescription>
-            Daily Target: {mealPlanData.daily_calorie_target}{" "}
-            {mealPlanData.units.macro.energy} | Protein:{" "}
-            {macroPercentages.protein}% | Carbohydrates:{" "}
+            Daily Target: {daily_calorie_target} {units?.macro.energy} |
+            Protein: {macroPercentages.protein}% | Carbohydrates:{" "}
             {macroPercentages.carbs}% | Fats: {macroPercentages.fat}%
           </CardDescription>
         </CardHeader>
       </Card>
 
-      {mealPlanData.weekly_plan.map((day) => {
+      {weekly_plan.map((day: DayPlan) => {
         const dayTotals = calculateDayTotals(day, mealStatus);
         const mealStatuses = getMealStatuses(day, mealStatus);
 
@@ -167,8 +191,7 @@ export const MealPlanForm = () => {
                       className="flex items-center gap-1"
                     >
                       <Calculator className="h-3 w-3" />
-                      {dayTotals.targetCalories}{" "}
-                      {mealPlanData.units.macro.energy}
+                      {dayTotals.targetCalories} {units?.macro.energy}
                     </Badge>
                   </div>
                   <div className="flex flex-col items-center">
@@ -180,8 +203,7 @@ export const MealPlanForm = () => {
                       className="flex items-center gap-1"
                     >
                       <Calculator className="h-3 w-3" />
-                      {dayTotals.totalCalories}{" "}
-                      {mealPlanData.units.macro.energy}
+                      {dayTotals.totalCalories} {units?.macro.energy}
                     </Badge>
                   </div>
                   <div className="flex flex-col">
@@ -191,15 +213,15 @@ export const MealPlanForm = () => {
                     <div className="flex gap-2">
                       <Badge variant="secondary">
                         P: {dayTotals.totalProtein}/{dayTotals.targetProtein}
-                        {mealPlanData.units.macro.protein}
+                        {units?.macro.protein}
                       </Badge>
                       <Badge variant="secondary">
                         C: {dayTotals.totalCarbs}/{dayTotals.targetCarbs}
-                        {mealPlanData.units.macro.carbs}
+                        {units?.macro.carbs}
                       </Badge>
                       <Badge variant="secondary">
                         G: {dayTotals.totalFat}/{dayTotals.targetFat}
-                        {mealPlanData.units.macro.fat}
+                        {units?.macro.fat}
                       </Badge>
                     </div>
                   </div>
@@ -210,7 +232,7 @@ export const MealPlanForm = () => {
               <DesktopMealTable
                 meals={day.meals}
                 mealStatuses={mealStatuses}
-                units={mealPlanData.units}
+                units={units as Units}
                 onToggleComplete={(index) =>
                   handleToggleMealStatus(day.day, index)
                 }
@@ -222,7 +244,7 @@ export const MealPlanForm = () => {
               <MobileMealList
                 meals={day.meals}
                 mealStatuses={mealStatuses}
-                units={mealPlanData.units}
+                units={units as Units}
                 onToggleComplete={(index) =>
                   handleToggleMealStatus(day.day, index)
                 }
@@ -240,7 +262,7 @@ export const MealPlanForm = () => {
         onClose={handleCloseEditDialog}
         onSave={handleSaveReplacementMeal}
         meal={editingMeal?.meal || null}
-        units={mealPlanData.units}
+        units={units as Units}
       />
     </div>
   );

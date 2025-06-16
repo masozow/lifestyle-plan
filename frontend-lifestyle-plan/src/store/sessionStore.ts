@@ -36,14 +36,14 @@ export const useSessionStore = create<SessionStore>()(
       hasTriedFetching: false,
 
       fetchSession: async () => {
-  try {
-    set({ isLoading: true });
+      try {
+        set({ isLoading: true });
 
-    const data = await getFromServer(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/session`) as FetchResponse;
+        const data = await getFromServer(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/session`) as FetchResponse;
 
-    if (typeof data.message !== "string") {
-      throw new Error("Expected message to be a JSON string");
-    }
+        if (typeof data.message !== "string") {
+          throw new Error("Expected message to be a JSON string");
+        }
 
     const parsedMessage = JSON.parse(data.message);
 
