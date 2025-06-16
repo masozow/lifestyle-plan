@@ -9,6 +9,7 @@ export const API_ENDPOINTS = {
   plan: `${BASE_URL}/api/plan`,
   openai: `${BASE_URL}/api/openai`,
   openaiResponse: `${BASE_URL}/api/openai-response`,
+  userMealProgress: `${BASE_URL}/api/user-meal-progress`,
 } as const;
 
 // Tipado automático
