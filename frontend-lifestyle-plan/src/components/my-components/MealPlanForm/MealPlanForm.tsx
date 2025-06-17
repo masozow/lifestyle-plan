@@ -44,7 +44,7 @@ interface ReplacementMeal {
 export const MealPlanForm = () => {
   const { user } = useSessionStore();
   const userId = user?.id;
-  const apiEndPoint = `${API_ENDPOINTS.openaiResponse}/${userId}`;
+  const apiEndPoint = `${API_ENDPOINTS.userMealPlan}/${userId}`;
   console.log("API endpoint:", apiEndPoint);
   //for submitting info to server, other endpoint is needed
   const { mealStatus, setMealStatus } = useMealPlanStore();

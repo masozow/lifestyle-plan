@@ -1,28 +1,19 @@
-import {
-  DataTypes,
-  Model,
-  Optional,
-  BelongsToGetAssociationMixin,
-} from "sequelize";
+import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/sequelize.js";
-import User from "./user.model.js";
-import OpenAIResponse from "./openAIResponse.model.js";
+import { UserDailyMeal,OpenAIResponse } from "./index.js";
 
 export interface UserMealProgressAttributes {
   id: number;
   userId: number;
   openAIResponseId: number;
-  date: string; // YYYY-MM-DD
-  meal: string;
-  foodConsumed: string;
-  fulfilled: boolean;
-  notes?: string;
+  openAIResponse?: OpenAIResponse;
+  date: string; // YYYY-MM-DD (stored as DATEONLY)
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 export interface UserMealProgressCreationAttributes
-  extends Optional<UserMealProgressAttributes, "id" | "notes" | "createdAt" | "updatedAt"> {}
+  extends Optional<UserMealProgressAttributes, "id" | "createdAt" | "updatedAt" | "openAIResponse"> {}
 
 class UserMealProgress extends Model<
   UserMealProgressAttributes,
@@ -32,15 +23,10 @@ class UserMealProgress extends Model<
   declare userId: number;
   declare openAIResponseId: number;
   declare date: string;
-  declare meal: string;
-  declare foodConsumed: string;
-  declare fulfilled: boolean;
-  declare notes?: string;
+  declare openAIResponse?: OpenAIResponse;
+  declare dailyMeals?: UserDailyMeal[];
   declare readonly createdAt: Date;
   declare readonly updatedAt: Date;
-
-  declare getUser: BelongsToGetAssociationMixin<User>;
-  declare getOpenAIResponse: BelongsToGetAssociationMixin<OpenAIResponse>;
 }
 
 UserMealProgress.init(
@@ -59,30 +45,20 @@ UserMealProgress.init(
       allowNull: false,
     },
     date: {
-      type: DataTypes.STRING,
+      type: DataTypes.DATEONLY,
       allowNull: false,
-    },
-    meal: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    foodConsumed: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    fulfilled: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-    },
-    notes: {
-      type: DataTypes.TEXT,
-      allowNull: true,
     },
   },
   {
     sequelize,
     tableName: "userMealProgress",
     timestamps: true,
+    indexes: [
+      {
+        fields: ["userId", "date"],
+        unique: true,
+      },
+    ],
   }
 );
 

@@ -2,8 +2,9 @@ import { Request, Response } from "express";
 import { prompt } from "../helpers/openAI/prompt.js";
 import { getCompletion } from "../helpers/openAI/completion.js";
 import { errorAndLogHandler, errorLevels } from "../utils/index.js";
-import { UserPrompt, OpenAIResponse } from "../models/index.js";
+import { UserPrompt, OpenAIResponse,UserMealProgress, UserDailyMeal, UserDailyIntake } from "../models/index.js";
 import sequelize from "../config/sequelize.js";
+import { upsertMealPlanStructure } from "./upsertMealPlanStructure.js";
 
 const sendPlanPrompt = async (req: Request, res: Response) => {
   const userId = req.user?.id;
@@ -77,7 +78,7 @@ const sendPlanPrompt = async (req: Request, res: Response) => {
     const userPrompt = await UserPrompt.create({ ...req.body, userId }, { transaction: t });
 
     
-    await OpenAIResponse.create(
+    const response = await OpenAIResponse.create(
       {
         userPromptId: userPrompt.id,
         userId,
@@ -91,7 +92,13 @@ const sendPlanPrompt = async (req: Request, res: Response) => {
       },
       { transaction: t }
     );
-
+    
+    await upsertMealPlanStructure({
+      userId,
+      openAIResponseId: response.id, 
+      weeklyPlan: mealPlan.weekly_plan,
+      transaction: t,
+    });
     await t.commit(); 
 
     return res.status(201).json(
