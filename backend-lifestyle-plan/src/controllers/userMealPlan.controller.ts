@@ -116,11 +116,10 @@ const getUserMealPlan = async (req: Request, res: Response) => {
   }
 };
 
-const getStructuredMealPlan = async (req: Request, res: Response) => {
+
+export const getStructuredMealPlan = async (req: Request, res: Response) => {
   const userId = req.user?.id;
-  if (!userId) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
+  if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
   try {
     const progressEntries = await UserMealProgress.findAll({
@@ -129,38 +128,42 @@ const getStructuredMealPlan = async (req: Request, res: Response) => {
         {
           model: UserDailyMeal,
           as: "dailyMeals",
-          include: [
-            {
-              model: UserDailyIntake,
-              as: "intake",
-              required: false,
-            },
-          ],
+          include: [{ model: UserDailyIntake, as: "intake", required: false }],
         },
         {
           model: OpenAIResponse,
           as: "openAIResponse",
+          attributes: ["id", "response"],
         },
       ],
       order: [["date", "ASC"]],
     });
 
-    if (!progressEntries.length || !progressEntries[0].openAIResponse) {
-      return res.status(404).json({ error: "No meal plan data found" });
+    if (!progressEntries.length) {
+      return res.status(200).json({ success: true, data: [] });
     }
 
-    const response = progressEntries[0].openAIResponse?.response as OpenAIResponsePayload;
+    const openAIResponse = progressEntries[0].openAIResponse;
+    const { response } = openAIResponse as any;
 
+    const weekMap: Record<string, any> = {};
 
-    const weekly_plan = response.weekly_plan.map((dayPlan: any, index: number) => {
-      const progress = progressEntries[index];
-      const meals = progress.dailyMeals?.map((meal, mealIndex) => {
+    for (const entry of progressEntries) {
+      const { date, dailyMeals } = entry;
+
+      const matchingDay = (response.weekly_plan as any[]).find((d) => {
+        console.log(`~ userMealPlan.controller.ts:46: date received => ${entry.date}  `);
+        return new Date(entry.date).toISOString().split("T")[0] === new Date(d.date).toISOString().split("T")[0];
+      });
+
+      const weekDay = matchingDay?.day || date; // fallback if not found
+
+      const meals = dailyMeals?.map((meal) => {
         const intake = meal.intake;
-        const originalMealName = dayPlan.meals?.[mealIndex]?.meal ?? "Meal";
-
         return {
-          meal: originalMealName,
+          id: meal.id,
           food: intake?.consumedFood ?? meal.recommendedMeal,
+          meal: matchingDay?.meals.find((m) => m.food === meal.recommendedMeal)?.meal ?? meal.recommendedMeal,
           portion: intake?.consumedPortion ?? meal.targetPortion,
           macro: {
             protein: intake?.consumedProtein ?? meal.targetProtein,
@@ -171,23 +174,32 @@ const getStructuredMealPlan = async (req: Request, res: Response) => {
         };
       }) ?? [];
 
-      return {
-        day: dayPlan.day,
-        date: progress.date,
+      weekMap[weekDay] = {
+        day: weekDay,
+        date,
         meals,
       };
-    });
+    }
 
-    return res.status(200).json({
-      success: true,
-      data: {
-        unit_system: response.unit_system,
+    const finalWeeklyPlan = Object.values(weekMap);
+
+    const responseData = {
+      id: openAIResponse.id,
+      userPromptId: openAIResponse.userPromptId,
+      userId,
+      response: {
+        meta: response.meta,
         units: response.units,
+        unit_system: response.unit_system,
         macro_ratios: response.macro_ratios,
         daily_calorie_target: response.daily_calorie_target,
-        weekly_plan,
+        weekly_plan: finalWeeklyPlan,
       },
-    });
+      createdAt: openAIResponse.createdAt,
+      updatedAt: openAIResponse.updatedAt,
+    };
+
+    return res.status(200).json({ success: true, data: [responseData] });
   } catch (error) {
     return res.status(500).json(
       await errorAndLogHandler({
