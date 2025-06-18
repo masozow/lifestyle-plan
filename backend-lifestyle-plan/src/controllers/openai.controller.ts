@@ -2,7 +2,11 @@ import { Request, Response } from "express";
 import { prompt } from "../helpers/openAI/prompt.js";
 import { getCompletion } from "../helpers/openAI/completion.js";
 import { errorAndLogHandler, errorLevels } from "../utils/index.js";
-import { UserPrompt, OpenAIResponse,UserMealProgress, UserDailyMeal, UserDailyIntake } from "../models/index.js";
+import {
+  UserPrompt,
+  OpenAIResponse,
+  UserMealProgress,
+} from "../models/index.js";
 import sequelize from "../config/sequelize.js";
 import { upsertMealPlanStructure } from "./upsertMealPlanStructure.js";
 
@@ -37,7 +41,7 @@ const sendPlanPrompt = async (req: Request, res: Response) => {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
-  const t = await sequelize.transaction(); 
+  const t = await sequelize.transaction();
 
   try {
     const model = "llama-3.3-70b-versatile";
@@ -69,15 +73,12 @@ const sendPlanPrompt = async (req: Request, res: Response) => {
 
     const mealPlan = JSON.parse(completion);
 
-    
     if (!mealPlan.daily_calorie_target || !Array.isArray(mealPlan.weekly_plan)) {
       throw new Error("OpenAI response is missing required fields.");
     }
 
-    
     const userPrompt = await UserPrompt.create({ ...req.body, userId }, { transaction: t });
 
-    
     const response = await OpenAIResponse.create(
       {
         userPromptId: userPrompt.id,
@@ -92,14 +93,51 @@ const sendPlanPrompt = async (req: Request, res: Response) => {
       },
       { transaction: t }
     );
-    
+
+    const today = new Date();
+
+    // Crear UserMealProgress por cada día, con los campos adicionales
+    for (let i = 0; i < mealPlan.weekly_plan.length; i++) {
+      const dayObj = mealPlan.weekly_plan[i];
+
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      const formattedDate = date.toISOString().split("T")[0];
+
+      await UserMealProgress.findOrCreate({
+        where: {
+          userId,
+          date: formattedDate,
+        },
+        defaults: {
+          userId,
+          openAIResponseId: response.id,
+          date: formattedDate,
+          language: mealPlan.language,
+          unitSystem: mealPlan.unit_system,
+          portionUnit: mealPlan.units?.portion ?? null,
+          macroProteinUnit: mealPlan.units?.macro?.protein ?? null,
+          macroCarbsUnit: mealPlan.units?.macro?.carbs ?? null,
+          macroFatUnit: mealPlan.units?.macro?.fat ?? null,
+          macroEnergyUnit: mealPlan.units?.macro?.energy ?? null,
+          dailyCalorieTarget: mealPlan.daily_calorie_target,
+          ratioProtein: mealPlan.macro_ratios?.protein ?? null,
+          ratioCarbs: mealPlan.macro_ratios?.carbs ?? null,
+          ratioFat: mealPlan.macro_ratios?.fat ?? null,
+        },
+        transaction: t,
+      });
+    }
+
+    // Insertar comidas (con day incluido)
     await upsertMealPlanStructure({
       userId,
-      openAIResponseId: response.id, 
+      openAIResponseId: response.id,
       weeklyPlan: mealPlan.weekly_plan,
       transaction: t,
     });
-    await t.commit(); 
+
+    await t.commit();
 
     return res.status(201).json(
       await errorAndLogHandler({
@@ -111,7 +149,7 @@ const sendPlanPrompt = async (req: Request, res: Response) => {
       })
     );
   } catch (error) {
-    await t.rollback(); 
+    await t.rollback();
     return res.status(400).json(
       await errorAndLogHandler({
         level: errorLevels.error,

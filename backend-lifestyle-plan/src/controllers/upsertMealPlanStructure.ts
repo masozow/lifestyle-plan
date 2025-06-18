@@ -42,7 +42,7 @@ export const upsertMealPlanStructure = async ({
         { transaction }
       );
     }
-
+    console.log("-------day =>", day); //day.day gives us the day of the week
     for (const meal of day.meals) {
       const [dailyMeal, created] = await UserDailyMeal.findOrCreate({
         where: {
@@ -50,6 +50,7 @@ export const upsertMealPlanStructure = async ({
           recommendedMeal: meal.food,
         },
         defaults: {
+          day: day.day,
           targetPortion: meal.portion,
           targetProtein: meal.macro.protein,
           targetFat: meal.macro.fat,
@@ -63,6 +64,7 @@ export const upsertMealPlanStructure = async ({
       if (!created) {
         await dailyMeal.update(
           {
+            day: day.day,
             targetPortion: meal.portion,
             targetProtein: meal.macro.protein,
             targetFat: meal.macro.fat,
