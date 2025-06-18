@@ -5,6 +5,9 @@ import { errorAndLogHandler, errorLevels } from "../utils/index.js";
 const upsertUserDailyIntake = async (req: Request, res: Response) => {
   const userId = req.user?.id;
   const {
+    day,
+    date,
+    meal,
     userDailyMealId,
     consumedFood,
     consumedPortion,
@@ -31,6 +34,9 @@ const upsertUserDailyIntake = async (req: Request, res: Response) => {
         consumedCarbs,
         consumedEnergy,
         consumed,
+        day,
+        date,
+        meal,
       });
     } else {
       await UserDailyIntake.create({
@@ -42,6 +48,9 @@ const upsertUserDailyIntake = async (req: Request, res: Response) => {
         consumedCarbs,
         consumedEnergy,
         consumed,
+        day,
+        date,
+        meal,
       });
     }
 
