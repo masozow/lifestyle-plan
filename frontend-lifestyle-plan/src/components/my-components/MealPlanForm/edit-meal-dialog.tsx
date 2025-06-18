@@ -11,15 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-interface ReplacementMeal {
-  title: string;
-  portion: number;
-  calories: number;
-  carbs: number;
-  fat: number;
-  protein: number;
-}
+import type { ReplacementMeal } from "@/store";
 
 interface EditMealDialogProps {
   isOpen: boolean;
@@ -86,7 +78,7 @@ export const EditMealDialog = ({
             <Input
               id="title"
               placeholder="e.g., Mixed salad"
-              {...register("title", { required: true })}
+              {...register("consumedFood", { required: true })}
             />
           </div>
           <div className="space-y-2">
@@ -95,7 +87,10 @@ export const EditMealDialog = ({
               id="portion"
               type="number"
               placeholder="300"
-              {...register("portion", { required: true, valueAsNumber: true })}
+              {...register("consumedPortion", {
+                required: true,
+                valueAsNumber: true,
+              })}
             />
           </div>
           <div className="space-y-2">
@@ -104,7 +99,10 @@ export const EditMealDialog = ({
               id="calories"
               type="number"
               placeholder="400"
-              {...register("calories", { required: true, valueAsNumber: true })}
+              {...register("consumedEnergy", {
+                required: true,
+                valueAsNumber: true,
+              })}
             />
           </div>
           <div className="space-y-2">
@@ -113,7 +111,10 @@ export const EditMealDialog = ({
               id="protein"
               type="number"
               placeholder="25"
-              {...register("protein", { required: true, valueAsNumber: true })}
+              {...register("consumedProtein", {
+                required: true,
+                valueAsNumber: true,
+              })}
             />
           </div>
           <div className="space-y-2">
@@ -122,7 +123,10 @@ export const EditMealDialog = ({
               id="carbs"
               type="number"
               placeholder="30"
-              {...register("carbs", { required: true, valueAsNumber: true })}
+              {...register("consumedCarbs", {
+                required: true,
+                valueAsNumber: true,
+              })}
             />
           </div>
           <div className="space-y-2">
@@ -131,7 +135,10 @@ export const EditMealDialog = ({
               id="fat"
               type="number"
               placeholder="15"
-              {...register("fat", { required: true, valueAsNumber: true })}
+              {...register("consumedFat", {
+                required: true,
+                valueAsNumber: true,
+              })}
             />
           </div>
           <div className="md:col-span-2 flex gap-2 pt-4">

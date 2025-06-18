@@ -1,4 +1,5 @@
 import type { MealStatus, ReplacementMeal } from "@/store"
+import type { DayPlan,  MacroRatios,  Meal } from "@/types/openAIPlan"
 
 
 export const getMealKey = (day: string, mealIndex: number): string => {
@@ -32,7 +33,7 @@ export const saveReplacementMeal = (
   }
 }
 
-export const calculateDayTotals = (day: any, mealStatus: MealStatus) => {
+export const calculateDayTotals = (day: DayPlan, mealStatus: MealStatus) => {
   let totalCalories = 0
   let totalProtein = 0
   let totalCarbs = 0
@@ -43,7 +44,7 @@ export const calculateDayTotals = (day: any, mealStatus: MealStatus) => {
   let targetCarbs = 0
   let targetFat = 0
 
-  day.meals.forEach((meal: any, index: number) => {
+  day.meals.forEach((meal: Meal, index: number) => {
     const key = getMealKey(day.day, index)
     const status = mealStatus[key]
 
@@ -83,23 +84,33 @@ export const calculateDayTotals = (day: any, mealStatus: MealStatus) => {
   }
 }
 
-export const getMealStatuses = (day: any, mealStatus: MealStatus) => {
-  return day.meals.map((_: any, index: number) => {
+export const getMealStatuses = (day: DayPlan, mealStatus: MealStatus) => {
+  return day.meals.map((_, index: number) => {
     const key = getMealKey(day.day, index)
     const status = mealStatus[key]
     return {
       isCompleted: status?.completed === true,
       hasReplacement: !!status?.replacement,
-      replacement: status?.replacement,
+      replacement: status?.replacement
+        ? {
+            title: status.replacement.consumedFood,
+            portion: status.replacement.consumedPortion,
+            calories: status.replacement.consumedEnergy,
+            carbs: status.replacement.consumedCarbs,
+            fat: status.replacement.consumedFat,
+            protein: status.replacement.consumedProtein,
+          }
+        : undefined,
     }
   })
 }
 
-export const createEditingMeal = (day: string, mealIndex: number, meal: any) => {
+export const createEditingMeal = (day: string, mealIndex: number, meal: Meal) => {
   return { day, mealIndex, meal }
 }
 
-export const calculateMacroPercentages = (macroRatios: any) => {
+
+export const calculateMacroPercentages = (macroRatios: MacroRatios) => {
   return {
     protein: Math.round(macroRatios.protein * 100),
     carbs: Math.round(macroRatios.carbs * 100),

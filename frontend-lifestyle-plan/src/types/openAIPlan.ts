@@ -31,6 +31,11 @@ export interface Units {
   };
 }
 
+export interface MacroRatios  {
+  protein: number;
+  carbs: number;
+  fat: number;
+}
 export interface OpenAIResponsePayload {
   meta: {
     model: string;
