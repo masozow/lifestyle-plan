@@ -12,7 +12,8 @@ import UserDailyIntake from "./userDailyIntake.model.js";
 export interface UserDailyMealAttributes {
   id: number;
   day: string;
-  meal: string; // <- nuevo campo
+  meal: string;
+  date?: Date; 
   userMealProgressId: number;
   recommendedMeal: string;
   targetPortion: number;
@@ -26,7 +27,7 @@ export interface UserDailyMealAttributes {
 }
 
 export interface UserDailyMealCreationAttributes
-  extends Optional<UserDailyMealAttributes, "id" | "createdAt" | "updatedAt"> {}
+  extends Optional<UserDailyMealAttributes, "id" | "createdAt" | "updatedAt" | "date"> {}
 
 class UserDailyMeal extends Model<
   UserDailyMealAttributes,
@@ -34,7 +35,8 @@ class UserDailyMeal extends Model<
 > implements UserDailyMealAttributes {
   declare id: number;
   declare day: string;
-  declare meal: string; // <- nuevo campo
+  declare date: Date;
+  declare meal: string;
   declare userMealProgressId: number;
   declare recommendedMeal: string;
   declare targetPortion: number;
@@ -61,6 +63,10 @@ UserDailyMeal.init(
     day: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    date: {
+      type: DataTypes.DATEONLY,
+      allowNull: true,
     },
     meal: {
       type: DataTypes.STRING,

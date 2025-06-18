@@ -76,7 +76,7 @@ const sendPlanPrompt = async (req: Request, res: Response) => {
     if (!mealPlan.daily_calorie_target || !Array.isArray(mealPlan.weekly_plan)) {
       throw new Error("OpenAI response is missing required fields.");
     }
-
+    console.log("<<<< mealPlan >>>>", mealPlan);
     const userPrompt = await UserPrompt.create({ ...req.body, userId }, { transaction: t });
 
     const response = await OpenAIResponse.create(
@@ -94,44 +94,26 @@ const sendPlanPrompt = async (req: Request, res: Response) => {
       { transaction: t }
     );
 
-    const today = new Date();
+    const newestUserMealProgress = await UserMealProgress.create({
+      userId,
+      openAIResponseId: response.id,
+      language: mealPlan.language,
+      unitSystem: mealPlan.unit_system,
+      portionUnit: mealPlan.units?.portion,
+      macroProteinUnit: mealPlan.units?.macro?.protein,
+      macroCarbsUnit: mealPlan.units?.macro?.carbs,
+      macroFatUnit: mealPlan.units?.macro?.fat,
+      macroEnergyUnit: mealPlan.units?.macro?.energy,
+      dailyCalorieTarget: mealPlan.daily_calorie_target,
+      ratioProtein: mealPlan.macro_ratios?.protein,
+      ratioCarbs: mealPlan.macro_ratios?.carbs,
+      ratioFat: mealPlan.macro_ratios?.fat,
+    }, { transaction: t }); 
 
-    // Crear UserMealProgress por cada día, con los campos adicionales
-    for (let i = 0; i < mealPlan.weekly_plan.length; i++) {
-      const dayObj = mealPlan.weekly_plan[i];
-
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
-      const formattedDate = date.toISOString().split("T")[0];
-
-      await UserMealProgress.findOrCreate({
-        where: {
-          userId,
-          date: formattedDate,
-        },
-        defaults: {
-          userId,
-          openAIResponseId: response.id,
-          date: formattedDate,
-          language: mealPlan.language,
-          unitSystem: mealPlan.unit_system,
-          portionUnit: mealPlan.units?.portion ?? null,
-          macroProteinUnit: mealPlan.units?.macro?.protein ?? null,
-          macroCarbsUnit: mealPlan.units?.macro?.carbs ?? null,
-          macroFatUnit: mealPlan.units?.macro?.fat ?? null,
-          macroEnergyUnit: mealPlan.units?.macro?.energy ?? null,
-          dailyCalorieTarget: mealPlan.daily_calorie_target,
-          ratioProtein: mealPlan.macro_ratios?.protein ?? null,
-          ratioCarbs: mealPlan.macro_ratios?.carbs ?? null,
-          ratioFat: mealPlan.macro_ratios?.fat ?? null,
-        },
-        transaction: t,
-      });
-    }
-
-    // Insertar comidas (con day incluido)
+    // Insert meals (including day)
     await upsertMealPlanStructure({
       userId,
+      userMealProgressId: newestUserMealProgress.id,
       openAIResponseId: response.id,
       weeklyPlan: mealPlan.weekly_plan,
       transaction: t,

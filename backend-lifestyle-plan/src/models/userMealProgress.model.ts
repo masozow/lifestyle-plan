@@ -11,7 +11,6 @@ export interface UserMealProgressAttributes {
   userId: number;
   openAIResponseId: number;
   openAIResponse?: OpenAIResponse;
-  date: string;
   language?: string;
   unitSystem?: string;
   portionUnit?: string;
@@ -54,7 +53,6 @@ class UserMealProgress extends Model<
   declare id: number;
   declare userId: number;
   declare openAIResponseId: number;
-  declare date: string;
   declare openAIResponse?: OpenAIResponse;
   declare dailyMeals?: UserDailyMeal[];
   declare language?: string;
@@ -85,10 +83,6 @@ UserMealProgress.init(
     },
     openAIResponseId: {
       type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false,
-    },
-    date: {
-      type: DataTypes.DATEONLY,
       allowNull: false,
     },
     language: {

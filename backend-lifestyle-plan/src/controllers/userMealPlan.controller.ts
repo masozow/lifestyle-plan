@@ -6,6 +6,7 @@ import {
   OpenAIResponse,
 } from "../models/index.js";
 import { errorAndLogHandler, errorLevels } from "../utils/index.js";
+import { OpenAIResponsePayload } from "../types/openAIPlan.js";
 
 
 const getUserMealPlan = async (req: Request, res: Response) => {
@@ -67,89 +68,87 @@ const getStructuredMealPlan = async (req: Request, res: Response) => {
             },
           ],
         },
+        {
+          model: OpenAIResponse,
+          as: "openAIResponse",
+          attributes: ["id", "userPromptId", "userId", "response", "createdAt", "updatedAt"],
+        },
       ],
       order: [["date", "ASC"]],
     });
 
     if (!progressEntries.length) {
-      return res.status(200).json({ success: true, data: [] });
+      return res.status(500).json({ success: false, data: [] });
     }
 
-    const {
-      language,
-      unitSystem,
-      portionUnit,
-      macroProteinUnit,
-      macroCarbsUnit,
-      macroFatUnit,
-      macroEnergyUnit,
-      dailyCalorieTarget,
-      ratioProtein,
-      ratioCarbs,
-      ratioFat,
-    } = progressEntries[0];
+    const firstEntry = progressEntries[0];
+    const parsedResponse = firstEntry.openAIResponse?.response as OpenAIResponsePayload;
 
-    const mealsByDay: Record<string, any[]> = {};
+    const grouped: Record<string, any> = {};
 
     for (const entry of progressEntries) {
-      for (const meal of entry.dailyMeals || []) {
-        if (!mealsByDay[meal.day]) {
-          mealsByDay[meal.day] = [];
+      for (const meal of entry.dailyMeals ?? []) {
+        const intake = meal.intake;
+        const mealDay = meal.day;
+
+        if (!grouped[mealDay]) {
+          grouped[mealDay] = {
+            day: mealDay,
+            date: entry.date,
+            meals: [],
+          };
         }
 
-        mealsByDay[meal.day].push({
+        grouped[mealDay].meals.push({
           id: meal.id,
-          food: meal.intake?.consumedFood ?? meal.recommendedMeal,
-          meal: meal.recommendedMeal,
-          portion: meal.intake?.consumedPortion ?? meal.targetPortion,
+          food: intake?.consumedFood ?? meal.recommendedMeal,
+          meal: meal.meal,
+          portion: intake?.consumedPortion ?? meal.targetPortion,
           macro: {
-            protein: meal.intake?.consumedProtein ?? meal.targetProtein,
-            carbs: meal.intake?.consumedCarbs ?? meal.targetCarbs,
-            fat: meal.intake?.consumedFat ?? meal.targetFat,
-            energy: meal.intake?.consumedEnergy ?? meal.targetEnergy,
+            protein: intake?.consumedProtein ?? meal.targetProtein,
+            carbs: intake?.consumedCarbs ?? meal.targetCarbs,
+            fat: intake?.consumedFat ?? meal.targetFat,
+            energy: intake?.consumedEnergy ?? meal.targetEnergy,
           },
         });
       }
     }
 
-    const weekly_plan = Object.entries(mealsByDay).map(([day, meals]) => ({
-      day,
-      date: meals[0]?.createdAt?.toISOString().split("T")[0] ?? null,
-      meals,
-    }));
 
-    const responseData = {
-      id: progressEntries[0].id,
-      userPromptId: progressEntries[0].openAIResponseId,
-      userId,
-      response: {
-        meta: {
-          generated_at: progressEntries[0].createdAt.toISOString(),
-          model: "llama-3.3-70b-versatile",
+    const response = {
+      meta: parsedResponse.meta,
+      unit_system: firstEntry.unitSystem ?? null,
+      units: {
+        portion: firstEntry.portionUnit ?? null,
+        macro: {
+          protein: firstEntry.macroProteinUnit ?? null,
+          carbs: firstEntry.macroCarbsUnit ?? null,
+          fat: firstEntry.macroFatUnit ?? null,
+          energy: firstEntry.macroEnergyUnit ?? null,
         },
-        unit_system: unitSystem,
-        units: {
-          portion: portionUnit,
-          macro: {
-            protein: macroProteinUnit,
-            carbs: macroCarbsUnit,
-            fat: macroFatUnit,
-            energy: macroEnergyUnit,
-          },
-        },
-        macro_ratios: {
-          protein: ratioProtein,
-          carbs: ratioCarbs,
-          fat: ratioFat,
-        },
-        daily_calorie_target: dailyCalorieTarget,
-        weekly_plan,
       },
-      createdAt: progressEntries[0].createdAt,
-      updatedAt: progressEntries[0].updatedAt,
+      macro_ratios: {
+        protein: firstEntry.ratioProtein ?? null,
+        carbs: firstEntry.ratioCarbs ?? null,
+        fat: firstEntry.ratioFat ?? null,
+      },
+      daily_calorie_target: firstEntry.dailyCalorieTarget ?? null,
+      weekly_plan: Object.values(grouped),
     };
 
-    return res.status(200).json({ success: true, data: [responseData] });
+    return res.status(200).json({
+      success: true,
+      data: [
+        {
+          id: firstEntry.openAIResponseId,
+          userPromptId: firstEntry.openAIResponse?.userPromptId,
+          userId,
+          response,
+          createdAt: firstEntry.openAIResponse?.createdAt,
+          updatedAt: firstEntry.openAIResponse?.updatedAt,
+        },
+      ],
+    });
   } catch (error) {
     return res.status(500).json(
       await errorAndLogHandler({
@@ -160,6 +159,8 @@ const getStructuredMealPlan = async (req: Request, res: Response) => {
     );
   }
 };
+
+
 
 export const UserMealPlanController = {
   getUserMealPlan,
