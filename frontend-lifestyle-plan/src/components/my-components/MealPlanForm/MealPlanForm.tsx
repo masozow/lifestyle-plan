@@ -27,19 +27,14 @@ import {
   createEditingMeal,
   calculateMacroPercentages,
 } from "../helpers/meal-plan-form-helper-functions";
-import { useMealPlanStore, useSessionStore } from "@/store";
+import {
+  useMealPlanStore,
+  useSessionStore,
+  type ReplacementMeal,
+} from "@/store";
 import { useMealPlanSync } from "@/hooks";
 import { API_ENDPOINTS } from "@/lib/backendURLS";
 import { CustomSpinner } from "@/components";
-
-interface ReplacementMeal {
-  title: string;
-  portion: number;
-  calories: number;
-  carbs: number;
-  fat: number;
-  protein: number;
-}
 
 export const MealPlanForm = () => {
   const { user } = useSessionStore();
