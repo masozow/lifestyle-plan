@@ -13,7 +13,7 @@ export interface UserDailyMealAttributes {
   id: number;
   day: string;
   meal: string;
-  date?: Date; 
+  date?: string; 
   userMealProgressId: number;
   recommendedMeal: string;
   targetPortion: number;
@@ -35,7 +35,7 @@ class UserDailyMeal extends Model<
 > implements UserDailyMealAttributes {
   declare id: number;
   declare day: string;
-  declare date: Date;
+  declare date: string;
   declare meal: string;
   declare userMealProgressId: number;
   declare recommendedMeal: string;
@@ -109,6 +109,12 @@ UserDailyMeal.init(
     sequelize,
     tableName: "userDailyMeal",
     timestamps: true,
+    indexes: [
+      {
+        fields: ["userMealProgressId", "date", "meal"],
+        unique: true,
+      },
+    ],
   }
 );
 

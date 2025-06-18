@@ -6,7 +6,6 @@ import {
   OpenAIResponse,
 } from "../models/index.js";
 import { errorAndLogHandler, errorLevels } from "../utils/index.js";
-import { OpenAIResponsePayload } from "../types/openAIPlan.js";
 
 
 const getUserMealPlan = async (req: Request, res: Response) => {
@@ -54,7 +53,7 @@ const getStructuredMealPlan = async (req: Request, res: Response) => {
   if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
   try {
-    const progressEntries = await UserMealProgress.findAll({
+    const progressEntries = await UserMealProgress.findOne({
       where: { userId },
       include: [
         {
@@ -74,19 +73,22 @@ const getStructuredMealPlan = async (req: Request, res: Response) => {
           attributes: ["id", "userPromptId", "userId", "response", "createdAt", "updatedAt"],
         },
       ],
-      order: [["date", "ASC"]],
+      order: [["createdAt", "ASC"]],
     });
 
-    if (!progressEntries.length) {
-      return res.status(500).json({ success: false, data: [] });
+    if (!progressEntries) {
+      return res.status(404).json({ success: false, message: "No meal plan found." });
     }
 
-    const firstEntry = progressEntries[0];
-    const parsedResponse = firstEntry.openAIResponse?.response as OpenAIResponsePayload;
+    const firstEntry = progressEntries;
 
-    const grouped: Record<string, any> = {};
+    const parsedResponse = typeof firstEntry.openAIResponse?.response === "string"
+      ? JSON.parse(firstEntry.openAIResponse.response)
+      : firstEntry.openAIResponse?.response;
 
-    for (const entry of progressEntries) {
+    const grouped: Record<string, { day: string; date: string | null; meals: any[] }> = {};
+
+    const entry = progressEntries;
       for (const meal of entry.dailyMeals ?? []) {
         const intake = meal.intake;
         const mealDay = meal.day;
@@ -94,7 +96,7 @@ const getStructuredMealPlan = async (req: Request, res: Response) => {
         if (!grouped[mealDay]) {
           grouped[mealDay] = {
             day: mealDay,
-            date: entry.date,
+            date: meal.date ?? null,
             meals: [],
           };
         }
@@ -104,6 +106,8 @@ const getStructuredMealPlan = async (req: Request, res: Response) => {
           food: intake?.consumedFood ?? meal.recommendedMeal,
           meal: meal.meal,
           portion: intake?.consumedPortion ?? meal.targetPortion,
+          day: mealDay,
+          date: meal.date,
           macro: {
             protein: intake?.consumedProtein ?? meal.targetProtein,
             carbs: intake?.consumedCarbs ?? meal.targetCarbs,
@@ -112,11 +116,10 @@ const getStructuredMealPlan = async (req: Request, res: Response) => {
           },
         });
       }
-    }
-
+    
 
     const response = {
-      meta: parsedResponse.meta,
+      meta: parsedResponse?.meta ?? null,
       unit_system: firstEntry.unitSystem ?? null,
       units: {
         portion: firstEntry.portionUnit ?? null,
@@ -138,7 +141,7 @@ const getStructuredMealPlan = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       success: true,
-      data: [
+      data: 
         {
           id: firstEntry.openAIResponseId,
           userPromptId: firstEntry.openAIResponse?.userPromptId,
@@ -147,7 +150,6 @@ const getStructuredMealPlan = async (req: Request, res: Response) => {
           createdAt: firstEntry.openAIResponse?.createdAt,
           updatedAt: firstEntry.openAIResponse?.updatedAt,
         },
-      ],
     });
   } catch (error) {
     return res.status(500).json(
@@ -159,8 +161,6 @@ const getStructuredMealPlan = async (req: Request, res: Response) => {
     );
   }
 };
-
-
 
 export const UserMealPlanController = {
   getUserMealPlan,

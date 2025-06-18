@@ -38,7 +38,8 @@ export const upsertMealPlanStructure = async ({
       const [dailyMeal, created] = await UserDailyMeal.findOrCreate({
         where: {
           userMealProgressId: userMealProgressId,
-          recommendedMeal: meal.food,
+          date: formattedDate,
+          meal: meal.meal,
         },
         defaults: {
           day,
@@ -46,15 +47,35 @@ export const upsertMealPlanStructure = async ({
           targetPortion: meal.portion,
           targetProtein: meal.macro.protein,
           targetFat: meal.macro.fat,
-          date: formattedDate,
+          date: new Date(formattedDate).toISOString().split("T")[0],
           targetCarbs: meal.macro.carbs,
           targetEnergy: meal.macro.energy,
           consumed: false,
           userMealProgressId: userMealProgressId,
           recommendedMeal: meal.food,
         },
-        { transaction }
+        transaction
       });
+      
+      if (!created) {
+        await dailyMeal.update(
+          {
+            day,
+            meal: meal.meal,
+            targetPortion: meal.portion,
+            targetProtein: meal.macro.protein,
+            targetFat: meal.macro.fat,
+            date: formattedDate,
+            targetCarbs: meal.macro.carbs,
+            targetEnergy: meal.macro.energy,
+            consumed: false,
+            userMealProgressId: userMealProgressId,
+            recommendedMeal: meal.food,
+          },
+          { transaction }
+        );
+      }
     }
   }
 };
+

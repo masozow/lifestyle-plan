@@ -6,39 +6,45 @@ export interface Macro {
 }
 
 export interface Meal {
-  meal: string;
+  id: number;
   food: string;
+  meal: string;
   portion: number;
+  day: string;
+  date: string;
   macro: Macro;
 }
 
 export interface DayPlan {
   day: string;
+  date: string;
   meals: Meal[];
 }
 
 export interface Units {
+  portion: string;
   macro: {
     protein: string;
     carbs: string;
     fat: string;
     energy: string;
   };
-  portion: string;
 }
 
 export interface OpenAIResponsePayload {
-  language: string;
-  daily_calorie_target: number;
+  meta: {
+    model: string;
+    generated_at: string;
+  };
+  unit_system: string;
+  units: Units;
   macro_ratios: {
     protein: number;
     carbs: number;
     fat: number;
   };
-  unit_system: string;
-  units: Units;
+  daily_calorie_target: number;
   weekly_plan: DayPlan[];
-  meta?: unknown;
 }
 
 export interface OpenAIResponseFromServer {

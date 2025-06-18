@@ -70,7 +70,7 @@ export const MealPlanForm = () => {
   });
   console.log("Data from server:", data);
   const responseData = data?.data?.response;
-
+  console.log("Response data:", responseData);
   const { syncToServer, hasUnsyncedChanges } = useMealPlanSync(
     userId && responseData ? userId : undefined,
     responseData ? `${API_ENDPOINTS.userMealProgress}/${userId}` : ""

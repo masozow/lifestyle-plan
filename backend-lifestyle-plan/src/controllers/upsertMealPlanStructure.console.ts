@@ -9,6 +9,7 @@ async function main() {
 
   const result = await upsertMealPlanStructure({
     userId,
+    userMealProgressId: 1,
     openAIResponseId,
     weeklyPlan,
     transaction,

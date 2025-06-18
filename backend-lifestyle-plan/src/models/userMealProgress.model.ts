@@ -133,13 +133,7 @@ UserMealProgress.init(
   {
     sequelize,
     tableName: "userMealProgress",
-    timestamps: true,
-    indexes: [
-      {
-        fields: ["userId", "date"],
-        unique: true,
-      },
-    ],
+    timestamps: true
   }
 );
 
