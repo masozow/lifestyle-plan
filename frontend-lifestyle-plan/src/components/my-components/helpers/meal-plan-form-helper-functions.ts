@@ -1,18 +1,5 @@
-interface ReplacementMeal {
-  title: string
-  portion: number
-  calories: number
-  carbs: number
-  fat: number
-  protein: number
-}
+import type { MealStatus, ReplacementMeal } from "@/store"
 
-interface MealStatus {
-  [key: string]: {
-    completed: boolean
-    replacement?: ReplacementMeal
-  }
-}
 
 export const getMealKey = (day: string, mealIndex: number): string => {
   return `${day}-${mealIndex}`
@@ -70,10 +57,10 @@ export const calculateDayTotals = (day: any, mealStatus: MealStatus) => {
     if (status?.completed === true) {
       if (status?.replacement) {
         // Use replacement meal if available
-        totalCalories += status.replacement.calories
-        totalProtein += status.replacement.protein
-        totalCarbs += status.replacement.carbs
-        totalFat += status.replacement.fat
+        totalCalories += status.replacement.consumedEnergy
+        totalProtein += status.replacement.consumedProtein
+        totalCarbs += status.replacement.consumedCarbs
+        totalFat += status.replacement.consumedFat
       } else {
         // Use original meal
         totalCalories += meal.macro.energy
