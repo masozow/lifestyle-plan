@@ -3,6 +3,9 @@ import sequelize from "../config/sequelize.js";
 
 export interface UserDailyIntakeAttributes {
   id: number;
+  day: string;
+  date: string;
+  meal: string;
   userDailyMealId: number;
   consumedFood: string;
   consumedPortion: number;
@@ -23,6 +26,9 @@ class UserDailyIntake extends Model<
   UserDailyIntakeCreationAttributes
 > implements UserDailyIntakeAttributes {
   declare id: number;
+  declare day: string;
+  declare date: string;
+  declare meal: string;
   declare userDailyMealId: number;
   declare consumedFood: string;
   declare consumedPortion: number;
@@ -38,6 +44,9 @@ class UserDailyIntake extends Model<
 UserDailyIntake.init(
   {
     id: { type: DataTypes.INTEGER.UNSIGNED, autoIncrement: true, primaryKey: true },
+    day: { type: DataTypes.STRING, allowNull: false },
+    date: { type: DataTypes.DATEONLY, allowNull: false },
+    meal: { type: DataTypes.STRING, allowNull: false },
     userDailyMealId: { type: DataTypes.INTEGER.UNSIGNED, allowNull: false },
     consumedFood: { type: DataTypes.STRING, allowNull: false },
     consumedPortion: { type: DataTypes.FLOAT, allowNull: false },
