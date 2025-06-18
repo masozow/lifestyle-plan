@@ -4,6 +4,8 @@ import Plan from "./plan.model.js";
 import UserPrompt from "./userPrompt.model.js";
 import OpenAIResponse from "./openAIResponse.model.js";
 import UserMealProgress from "./userMealProgress.model.js";
+import UserDailyMeal from "./userDailyMeal.model.js";
+import UserDailyIntake from "./userDailyIntake.model.js";
 
 
 // Relations
@@ -40,11 +42,30 @@ OpenAIResponse.belongsTo(User, {
   foreignKey: "userId",
   as: "user",
 });
+UserMealProgress.hasMany(UserDailyMeal, {
+  foreignKey: "userMealProgressId",
+  as: "dailyMeals",
+});
+UserDailyMeal.belongsTo(UserMealProgress, {
+  foreignKey: "userMealProgressId",
+  as: "mealProgress",
+});
+
+UserDailyMeal.hasOne(UserDailyIntake, {
+  foreignKey: "userDailyMealId",
+  as: "intake",
+});
+UserDailyIntake.belongsTo(UserDailyMeal, {
+  foreignKey: "userDailyMealId",
+  as: "dailyMeal",
+});
 export {
   User,
   Profile,
   Plan,
   UserPrompt,
   OpenAIResponse,
-  UserMealProgress
+  UserMealProgress,
+  UserDailyMeal,
+  UserDailyIntake
 };

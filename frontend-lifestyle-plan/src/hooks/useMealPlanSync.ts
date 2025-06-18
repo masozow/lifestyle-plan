@@ -1,11 +1,11 @@
 import { useRef } from "react"
-import { useMealPlanStore } from "@/store";
+import { useMealPlanStore, type MealStatus } from "@/store";
 import { useApiRequest } from "./useApiRequest";
 
 interface MealPlanSyncData {
-  userId: number
-  mealStatus: Record<string, any>
-  lastUpdated: number
+  userId: number;
+  mealStatus: MealStatus;
+  lastUpdated: number;
 }
 
   /**
@@ -76,6 +76,6 @@ export const useMealPlanSync = (userId: number | undefined, apiEndpoint: string)
 
   return {
     syncToServer,
-    hasUnsyncedChanges: hasUnsyncedChanges,
+    hasUnsyncedChanges,
   }
 }

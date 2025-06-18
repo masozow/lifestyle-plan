@@ -1,16 +1,22 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
-interface ReplacementMeal {
-  title: string
-  portion: number
-  calories: number
-  carbs: number
-  fat: number
-  protein: number
+export interface ReplacementMeal {
+  id: number;
+  day: string;
+  date: string;
+  meal: string;
+  userDailyMealId: number;
+  consumedFood: string;
+  consumedPortion: number;
+  consumedProtein: number;
+  consumedFat: number;
+  consumedCarbs: number;
+  consumedEnergy: number;
+  consumed: boolean;
 }
 
-interface MealStatus {
+export interface MealStatus {
   [key: string]: {
     completed: boolean
     replacement?: ReplacementMeal

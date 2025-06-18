@@ -2,27 +2,49 @@ import {
   DataTypes,
   Model,
   Optional,
-  BelongsToGetAssociationMixin,
 } from "sequelize";
 import sequelize from "../config/sequelize.js";
-import User from "./user.model.js";
-import OpenAIResponse from "./openAIResponse.model.js";
+import { UserDailyMeal, OpenAIResponse } from "./index.js";
 
 export interface UserMealProgressAttributes {
   id: number;
   userId: number;
   openAIResponseId: number;
-  date: string; // YYYY-MM-DD
-  meal: string;
-  foodConsumed: string;
-  fulfilled: boolean;
-  notes?: string;
+  openAIResponse?: OpenAIResponse;
+  language?: string;
+  unitSystem?: string;
+  portionUnit?: string;
+  macroProteinUnit?: string;
+  macroCarbsUnit?: string;
+  macroFatUnit?: string;
+  macroEnergyUnit?: string;
+  dailyCalorieTarget?: number;
+  ratioProtein?: number;
+  ratioCarbs?: number;
+  ratioFat?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 export interface UserMealProgressCreationAttributes
-  extends Optional<UserMealProgressAttributes, "id" | "notes" | "createdAt" | "updatedAt"> {}
+  extends Optional<
+    UserMealProgressAttributes,
+    | "id"
+    | "createdAt"
+    | "updatedAt"
+    | "openAIResponse"
+    | "language"
+    | "unitSystem"
+    | "portionUnit"
+    | "macroProteinUnit"
+    | "macroCarbsUnit"
+    | "macroFatUnit"
+    | "macroEnergyUnit"
+    | "dailyCalorieTarget"
+    | "ratioProtein"
+    | "ratioCarbs"
+    | "ratioFat"
+  > {}
 
 class UserMealProgress extends Model<
   UserMealProgressAttributes,
@@ -31,16 +53,21 @@ class UserMealProgress extends Model<
   declare id: number;
   declare userId: number;
   declare openAIResponseId: number;
-  declare date: string;
-  declare meal: string;
-  declare foodConsumed: string;
-  declare fulfilled: boolean;
-  declare notes?: string;
+  declare openAIResponse?: OpenAIResponse;
+  declare dailyMeals?: UserDailyMeal[];
+  declare language?: string;
+  declare unitSystem?: string;
+  declare portionUnit?: string;
+  declare macroProteinUnit?: string;
+  declare macroCarbsUnit?: string;
+  declare macroFatUnit?: string;
+  declare macroEnergyUnit?: string;
+  declare dailyCalorieTarget?: number;
+  declare ratioProtein?: number;
+  declare ratioCarbs?: number;
+  declare ratioFat?: number;
   declare readonly createdAt: Date;
   declare readonly updatedAt: Date;
-
-  declare getUser: BelongsToGetAssociationMixin<User>;
-  declare getOpenAIResponse: BelongsToGetAssociationMixin<OpenAIResponse>;
 }
 
 UserMealProgress.init(
@@ -58,31 +85,55 @@ UserMealProgress.init(
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
     },
-    date: {
+    language: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
-    meal: {
+    unitSystem: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
-    foodConsumed: {
+    portionUnit: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
-    fulfilled: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
+    macroProteinUnit: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
-    notes: {
-      type: DataTypes.TEXT,
+    macroCarbsUnit: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    macroFatUnit: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    macroEnergyUnit: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    dailyCalorieTarget: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    ratioProtein: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    ratioCarbs: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    ratioFat: {
+      type: DataTypes.FLOAT,
       allowNull: true,
     },
   },
   {
     sequelize,
     tableName: "userMealProgress",
-    timestamps: true,
+    timestamps: true
   }
 );
 
