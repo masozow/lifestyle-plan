@@ -1,31 +1,11 @@
 import { Table, TableBody } from "@/components/ui/table";
 import { DesktopTableHeader } from "./desktop-table-header";
 import { DesktopTableRow } from "./desktop-table-row";
+import type { Meal, MealStatus } from "@/types/openAIPlan";
 
 interface DesktopMealTableProps {
-  meals: Array<{
-    meal: string;
-    food: string;
-    portion: number;
-    macro: {
-      protein: number;
-      carbs: number;
-      fat: number;
-      energy: number;
-    };
-  }>;
-  mealStatuses: Array<{
-    isCompleted: boolean;
-    hasReplacement: boolean;
-    replacement?: {
-      title: string;
-      portion: number;
-      calories: number;
-      carbs: number;
-      fat: number;
-      protein: number;
-    };
-  }>;
+  meals: Meal[];
+  mealStatuses: MealStatus;
   units: {
     macro: {
       protein: string;
@@ -51,18 +31,22 @@ export const DesktopMealTable = ({
       <Table>
         <DesktopTableHeader />
         <TableBody>
-          {meals.map((meal, index) => (
-            <DesktopTableRow
-              key={index}
-              meal={meal}
-              isCompleted={mealStatuses[index].isCompleted}
-              hasReplacement={mealStatuses[index].hasReplacement}
-              replacement={mealStatuses[index].replacement}
-              units={units}
-              onToggleComplete={() => onToggleComplete(index)}
-              onEdit={() => onEdit(index)}
-            />
-          ))}
+          {meals.map((meal, index) => {
+            const status = mealStatuses[meal.id] || {};
+
+            return (
+              <DesktopTableRow
+                key={meal.id}
+                meal={meal}
+                isCompleted={!!status.completed}
+                hasReplacement={!!status.replacement}
+                replacement={status.replacement}
+                units={units}
+                onToggleComplete={() => onToggleComplete(index)}
+                onEdit={() => onEdit(index)}
+              />
+            );
+          })}
         </TableBody>
       </Table>
     </div>

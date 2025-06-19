@@ -5,6 +5,7 @@ import type {
   Meal,
   OpenAIResponseFromServer,
   Units,
+  ReplacementMeal,
 } from "@/types/openAIPlan";
 import { useApiGet } from "@/hooks";
 import {
@@ -23,15 +24,9 @@ import {
   toggleMealStatus as toggleMealStatusHelper,
   saveReplacementMeal as saveReplacementMealHelper,
   calculateDayTotals,
-  getMealStatuses,
-  createEditingMeal,
   calculateMacroPercentages,
 } from "../helpers/meal-plan-form-helper-functions";
-import {
-  useMealPlanStore,
-  useSessionStore,
-  type ReplacementMeal,
-} from "@/store";
+import { useMealPlanStore, useSessionStore } from "@/store";
 import { useMealPlanSync } from "@/hooks";
 import { API_ENDPOINTS } from "@/lib/backendURLS";
 import { CustomSpinner } from "@/components";
@@ -40,15 +35,9 @@ export const MealPlanForm = () => {
   const { user } = useSessionStore();
   const userId = user?.id;
   const apiEndPoint = `${API_ENDPOINTS.userMealPlan}/${userId}`;
-  console.log("API endpoint:", apiEndPoint);
-  //for submitting info to server, other endpoint is needed
   const { mealStatus, setMealStatus } = useMealPlanStore();
   const [isSyncing, setIsSyncing] = useState(false);
-  const [editingMeal, setEditingMeal] = useState<{
-    day: string;
-    mealIndex: number;
-    meal: Meal;
-  } | null>(null);
+  const [editingMeal, setEditingMeal] = useState<Meal | null>(null);
 
   useEffect(() => {
     if (!userId) {
@@ -63,13 +52,13 @@ export const MealPlanForm = () => {
     url: apiEndPoint,
     enabled: !!userId,
   });
-  console.log("Data from server:", data);
+
   const responseData = data?.data?.response;
-  console.log("Response data:", responseData);
-  const { syncToServer, hasUnsyncedChanges } = useMealPlanSync(
-    userId && responseData ? userId : undefined,
-    responseData ? `${API_ENDPOINTS.userMealProgress}/${userId}` : ""
-  );
+
+  const { syncToServer, hasUnsyncedChanges } = useMealPlanSync(userId, {
+    intakeUrl: API_ENDPOINTS.userDailyIntake,
+    consumedUrl: API_ENDPOINTS.userDailyConsumed,
+  });
 
   if (isLoading) return <CustomSpinner />;
 
@@ -89,13 +78,13 @@ export const MealPlanForm = () => {
   const { daily_calorie_target, macro_ratios, units, weekly_plan } =
     responseData;
 
-  const handleToggleMealStatus = (day: string, mealIndex: number) => {
-    const newMealStatus = toggleMealStatusHelper(mealStatus, day, mealIndex);
+  const handleToggleMealStatus = (meal: Meal, completed: boolean) => {
+    const newMealStatus = toggleMealStatusHelper(mealStatus, meal, completed);
     setMealStatus(newMealStatus);
   };
 
-  const handleOpenEditDialog = (day: string, mealIndex: number, meal: Meal) => {
-    setEditingMeal(createEditingMeal(day, mealIndex, meal));
+  const handleOpenEditDialog = (meal: Meal) => {
+    setEditingMeal(meal);
   };
 
   const handleCloseEditDialog = () => {
@@ -106,8 +95,7 @@ export const MealPlanForm = () => {
     if (!editingMeal) return;
     const newMealStatus = saveReplacementMealHelper(
       mealStatus,
-      editingMeal.day,
-      editingMeal.mealIndex,
+      editingMeal,
       data
     );
     setMealStatus(newMealStatus);
@@ -169,7 +157,6 @@ export const MealPlanForm = () => {
 
       {weekly_plan.map((day: DayPlan) => {
         const dayTotals = calculateDayTotals(day, mealStatus);
-        const mealStatuses = getMealStatuses(day, mealStatus);
 
         return (
           <Card key={day.day} className="overflow-hidden">
@@ -226,26 +213,28 @@ export const MealPlanForm = () => {
             <CardContent>
               <DesktopMealTable
                 meals={day.meals}
-                mealStatuses={mealStatuses}
+                mealStatuses={mealStatus}
                 units={units as Units}
                 onToggleComplete={(index) =>
-                  handleToggleMealStatus(day.day, index)
+                  handleToggleMealStatus(
+                    day.meals[index],
+                    !mealStatus[day.meals[index].id]?.completed
+                  )
                 }
-                onEdit={(index) =>
-                  handleOpenEditDialog(day.day, index, day.meals[index])
-                }
+                onEdit={(index) => handleOpenEditDialog(day.meals[index])}
               />
 
               <MobileMealList
                 meals={day.meals}
-                mealStatuses={mealStatuses}
+                mealStatuses={mealStatus}
                 units={units as Units}
                 onToggleComplete={(index) =>
-                  handleToggleMealStatus(day.day, index)
+                  handleToggleMealStatus(
+                    day.meals[index],
+                    !mealStatus[day.meals[index].id]?.completed
+                  )
                 }
-                onEdit={(index) =>
-                  handleOpenEditDialog(day.day, index, day.meals[index])
-                }
+                onEdit={(index) => handleOpenEditDialog(day.meals[index])}
               />
             </CardContent>
           </Card>
@@ -256,7 +245,7 @@ export const MealPlanForm = () => {
         isOpen={!!editingMeal}
         onClose={handleCloseEditDialog}
         onSave={handleSaveReplacementMeal}
-        meal={editingMeal?.meal || null}
+        meal={editingMeal}
         units={units as Units}
       />
     </div>

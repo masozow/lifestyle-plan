@@ -1,29 +1,9 @@
+import type { Meal, MealStatus } from "@/types/openAIPlan";
 import { MobileMealCard } from "./mobile-meal-card";
 
 interface MobileMealListProps {
-  meals: Array<{
-    meal: string;
-    food: string;
-    portion: number;
-    macro: {
-      protein: number;
-      carbs: number;
-      fat: number;
-      energy: number;
-    };
-  }>;
-  mealStatuses: Array<{
-    isCompleted: boolean;
-    hasReplacement: boolean;
-    replacement?: {
-      title: string;
-      portion: number;
-      calories: number;
-      carbs: number;
-      fat: number;
-      protein: number;
-    };
-  }>;
+  meals: Meal[];
+  mealStatuses: MealStatus;
   units: {
     macro: {
       protein: string;
@@ -46,18 +26,22 @@ export const MobileMealList = ({
 }: MobileMealListProps) => {
   return (
     <div className="md:hidden space-y-4">
-      {meals.map((meal, index) => (
-        <MobileMealCard
-          key={index}
-          meal={meal}
-          isCompleted={mealStatuses[index].isCompleted}
-          hasReplacement={mealStatuses[index].hasReplacement}
-          replacement={mealStatuses[index].replacement}
-          units={units}
-          onToggleComplete={() => onToggleComplete(index)}
-          onEdit={() => onEdit(index)}
-        />
-      ))}
+      {meals.map((meal, index) => {
+        const status = mealStatuses[meal.id] || {};
+
+        return (
+          <MobileMealCard
+            key={meal.id}
+            meal={meal}
+            isCompleted={!!status.completed}
+            hasReplacement={!!status.replacement}
+            replacement={status.replacement}
+            units={units}
+            onToggleComplete={() => onToggleComplete(index)}
+            onEdit={() => onEdit(index)}
+          />
+        );
+      })}
     </div>
   );
 };

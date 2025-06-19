@@ -1,76 +1,83 @@
-import type { MealStatus, ReplacementMeal } from "@/store"
-import type { DayPlan,  MacroRatios,  Meal } from "@/types/openAIPlan"
+import type { DayPlan, MacroRatios, Meal,MealStatus, ReplacementMeal } from "@/types/openAIPlan"
 
+export const toggleMealStatus = (
+  mealStatus: MealStatus,
+  meal: Meal,
+  completed: boolean
+): MealStatus => {
+  const updatedStatus = {
+    completed,
+    userDailyMealId: meal.id,
+    userDailyIntakeId: meal.intake?.id,
+    replacement: meal.intake
+      ? {
+          ...meal.intake,
+          isIntake: true,
+        }
+      : undefined,
+  };
 
-export const getMealKey = (day: string, mealIndex: number): string => {
-  return `${day}-${mealIndex}`
-}
-
-export const toggleMealStatus = (mealStatus: MealStatus, day: string, mealIndex: number): MealStatus => {
-  const key = getMealKey(day, mealIndex)
   return {
     ...mealStatus,
-    [key]: {
-      ...mealStatus[key],
-      completed: !mealStatus[key]?.completed,
-    },
-  }
-}
+    [meal.id]: updatedStatus,
+  };
+};
 
 export const saveReplacementMeal = (
   mealStatus: MealStatus,
-  day: string,
-  mealIndex: number,
-  data: ReplacementMeal,
+  meal: Meal,
+  data: ReplacementMeal
 ): MealStatus => {
-  const key = getMealKey(day, mealIndex)
+  const current = mealStatus[meal.id] || { completed: true, userDailyMealId: meal.id };
   return {
     ...mealStatus,
-    [key]: {
-      ...mealStatus[key],
-      replacement: data,
+    [meal.id]: {
+      ...current,
+      replacement: {
+        ...data,
+        userDailyMealId: meal.id,
+        isIntake: true,
+      },
     },
-  }
-}
+  };
+};
 
 export const calculateDayTotals = (day: DayPlan, mealStatus: MealStatus) => {
-  let totalCalories = 0
-  let totalProtein = 0
-  let totalCarbs = 0
-  let totalFat = 0
+  let totalCalories = 0;
+  let totalProtein = 0;
+  let totalCarbs = 0;
+  let totalFat = 0;
 
-  let targetCalories = 0
-  let targetProtein = 0
-  let targetCarbs = 0
-  let targetFat = 0
+  let targetCalories = 0;
+  let targetProtein = 0;
+  let targetCarbs = 0;
+  let targetFat = 0;
 
-  day.meals.forEach((meal: Meal, index: number) => {
-    const key = getMealKey(day.day, index)
-    const status = mealStatus[key]
+  day.meals.forEach((meal) => {
+    targetCalories += meal.targetEnergy;
+    targetProtein += meal.targetProtein;
+    targetCarbs += meal.targetCarbs;
+    targetFat += meal.targetFat;
 
-    // Always add to target totals
-    targetCalories += meal.macro.energy
-    targetProtein += meal.macro.protein
-    targetCarbs += meal.macro.carbs
-    targetFat += meal.macro.fat
+    const status = mealStatus[meal.id];
 
-    // Only add to actual totals if completed
-    if (status?.completed === true) {
-      if (status?.replacement) {
-        // Use replacement meal if available
-        totalCalories += status.replacement.consumedEnergy
-        totalProtein += status.replacement.consumedProtein
-        totalCarbs += status.replacement.consumedCarbs
-        totalFat += status.replacement.consumedFat
+    if (status?.completed) {
+      const m = status.replacement || meal;
+      if ('consumedEnergy' in m) {
+        const replacement = m as ReplacementMeal;
+        totalCalories += replacement.consumedEnergy;
+        totalProtein += replacement.consumedProtein;
+        totalCarbs += replacement.consumedCarbs;
+        totalFat += replacement.consumedFat;
       } else {
-        // Use original meal
-        totalCalories += meal.macro.energy
-        totalProtein += meal.macro.protein
-        totalCarbs += meal.macro.carbs
-        totalFat += meal.macro.fat
+        const meal = m as Meal;
+        totalCalories += meal.targetEnergy;
+        totalProtein += meal.targetProtein;
+        totalCarbs += meal.targetCarbs;
+        totalFat += meal.targetFat;
       }
     }
-  })
+  });
 
   return {
     totalCalories,
@@ -81,15 +88,14 @@ export const calculateDayTotals = (day: DayPlan, mealStatus: MealStatus) => {
     targetProtein,
     targetCarbs,
     targetFat,
-  }
-}
+  };
+};
 
 export const getMealStatuses = (day: DayPlan, mealStatus: MealStatus) => {
-  return day.meals.map((_, index: number) => {
-    const key = getMealKey(day.day, index)
-    const status = mealStatus[key]
+  return day.meals.map((meal) => {
+    const status = mealStatus[meal.id];
     return {
-      isCompleted: status?.completed === true,
+      isCompleted: !!status?.completed,
       hasReplacement: !!status?.replacement,
       replacement: status?.replacement
         ? {
@@ -101,19 +107,14 @@ export const getMealStatuses = (day: DayPlan, mealStatus: MealStatus) => {
             protein: status.replacement.consumedProtein,
           }
         : undefined,
-    }
-  })
-}
-
-export const createEditingMeal = (day: string, mealIndex: number, meal: Meal) => {
-  return { day, mealIndex, meal }
-}
-
+    };
+  });
+};
 
 export const calculateMacroPercentages = (macroRatios: MacroRatios) => {
   return {
     protein: Math.round(macroRatios.protein * 100),
     carbs: Math.round(macroRatios.carbs * 100),
     fat: Math.round(macroRatios.fat * 100),
-  }
-}
+  };
+};

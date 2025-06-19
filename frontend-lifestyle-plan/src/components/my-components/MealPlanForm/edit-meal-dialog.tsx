@@ -11,23 +11,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import type { ReplacementMeal } from "@/store";
+import type { Meal, ReplacementMeal } from "@/types/openAIPlan";
 
 interface EditMealDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (data: ReplacementMeal) => void;
-  meal: {
-    meal: string;
-    food: string;
-    portion: number;
-    macro: {
-      protein: number;
-      carbs: number;
-      fat: number;
-      energy: number;
-    };
-  } | null;
+  meal: Meal | null;
   units: {
     macro: {
       protein: string;

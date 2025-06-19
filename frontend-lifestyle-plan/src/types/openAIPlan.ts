@@ -7,14 +7,34 @@ export interface Macro {
 
 export interface Meal {
   id: number;
-  food: string;
   meal: string;
-  portion: number;
+  targetPortion: number;
+  targetFood: string;
+  targetProtein: number;
+  targetFat: number;
+  targetCarbs: number;
+  targetEnergy: number;
+  consumed: boolean;
+  intake?: ReplacementMeal;
   day: string;
   date: string;
   macro: Macro;
 }
-
+export interface ReplacementMeal {
+  id: number;
+  day: string;
+  date: string;
+  meal: string;
+  userDailyMealId: number;
+  consumedFood: string;
+  consumedPortion: number;
+  consumedProtein: number;
+  consumedFat: number;
+  consumedCarbs: number;
+  consumedEnergy: number;
+  consumed: boolean;
+  isIntake?: boolean;
+}
 export interface DayPlan {
   day: string;
   date: string;
@@ -31,11 +51,12 @@ export interface Units {
   };
 }
 
-export interface MacroRatios  {
+export interface MacroRatios {
   protein: number;
   carbs: number;
   fat: number;
 }
+
 export interface OpenAIResponsePayload {
   meta: {
     model: string;
@@ -43,11 +64,7 @@ export interface OpenAIResponsePayload {
   };
   unit_system: string;
   units: Units;
-  macro_ratios: {
-    protein: number;
-    carbs: number;
-    fat: number;
-  };
+  macro_ratios: MacroRatios;
   daily_calorie_target: number;
   weekly_plan: DayPlan[];
 }
@@ -60,3 +77,13 @@ export interface OpenAIResponseFromServer {
   createdAt: string;
   updatedAt: string;
 }
+
+
+export interface MealStatusItem {
+  completed: boolean;
+  userDailyMealId: number;
+  targetMeal?: Meal;
+  replacement?: ReplacementMeal;
+}
+
+export type MealStatus = Record<number, MealStatusItem>;

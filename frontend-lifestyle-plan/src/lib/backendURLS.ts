@@ -11,7 +11,8 @@ export const API_ENDPOINTS = {
   openaiResponse: `${BASE_URL}/api/openai-response`,
   userMealProgress: `${BASE_URL}/api/user-meal-progress`,
   userMealPlan: `${BASE_URL}/api/user-meal-plan`,
-  userDailyIntake: `${BASE_URL}/api/user-daily-intake`,
+  userDailyIntake: `${BASE_URL}/api/user-daily/intake`,
+  userDailyConsumed: `${BASE_URL}/api/user-daily/consumed`,
 } as const;
 
 // Tipado automático

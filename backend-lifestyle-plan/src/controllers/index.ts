@@ -9,3 +9,4 @@ export * from "./openAIResponse.controller.js";
 export * from "./userMealProgress.controller.js";
 export * from "./userDailyIntake.controller.js";
 export * from "./userMealPlan.controller.js";
+export * from "./userDailyMeal.controller.js";
