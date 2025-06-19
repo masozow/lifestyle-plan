@@ -103,6 +103,7 @@ export const MealPlanForm = () => {
   };
 
   const handleSyncToServer = async () => {
+    console.log("Syncing to server from button...");
     setIsSyncing(true);
     await syncToServer();
     setIsSyncing(false);

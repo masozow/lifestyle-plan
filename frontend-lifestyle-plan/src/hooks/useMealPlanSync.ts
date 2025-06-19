@@ -35,13 +35,14 @@ export const useMealPlanSync = (
   });
 
   const syncToServer = async () => {
+    console.log("Starting sync to server...");
     if (!hasUnsyncedChanges() || !userId) return false;
 
     const currentStateString = JSON.stringify(mealStatus);
     if (currentStateString === lastSyncRef.current) return false;
 
     const updates = Object.values(mealStatus);
-
+    console.log("Status updates:", updates);
     for (const status of updates) {
       const consumed = status.completed;
       const userDailyMealId = status.userDailyMealId;
@@ -55,7 +56,11 @@ export const useMealPlanSync = (
           isIntake: true,
         });
 
-        if (!res.isSuccess) return false;
+        if (!res.isSuccess){console.log("Intake mutation error:",  res, "||", res?.error); return false;}
+        else
+        {
+          console.log("Intake mutation result:",  res);
+        }
       } else {
         const res = await consumedMutation.mutateAsync({
           userDailyMealId,
@@ -63,18 +68,24 @@ export const useMealPlanSync = (
           isIntake: false,
         });
 
-        if (!res.isSuccess) return false;
+        if (!res.isSuccess){ console.log("Consumed mutation error:",  res , "||", res?.error); return false;}
+        else
+        {
+          console.log("Consumed mutation result:",  res);
+        }
       }
     }
 
     markAsSynced();
     lastSyncRef.current = currentStateString;
+    console.log("Sync to server completed.");
     return true;
   };
 
-  useEffect(() => {
-    syncToServer();
-  }, [mealStatus]);
+  // useEffect(() => {
+  //   console.log("Meal status changed:", mealStatus);
+  //   syncToServer();
+  // }, [mealStatus]);
 
   return { syncToServer, hasUnsyncedChanges };
 };
