@@ -7,7 +7,7 @@ import type {
   Units,
   ReplacementMeal,
 } from "@/types/openAIPlan";
-import { useApiGet, useApiRequest } from "@/hooks";
+import { useApiGet } from "@/hooks";
 import {
   Card,
   CardContent,
@@ -58,25 +58,11 @@ export const MealPlanForm = () => {
   const responseData = data?.data?.response;
   console.log("responseData", responseData);
 
-  const { syncToServer, hasUnsyncedChanges } = useMealPlanSync(userId, {
-    consumedUrl: API_ENDPOINTS.userDailyConsumed,
-  });
-  const intakeReplacementMutation = useApiRequest({
-    url: API_ENDPOINTS.userDailyIntake,
-    method: "POST",
-  });
-  useEffect(() => {
-    if (intakeReplacementMutation.isSuccess) {
-      toast.success(intakeReplacementMutation.data.message);
-    } else if (intakeReplacementMutation.isError) {
-      toast.error(intakeReplacementMutation.error.message);
-    }
-  }, [
-    intakeReplacementMutation.isSuccess,
-    intakeReplacementMutation.isError,
-    intakeReplacementMutation.error?.message,
-    intakeReplacementMutation.data?.message,
-  ]);
+  const { syncToServer, hasUnsyncedChanges, createOrUpdateIntake } =
+    useMealPlanSync(userId, {
+      consumedUrl: API_ENDPOINTS.userDailyConsumed,
+      intakeUrl: API_ENDPOINTS.userDailyIntake,
+    });
 
   if (isLoading) return <CustomSpinner />;
 
@@ -95,6 +81,13 @@ export const MealPlanForm = () => {
 
   const { daily_calorie_target, macro_ratios, units, weekly_plan } =
     responseData;
+
+  console.group("Response Data");
+  console.log("daily_calorie_target", daily_calorie_target);
+  console.log("macro_ratios", macro_ratios);
+  console.log("units", units);
+  console.log("weekly_plan", weekly_plan);
+  console.groupEnd();
 
   const handleToggleMealStatus = (meal: Meal, completed: boolean) => {
     const updatedStatus = toggleMealStatusHelper(mealStatus, meal, completed);
@@ -118,23 +111,21 @@ export const MealPlanForm = () => {
       editingMeal,
       data
     );
-
     updateMealStatus(editingMeal.id, newMealStatus[editingMeal.id]);
     setLastTouchedKey(editingMeal.id);
-    const result = await intakeReplacementMutation.mutateAsync({
-      userDailyMealId: data.userDailyMealId,
-      consumedFood: data.consumedFood,
-      consumedPortion: data.consumedPortion,
-      consumedProtein: data.macro.protein,
-      consumedFat: data.macro.fat,
-      consumedCarbs: data.macro.carbs,
-      consumedEnergy: data.macro.energy,
-      consumed: data.consumed,
-      day: data.day,
-      date: data.date,
-      meal: data.meal,
-    });
-    console.log("intakeReplacementMutation", result);
+
+    try {
+      const result = await createOrUpdateIntake(data);
+      if (result.isSuccess) {
+        toast.success(`Replacement meal saved! - ${result.message}`);
+      } else {
+        toast.error(`Error saving replacement meal. - ${result.message}`);
+      }
+    } catch (err) {
+      toast.error("Unexpected error saving replacement meal.");
+      console.error("createOrUpdateIntake failed", err);
+    }
+
     handleCloseEditDialog();
   };
 

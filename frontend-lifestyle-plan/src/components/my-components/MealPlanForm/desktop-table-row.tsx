@@ -32,6 +32,7 @@ export const DesktopTableRow = ({
   onToggleComplete,
   onEdit,
 }: DesktopTableRowProps) => {
+  console.log("DesktopTableRow", { meal, isCompleted, hasReplacement });
   return (
     <TableRow className={isCompleted ? "" : "bg-red-50 dark:bg-red-950/20"}>
       <TableCell>
@@ -39,38 +40,34 @@ export const DesktopTableRow = ({
       </TableCell>
       <TableCell className="font-medium text-left">{meal.meal}</TableCell>
       <TableCell className="text-left">
-        {isCompleted || !hasReplacement
-          ? meal.targetFood
-          : replacement!.consumedFood}
+        {isCompleted || !hasReplacement ? meal.food : replacement!.food}
       </TableCell>
       <TableCell className="text-right">
-        {isCompleted || !hasReplacement
-          ? meal.targetPortion
-          : replacement!.consumedPortion}
+        {isCompleted || !hasReplacement ? meal.portion : replacement!.portion}
         {units.portion}
       </TableCell>
       <TableCell className="text-right">
         {isCompleted || !hasReplacement
           ? meal.macro.energy
-          : replacement!.consumedEnergy}{" "}
+          : replacement!.macro.energy}{" "}
         {units.macro.energy}
       </TableCell>
       <TableCell className="text-right">
         {isCompleted || !hasReplacement
           ? meal.macro.protein
-          : replacement!.consumedProtein}
+          : replacement!.macro.protein}
         {units.macro.protein}
       </TableCell>
       <TableCell className="text-right">
         {isCompleted || !hasReplacement
           ? meal.macro.carbs
-          : replacement!.consumedCarbs}
+          : replacement!.macro.carbs}
         {units.macro.carbs}
       </TableCell>
       <TableCell className="text-right">
         {isCompleted || !hasReplacement
           ? meal.macro.fat
-          : replacement!.consumedFat}
+          : replacement!.macro.fat}
         {units.macro.fat}
       </TableCell>
       <TableCell>

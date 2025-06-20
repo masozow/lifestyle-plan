@@ -102,8 +102,8 @@ export const getMealStatuses = (day: DayPlan, mealStatus: MealStatus) => {
       hasReplacement: !!status?.replacement,
       replacement: status?.replacement
         ? {
-            title: status.replacement.consumedFood,
-            portion: status.replacement.consumedPortion,
+            title: status.replacement.food,
+            portion: status.replacement.portion,
             calories: status.replacement.macro.energy,
             carbs: status.replacement.macro.carbs,
             fat: status.replacement.macro.fat,

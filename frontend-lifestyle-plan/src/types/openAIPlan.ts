@@ -11,8 +11,8 @@ export interface ReplacementMeal {
   date: string;
   meal: string;
   userDailyMealId: number;
-  consumedFood: string;
-  consumedPortion: number;
+  food: string;
+  portion: number;
   macro: Macro;
   consumed: boolean;
   isIntake?: boolean;
@@ -23,8 +23,8 @@ export interface Meal {
   day: string;
   date: string;
   meal: string;
-  targetFood: string;
-  targetPortion: number;
+  food: string;
+  portion: number;
   macro: Macro;
   consumed: boolean;
   intake?: ReplacementMeal;

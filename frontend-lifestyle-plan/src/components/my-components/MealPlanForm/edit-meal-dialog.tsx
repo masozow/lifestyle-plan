@@ -68,7 +68,7 @@ export const EditMealDialog = ({
             <Input
               id="title"
               placeholder="e.g., Mixed salad"
-              {...register("consumedFood", { required: true })}
+              {...register("food", { required: true })}
             />
           </div>
           <div className="space-y-2">
@@ -77,7 +77,7 @@ export const EditMealDialog = ({
               id="portion"
               type="number"
               placeholder="300"
-              {...register("consumedPortion", {
+              {...register("portion", {
                 required: true,
                 valueAsNumber: true,
               })}

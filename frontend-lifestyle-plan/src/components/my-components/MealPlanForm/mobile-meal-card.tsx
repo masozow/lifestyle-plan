@@ -50,23 +50,21 @@ export const MobileMealCard = ({
           <div className="flex-1">
             <CardTitle className="text-2xl">{meal.meal}</CardTitle>
             <CardDescription className="font-semibold text-foreground mt-1 text-base">
-              {isCompleted || !hasReplacement
-                ? meal.targetFood
-                : replacement!.consumedFood}
+              {isCompleted || !hasReplacement ? meal.food : replacement!.food}
             </CardDescription>
             <div className="mt-2 space-y-1">
               <Badge className="text-md" variant="outline">
                 <span className="font-medium">Portion - </span>{" "}
                 {isCompleted || !hasReplacement
-                  ? meal.targetPortion
-                  : replacement!.consumedPortion}
+                  ? meal.portion
+                  : replacement!.portion}
                 {units.portion}
               </Badge>
               <Badge className="text-md" variant="outline">
                 <span className="font-medium">Calories - </span>{" "}
                 {isCompleted || !hasReplacement
                   ? meal.macro.energy
-                  : replacement!.consumedEnergy}
+                  : replacement!.macro.energy}
                 {units.macro.energy}
               </Badge>
             </div>
@@ -95,21 +93,21 @@ export const MobileMealCard = ({
               Protein:{" "}
               {isCompleted || !hasReplacement
                 ? meal.macro.protein
-                : replacement!.consumedProtein}
+                : replacement!.macro.protein}
               {units.macro.protein}
             </Badge>
             <Badge variant="secondary" className="text-md">
               Carbs:{" "}
               {isCompleted || !hasReplacement
                 ? meal.macro.carbs
-                : replacement!.consumedCarbs}
+                : replacement!.macro.carbs}
               {units.macro.carbs}
             </Badge>
             <Badge variant="secondary" className="text-md">
               Fats:{" "}
               {isCompleted || !hasReplacement
                 ? meal.macro.fat
-                : replacement!.consumedFat}
+                : replacement!.macro.fat}
               {units.macro.fat}
             </Badge>
           </div>
