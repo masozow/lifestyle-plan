@@ -1,117 +1,57 @@
 import { useEffect, useRef } from "react";
 import { useMealPlanStore } from "@/store";
 import { useApiRequest } from "./useApiRequest";
-import type { IntakeReplacementPayload } from "@/types/openAIPlan";
-
-
-interface ConsumedUpdate {
-  userDailyMealId: number;
-  userDailyIntakeId?: number;
-  consumed: boolean;
-  origin: "intake" | "meal";
-}
+import type { ConsumedUpdate } from "@/types/openAIPlan";
 
 interface MealPlanSyncConfig {
-  intakeUrl: string;
   consumedUrl: string;
 }
 
 export const useMealPlanSync = (
   userId: number | undefined,
-  { intakeUrl, consumedUrl }: MealPlanSyncConfig
+  { consumedUrl }: MealPlanSyncConfig
 ) => {
-  const mealStatus = useMealPlanStore((state) => state.mealStatus);
-  const hasUnsyncedChanges = useMealPlanStore((state) => state.hasUnsyncedChanges);
-  const markAsSynced = useMealPlanStore((state) => state.markAsSynced);
-  const lastSyncRef = useRef<string>("");
+  const {
+    mealStatus,
+    lastTouchedKey,
+    hasUnsyncedChanges,
+    markAsSynced,
+  } = useMealPlanStore();
 
+  const lastSyncRef = useRef<number | null>(null);
   const consumedMutation = useApiRequest<ConsumedUpdate>({
     url: consumedUrl,
     method: "POST",
   });
 
-  const intakeMutation = useApiRequest<IntakeReplacementPayload>({
-    url: intakeUrl,
-    method: "POST",
-  });
-
   const syncToServer = async () => {
-    console.log("Starting sync to server...");
-    if (!hasUnsyncedChanges() || !userId) return false;
+    if (!userId || !hasUnsyncedChanges() || lastTouchedKey === null) return false;
+    if (lastTouchedKey === lastSyncRef.current) return false;
 
-    const currentStateString = JSON.stringify(mealStatus);
-    if (currentStateString === lastSyncRef.current) return false;
+    const status = mealStatus[lastTouchedKey];
+    if (!status) return false;
 
-    const updates = Object.values(mealStatus);
-    console.log("Status updates:", updates);
-    for (const status of updates) {
-      const consumed = status.completed;
-      const userDailyMealId = status.userDailyMealId;
-      const userDailyIntakeId = status.replacement?.id;
+    const { userDailyMealId, userDailyIntakeId, completed } = status;
 
-      if (status.replacement) {
-        const {
-          consumedFood,
-          consumedPortion,
-          consumedProtein,
-          consumedFat,
-          consumedCarbs,
-          consumedEnergy,
-          day,
-          date,
-          meal,
-        } = status.replacement;
+    const res = await consumedMutation.mutateAsync({
+      userDailyMealId,
+      userDailyIntakeId,
+      consumed: completed,
+      origin: userDailyIntakeId ? "intake" : "meal",
+    });
 
-        const res = await intakeMutation.mutateAsync({
-          userDailyMealId,
-          consumedFood,
-          consumedPortion,
-          consumedProtein,
-          consumedFat,
-          consumedCarbs,
-          consumedEnergy,
-          consumed,
-          day,
-          date,
-          meal,
-        });
-
-        if (!res.isSuccess) {
-          console.log("Intake mutation error:", res, "||", res?.error);
-          return false;
-        } else {
-          console.log("Intake mutation result:", res);
-        }
-      } else {
-        const res = await consumedMutation.mutateAsync({
-          userDailyMealId,
-          userDailyIntakeId,
-          consumed,
-          origin: userDailyIntakeId ? "intake" : "meal",
-        });
-
-        if (!res.isSuccess){ console.log("Consumed mutation error:",  res , "||", res?.error); return false;}
-        else
-        {
-          console.log("Consumed mutation result:",  res);
-        }
-      }
-    }
+    if (!res.isSuccess) return false;
 
     markAsSynced();
-    lastSyncRef.current = currentStateString;
-    console.log("Sync to server completed.");
+    lastSyncRef.current = lastTouchedKey;
     return true;
   };
-
   useEffect(() => {
-    const hasRealData = Object.keys(mealStatus).length > 0;
-    if (hasRealData) {
-      syncToServer();
-      console.log("Syncing to server from hook...");
-    }
-  }, [mealStatus]);
-
-
+  if (!userId) return;
+  const hasRealData = Object.keys(mealStatus).length > 0;
+  if (hasRealData && lastTouchedKey !== null) {
+    syncToServer();
+  }
+}, [mealStatus, lastTouchedKey]);
   return { syncToServer, hasUnsyncedChanges };
 };

@@ -89,7 +89,7 @@ export const EditMealDialog = ({
               id="calories"
               type="number"
               placeholder="400"
-              {...register("consumedEnergy", {
+              {...register("macro.energy", {
                 required: true,
                 valueAsNumber: true,
               })}
@@ -101,7 +101,7 @@ export const EditMealDialog = ({
               id="protein"
               type="number"
               placeholder="25"
-              {...register("consumedProtein", {
+              {...register("macro.protein", {
                 required: true,
                 valueAsNumber: true,
               })}
@@ -113,7 +113,7 @@ export const EditMealDialog = ({
               id="carbs"
               type="number"
               placeholder="30"
-              {...register("consumedCarbs", {
+              {...register("macro.carbs", {
                 required: true,
                 valueAsNumber: true,
               })}
@@ -125,7 +125,7 @@ export const EditMealDialog = ({
               id="fat"
               type="number"
               placeholder="15"
-              {...register("consumedFat", {
+              {...register("macro.fat", {
                 required: true,
                 valueAsNumber: true,
               })}

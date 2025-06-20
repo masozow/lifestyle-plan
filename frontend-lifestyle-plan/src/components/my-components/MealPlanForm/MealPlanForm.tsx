@@ -7,7 +7,7 @@ import type {
   Units,
   ReplacementMeal,
 } from "@/types/openAIPlan";
-import { useApiGet } from "@/hooks";
+import { useApiGet, useApiRequest } from "@/hooks";
 import {
   Card,
   CardContent,
@@ -30,18 +30,20 @@ import { useMealPlanStore, useSessionStore } from "@/store";
 import { useMealPlanSync } from "@/hooks";
 import { API_ENDPOINTS } from "@/lib/backendURLS";
 import { CustomSpinner } from "@/components";
+import { toast } from "sonner";
 
 export const MealPlanForm = () => {
   const { user } = useSessionStore();
   const userId = user?.id;
-  const apiEndPoint = `${API_ENDPOINTS.userMealPlan}/${userId}`;
-  const { mealStatus, setMealStatus } = useMealPlanStore();
+  const apiEndPointGET = `${API_ENDPOINTS.userMealPlan}/${userId}`;
+  const { mealStatus, updateMealStatus, setLastTouchedKey } =
+    useMealPlanStore();
   const [isSyncing, setIsSyncing] = useState(false);
   const [editingMeal, setEditingMeal] = useState<Meal | null>(null);
 
   useEffect(() => {
     if (!userId) {
-      console.warn("⚠️ No userId detected — query is not triggered.");
+      console.warn("Warning: No userId detected - the query is not triggered.");
     }
   }, [userId]);
 
@@ -49,16 +51,32 @@ export const MealPlanForm = () => {
     success: boolean;
     data: OpenAIResponseFromServer;
   }>({
-    url: apiEndPoint,
+    url: apiEndPointGET,
     enabled: !!userId,
   });
 
   const responseData = data?.data?.response;
+  console.log("responseData", responseData);
 
   const { syncToServer, hasUnsyncedChanges } = useMealPlanSync(userId, {
-    intakeUrl: API_ENDPOINTS.userDailyIntake,
     consumedUrl: API_ENDPOINTS.userDailyConsumed,
   });
+  const intakeReplacementMutation = useApiRequest({
+    url: API_ENDPOINTS.userDailyIntake,
+    method: "POST",
+  });
+  useEffect(() => {
+    if (intakeReplacementMutation.isSuccess) {
+      toast.success(intakeReplacementMutation.data.message);
+    } else if (intakeReplacementMutation.isError) {
+      toast.error(intakeReplacementMutation.error.message);
+    }
+  }, [
+    intakeReplacementMutation.isSuccess,
+    intakeReplacementMutation.isError,
+    intakeReplacementMutation.error?.message,
+    intakeReplacementMutation.data?.message,
+  ]);
 
   if (isLoading) return <CustomSpinner />;
 
@@ -79,8 +97,9 @@ export const MealPlanForm = () => {
     responseData;
 
   const handleToggleMealStatus = (meal: Meal, completed: boolean) => {
-    const newMealStatus = toggleMealStatusHelper(mealStatus, meal, completed);
-    setMealStatus(newMealStatus);
+    const updatedStatus = toggleMealStatusHelper(mealStatus, meal, completed);
+    updateMealStatus(meal.id, updatedStatus[meal.id]);
+    setLastTouchedKey(meal.id);
   };
 
   const handleOpenEditDialog = (meal: Meal) => {
@@ -91,14 +110,31 @@ export const MealPlanForm = () => {
     setEditingMeal(null);
   };
 
-  const handleSaveReplacementMeal = (data: ReplacementMeal) => {
+  const handleSaveReplacementMeal = async (data: ReplacementMeal) => {
     if (!editingMeal) return;
+
     const newMealStatus = saveReplacementMealHelper(
       mealStatus,
       editingMeal,
       data
     );
-    setMealStatus(newMealStatus);
+
+    updateMealStatus(editingMeal.id, newMealStatus[editingMeal.id]);
+    setLastTouchedKey(editingMeal.id);
+    const result = await intakeReplacementMutation.mutateAsync({
+      userDailyMealId: data.userDailyMealId,
+      consumedFood: data.consumedFood,
+      consumedPortion: data.consumedPortion,
+      consumedProtein: data.macro.protein,
+      consumedFat: data.macro.fat,
+      consumedCarbs: data.macro.carbs,
+      consumedEnergy: data.macro.energy,
+      consumed: data.consumed,
+      day: data.day,
+      date: data.date,
+      meal: data.meal,
+    });
+    console.log("intakeReplacementMutation", result);
     handleCloseEditDialog();
   };
 
@@ -110,6 +146,7 @@ export const MealPlanForm = () => {
   };
 
   const macroPercentages = calculateMacroPercentages(macro_ratios);
+  console.log("Macro percentages:", macroPercentages);
 
   return (
     <div className="container mx-auto p-4 md:p-6 space-y-6">

@@ -5,21 +5,6 @@ export interface Macro {
   energy: number;
 }
 
-export interface Meal {
-  id: number;
-  meal: string;
-  targetPortion: number;
-  targetFood: string;
-  targetProtein: number;
-  targetFat: number;
-  targetCarbs: number;
-  targetEnergy: number;
-  consumed: boolean;
-  intake?: ReplacementMeal;
-  day: string;
-  date: string;
-  macro: Macro;
-}
 export interface ReplacementMeal {
   id: number;
   day: string;
@@ -28,25 +13,21 @@ export interface ReplacementMeal {
   userDailyMealId: number;
   consumedFood: string;
   consumedPortion: number;
-  consumedProtein: number;
-  consumedFat: number;
-  consumedCarbs: number;
-  consumedEnergy: number;
+  macro: Macro;
   consumed: boolean;
   isIntake?: boolean;
 }
-export interface IntakeReplacementPayload {
-  userDailyMealId: number;
-  consumedFood: string;
-  consumedPortion: number;
-  consumedProtein: number;
-  consumedFat: number;
-  consumedCarbs: number;
-  consumedEnergy: number;
-  consumed: boolean;
+
+export interface Meal {
+  id: number;
   day: string;
   date: string;
   meal: string;
+  targetFood: string;
+  targetPortion: number;
+  macro: Macro;
+  consumed: boolean;
+  intake?: ReplacementMeal;
 }
 
 export interface DayPlan {
@@ -57,25 +38,13 @@ export interface DayPlan {
 
 export interface Units {
   portion: string;
-  macro: {
-    protein: string;
-    carbs: string;
-    fat: string;
-    energy: string;
-  };
+  macro: { protein: string; carbs: string; fat: string; energy: string };
 }
 
-export interface MacroRatios {
-  protein: number;
-  carbs: number;
-  fat: number;
-}
+export interface MacroRatios { protein: number; carbs: number; fat: number; }
 
 export interface OpenAIResponsePayload {
-  meta: {
-    model: string;
-    generated_at: string;
-  };
+  meta: { model: string; generated_at: string };
   unit_system: string;
   units: Units;
   macro_ratios: MacroRatios;
@@ -92,12 +61,21 @@ export interface OpenAIResponseFromServer {
   updatedAt: string;
 }
 
-
 export interface MealStatusItem {
   completed: boolean;
   userDailyMealId: number;
-  targetMeal?: Meal;
+  userDailyIntakeId?: number;
   replacement?: ReplacementMeal;
+  targetMeal?: Meal; 
 }
 
+// mutation payload for consumed status endpoint
+export interface ConsumedUpdate {
+  userDailyMealId: number;
+  userDailyIntakeId?: number;
+  consumed: boolean;
+  origin: "intake" | "meal";
+}
 export type MealStatus = Record<number, MealStatusItem>;
+
+
