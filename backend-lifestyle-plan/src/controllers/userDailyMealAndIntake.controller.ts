@@ -1,9 +1,7 @@
 import { Request, Response } from "express";
-import {
-  UserDailyIntake,
-  UserDailyMeal,
-} from "../models/index.js";
+import { UserDailyIntake, UserDailyMeal } from "../models/index.js";
 import { errorAndLogHandler, errorLevels } from "../utils/index.js";
+
 
 const upsertUserDailyIntake = async (req: Request, res: Response) => {
   const userId = req.user?.id;
@@ -20,16 +18,17 @@ const upsertUserDailyIntake = async (req: Request, res: Response) => {
     consumedEnergy,
     consumed,
   } = req.body;
-
+  console.log("~ log from upsertUserDailyIntake ~ line 17 req.body:", req.body, "\n");
   if (!userId || !userDailyMealId) {
     return res.status(400).json({ error: "Missing userDailyMealId or userId" });
   }
-
+  const registryID = [];
   try {
     const existing = await UserDailyIntake.findOne({ where: { userDailyMealId } });
-
+    registryID.push(existing?.id);
+    console.log("~ log from upsertUserDailyIntake ~ line 25 existing:", registryID[0], "\n");
     if (existing) {
-      await existing.update({
+      const updated = await existing.update({
         consumedFood,
         consumedPortion,
         consumedProtein,
@@ -41,8 +40,10 @@ const upsertUserDailyIntake = async (req: Request, res: Response) => {
         date,
         meal,
       });
+      registryID.push(updated?.id);
+      console.log("~ log from upsertUserDailyIntake ~ line 32 updated:", registryID[0], "\n");
     } else {
-      await UserDailyIntake.create({
+      const created = await UserDailyIntake.create({
         userDailyMealId,
         consumedFood,
         consumedPortion,
@@ -55,9 +56,10 @@ const upsertUserDailyIntake = async (req: Request, res: Response) => {
         date,
         meal,
       });
+      registryID.push(created?.id);
+      console.log("~ log from upsertUserDailyIntake ~ line 39 created:", registryID[0], "\n");
     }
-
-    return res.status(200).json({ success: true });
+    return res.status(200).json({ success: true, data: registryID[0] });
   } catch (error) {
     return res.status(500).json(
       await errorAndLogHandler({
@@ -72,33 +74,56 @@ const upsertUserDailyIntake = async (req: Request, res: Response) => {
 
 const upsertConsumedStatus = async (req: Request, res: Response) => {
   const userId = req.user?.id;
-  const {
-    userDailyMealId,
-    userDailyIntakeId,
-    consumed,
-    origin,
-  } = req.body;
-
+  const { userDailyMealId, userDailyIntakeId, consumed, origin } = req.body;
+  console.log("~ log from upsertConsumedStatus ~ line 78 req.body:", req.body, "\n");
   if (!userId || !userDailyMealId || typeof consumed !== "boolean") {
-    return res.status(400).json({ error: "Missing required fields" });
+    return res.status(400).json(
+      await errorAndLogHandler({
+        level: errorLevels.warn,
+        message: "Missing required fields",
+        userId: req.user?.id || 0,
+      })
+    );
   }
 
   try {
     if (origin === "intake" && userDailyIntakeId) {
       const intake = await UserDailyIntake.findByPk(userDailyIntakeId);
       if (!intake) {
-        return res.status(404).json({ error: "Intake not found" });
+        return res.status(404).json(
+          await errorAndLogHandler({
+            level: errorLevels.warn,
+            message: "Intake not found",
+            userId,
+            genericId: userDailyIntakeId,
+          })
+        );
       }
-      await intake.update({ consumed });
+      const updated = await intake.update({ consumed });
+      console.log("~ log from upsertConsumedStatus ~ line 103 intake updated:", updated, "\n");
     } else {
       const meal = await UserDailyMeal.findByPk(userDailyMealId);
       if (!meal) {
-        return res.status(404).json({ error: "Daily meal not found" });
+        return res.status(404).json(
+          await errorAndLogHandler({
+            level: errorLevels.warn,
+            message: "Daily meal not found",
+            userId,
+            genericId: userDailyMealId,
+          })
+        );
       }
-      await meal.update({ consumed });
+      const updated = await meal.update({ consumed });
+      console.log("~ log from upsertConsumedStatus ~ line 117 meal updated:", updated, "\n");
     }
 
-    return res.status(200).json({ success: true });
+    return res.status(200).json({
+      success: true,
+      data: {
+        consumed,
+        updated: origin === "intake" ? `intake ${userDailyIntakeId}` : `meal ${userDailyMealId}`,
+      },
+    });
   } catch (error) {
     return res.status(500).json(
       await errorAndLogHandler({
@@ -115,3 +140,4 @@ export const UserDailyMealAndIntakeController = {
   upsertUserDailyIntake,
   upsertConsumedStatus,
 };
+

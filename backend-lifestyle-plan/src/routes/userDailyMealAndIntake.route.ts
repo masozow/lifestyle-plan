@@ -1,6 +1,6 @@
 import express from "express";
 import { checkAuth } from "../middleware/auth.middleware.js";
-import { UserDailyMealAndIntakeController } from "../controllers/userDailyMeal.controller.js";
+import { UserDailyMealAndIntakeController } from "../controllers/index.js";
 
 
 const router = express.Router();

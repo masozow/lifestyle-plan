@@ -1,13 +1,14 @@
 import { useEffect, useRef } from "react";
 import { useMealPlanStore } from "@/store";
 import { useApiRequest } from "./useApiRequest";
-import type { ReplacementMeal } from "@/types/openAIPlan";
+import type { IntakeReplacementPayload } from "@/types/openAIPlan";
 
 
 interface ConsumedUpdate {
   userDailyMealId: number;
+  userDailyIntakeId?: number;
   consumed: boolean;
-  isIntake: boolean;
+  origin: "intake" | "meal";
 }
 
 interface MealPlanSyncConfig {
@@ -29,7 +30,7 @@ export const useMealPlanSync = (
     method: "POST",
   });
 
-  const intakeMutation = useApiRequest<ReplacementMeal>({
+  const intakeMutation = useApiRequest<IntakeReplacementPayload>({
     url: intakeUrl,
     method: "POST",
   });
@@ -49,23 +50,44 @@ export const useMealPlanSync = (
       const userDailyIntakeId = status.replacement?.id;
 
       if (status.replacement) {
+        const {
+          consumedFood,
+          consumedPortion,
+          consumedProtein,
+          consumedFat,
+          consumedCarbs,
+          consumedEnergy,
+          day,
+          date,
+          meal,
+        } = status.replacement;
+
         const res = await intakeMutation.mutateAsync({
-          ...status.replacement,
-          id:userDailyIntakeId??0,
+          userDailyMealId,
+          consumedFood,
+          consumedPortion,
+          consumedProtein,
+          consumedFat,
+          consumedCarbs,
+          consumedEnergy,
           consumed,
-          isIntake: true,
+          day,
+          date,
+          meal,
         });
 
-        if (!res.isSuccess){console.log("Intake mutation error:",  res, "||", res?.error); return false;}
-        else
-        {
-          console.log("Intake mutation result:",  res);
+        if (!res.isSuccess) {
+          console.log("Intake mutation error:", res, "||", res?.error);
+          return false;
+        } else {
+          console.log("Intake mutation result:", res);
         }
       } else {
         const res = await consumedMutation.mutateAsync({
           userDailyMealId,
+          userDailyIntakeId,
           consumed,
-          isIntake: false,
+          origin: userDailyIntakeId ? "intake" : "meal",
         });
 
         if (!res.isSuccess){ console.log("Consumed mutation error:",  res , "||", res?.error); return false;}
@@ -82,10 +104,14 @@ export const useMealPlanSync = (
     return true;
   };
 
-  // useEffect(() => {
-  //   console.log("Meal status changed:", mealStatus);
-  //   syncToServer();
-  // }, [mealStatus]);
+  useEffect(() => {
+    const hasRealData = Object.keys(mealStatus).length > 0;
+    if (hasRealData) {
+      syncToServer();
+      console.log("Syncing to server from hook...");
+    }
+  }, [mealStatus]);
+
 
   return { syncToServer, hasUnsyncedChanges };
 };

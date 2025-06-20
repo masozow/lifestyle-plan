@@ -16,6 +16,7 @@ import userMealProgressRoutes from "./routes/userMealProgress.route.js";
 import openAIResponseRoutes from "./routes/openAIResponse.route.js";
 import userMealPlanRoutes from "./routes/userMealPlan.route.js";
 import userIntakeRoutes from "./routes/userDailyIntake.route.js";
+import userDailyMealAndIntakeRoutes from "./routes/userDailyMealAndIntake.route.js";
 
 const app = express();
 
@@ -46,6 +47,7 @@ app.use("/api", userMealProgressRoutes);
 app.use("/api", openAIResponseRoutes);
 app.use("/api", userMealPlanRoutes);
 app.use("/api", userIntakeRoutes);
+app.use("/api", userDailyMealAndIntakeRoutes);
 
 // Global error middleware
 app.use((err, req, res, next) => {

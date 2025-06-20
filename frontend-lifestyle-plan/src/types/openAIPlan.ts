@@ -35,6 +35,20 @@ export interface ReplacementMeal {
   consumed: boolean;
   isIntake?: boolean;
 }
+export interface IntakeReplacementPayload {
+  userDailyMealId: number;
+  consumedFood: string;
+  consumedPortion: number;
+  consumedProtein: number;
+  consumedFat: number;
+  consumedCarbs: number;
+  consumedEnergy: number;
+  consumed: boolean;
+  day: string;
+  date: string;
+  meal: string;
+}
+
 export interface DayPlan {
   day: string;
   date: string;
