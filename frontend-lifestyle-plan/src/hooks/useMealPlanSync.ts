@@ -1,81 +1,57 @@
-import { useRef } from "react"
-import { useMealPlanStore, type MealStatus } from "@/store";
+import { useEffect, useRef } from "react";
+import { useMealPlanStore } from "@/store";
 import { useApiRequest } from "./useApiRequest";
+import type { ConsumedUpdate } from "@/types/openAIPlan";
 
-interface MealPlanSyncData {
-  userId: number;
-  mealStatus: MealStatus;
-  lastUpdated: number;
+interface MealPlanSyncConfig {
+  consumedUrl: string;
 }
 
-  /**
-   * Hook to use when syncing meal plan changes to the server.
-   *
-   * @example
-   * const { syncToServer, hasUnsyncedChanges } = useMealPlanSync(1, "/api/meal-plan");
-   * const handleSyncButtonClick = () => {
-   *   if (hasUnsyncedChanges) {
-   *     syncToServer().then((success) => {
-   *       if (success) {
-   *         console.log("✅ Meal plan synced to server")
-   *       } else {
-   *         console.error("❌ Failed to sync meal plan")
-   *       }
-   *     })
-   *   }
-   * }
-   *
-   * @param {number | undefined} userId - ID of the user whose meal plan is being synced.
-   * @param {string} apiEndpoint - URL of the API endpoint to send the request to.
-   * @returns {Object} - Object with two properties: `syncToServer` (a function to call when syncing) and `hasUnsyncedChanges` (a boolean indicating whether there are unsynced changes).
-   */
-export const useMealPlanSync = (userId: number | undefined, apiEndpoint: string) => {
-  const mealPlanRequest = useApiRequest<MealPlanSyncData>({
-    url: apiEndpoint,
+export const useMealPlanSync = (
+  userId: number | undefined,
+  { consumedUrl }: MealPlanSyncConfig
+) => {
+  const {
+    mealStatus,
+    lastTouchedKey,
+    hasUnsyncedChanges,
+    markAsSynced,
+  } = useMealPlanStore();
+
+  const lastSyncRef = useRef<number | null>(null);
+  const consumedMutation = useApiRequest<ConsumedUpdate>({
+    url: consumedUrl,
     method: "POST",
   });
-  const { mealStatus, hasUnsyncedChanges, markAsSynced } = useMealPlanStore()
-  const lastSyncRef = useRef<string>("")
 
   const syncToServer = async () => {
-    if (!hasUnsyncedChanges() || !userId) return false
+    if (!userId || !hasUnsyncedChanges() || lastTouchedKey === null) return false;
+    if (lastTouchedKey === lastSyncRef.current) return false;
 
-    try {
-      const currentStateString = JSON.stringify(mealStatus)
+    const status = mealStatus[lastTouchedKey];
+    if (!status) return false;
 
-      // Only sync if state has actually changed
-      if (currentStateString === lastSyncRef.current) return false
+    const { userDailyMealId, userDailyIntakeId, completed } = status;
 
-      const syncData: MealPlanSyncData = {
-        userId,
-        mealStatus,
-        lastUpdated: Date.now(),
-      }
+    const res = await consumedMutation.mutateAsync({
+      userDailyMealId,
+      userDailyIntakeId,
+      consumed: completed,
+      origin: userDailyIntakeId ? "intake" : "meal",
+    });
 
-      console.log("Syncing to server:", syncData)
+    if (!res.isSuccess) return false;
 
-      // Replace this with your actual API call
-      const response = await mealPlanRequest.mutateAsync({
-          ...syncData,
-          userId
-        });
-
-      if (response.isSuccess) {
-        markAsSynced()
-        lastSyncRef.current = currentStateString
-        console.log("✅ Meal plan synced to server")
-        return true
-      } else {
-        throw new Error(`HTTP error! Status: ${response.error.message}`)
-      }
-    } catch (error) {
-      console.error("❌ Failed to sync meal plan:", error)
-      return false
-    }
+    markAsSynced();
+    lastSyncRef.current = lastTouchedKey;
+    return true;
+  };
+  useEffect(() => {
+  if (!userId) return;
+  const hasRealData = Object.keys(mealStatus).length > 0;
+  if (hasRealData && lastTouchedKey !== null) {
+    syncToServer();
   }
-
-  return {
-    syncToServer,
-    hasUnsyncedChanges,
-  }
-}
+}, [mealStatus, lastTouchedKey]);
+  return { syncToServer, hasUnsyncedChanges };
+};

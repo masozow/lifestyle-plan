@@ -3,29 +3,13 @@ import { Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { TableCell, TableRow } from "@/components/ui/table";
+import type { Meal, ReplacementMeal } from "@/types/openAIPlan";
 
 interface DesktopTableRowProps {
-  meal: {
-    meal: string;
-    food: string;
-    portion: number;
-    macro: {
-      protein: number;
-      carbs: number;
-      fat: number;
-      energy: number;
-    };
-  };
+  meal: Meal;
   isCompleted: boolean;
   hasReplacement: boolean;
-  replacement?: {
-    title: string;
-    portion: number;
-    calories: number;
-    carbs: number;
-    fat: number;
-    protein: number;
-  };
+  replacement?: ReplacementMeal;
   units: {
     macro: {
       protein: string;
@@ -55,30 +39,38 @@ export const DesktopTableRow = ({
       </TableCell>
       <TableCell className="font-medium text-left">{meal.meal}</TableCell>
       <TableCell className="text-left">
-        {isCompleted || !hasReplacement ? meal.food : replacement!.title}
+        {isCompleted || !hasReplacement
+          ? meal.targetFood
+          : replacement!.consumedFood}
       </TableCell>
       <TableCell className="text-right">
-        {isCompleted || !hasReplacement ? meal.portion : replacement!.portion}
+        {isCompleted || !hasReplacement
+          ? meal.targetPortion
+          : replacement!.consumedPortion}
         {units.portion}
       </TableCell>
       <TableCell className="text-right">
         {isCompleted || !hasReplacement
           ? meal.macro.energy
-          : replacement!.calories}{" "}
+          : replacement!.consumedEnergy}{" "}
         {units.macro.energy}
       </TableCell>
       <TableCell className="text-right">
         {isCompleted || !hasReplacement
           ? meal.macro.protein
-          : replacement!.protein}
+          : replacement!.consumedProtein}
         {units.macro.protein}
       </TableCell>
       <TableCell className="text-right">
-        {isCompleted || !hasReplacement ? meal.macro.carbs : replacement!.carbs}
+        {isCompleted || !hasReplacement
+          ? meal.macro.carbs
+          : replacement!.consumedCarbs}
         {units.macro.carbs}
       </TableCell>
       <TableCell className="text-right">
-        {isCompleted || !hasReplacement ? meal.macro.fat : replacement!.fat}
+        {isCompleted || !hasReplacement
+          ? meal.macro.fat
+          : replacement!.consumedFat}
         {units.macro.fat}
       </TableCell>
       <TableCell>

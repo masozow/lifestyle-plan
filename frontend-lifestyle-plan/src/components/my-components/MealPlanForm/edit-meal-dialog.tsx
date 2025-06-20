@@ -11,31 +11,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-interface ReplacementMeal {
-  title: string;
-  portion: number;
-  calories: number;
-  carbs: number;
-  fat: number;
-  protein: number;
-}
+import type { Meal, ReplacementMeal } from "@/types/openAIPlan";
 
 interface EditMealDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (data: ReplacementMeal) => void;
-  meal: {
-    meal: string;
-    food: string;
-    portion: number;
-    macro: {
-      protein: number;
-      carbs: number;
-      fat: number;
-      energy: number;
-    };
-  } | null;
+  meal: Meal | null;
   units: {
     macro: {
       protein: string;
@@ -86,7 +68,7 @@ export const EditMealDialog = ({
             <Input
               id="title"
               placeholder="e.g., Mixed salad"
-              {...register("title", { required: true })}
+              {...register("consumedFood", { required: true })}
             />
           </div>
           <div className="space-y-2">
@@ -95,7 +77,10 @@ export const EditMealDialog = ({
               id="portion"
               type="number"
               placeholder="300"
-              {...register("portion", { required: true, valueAsNumber: true })}
+              {...register("consumedPortion", {
+                required: true,
+                valueAsNumber: true,
+              })}
             />
           </div>
           <div className="space-y-2">
@@ -104,7 +89,10 @@ export const EditMealDialog = ({
               id="calories"
               type="number"
               placeholder="400"
-              {...register("calories", { required: true, valueAsNumber: true })}
+              {...register("macro.energy", {
+                required: true,
+                valueAsNumber: true,
+              })}
             />
           </div>
           <div className="space-y-2">
@@ -113,7 +101,10 @@ export const EditMealDialog = ({
               id="protein"
               type="number"
               placeholder="25"
-              {...register("protein", { required: true, valueAsNumber: true })}
+              {...register("macro.protein", {
+                required: true,
+                valueAsNumber: true,
+              })}
             />
           </div>
           <div className="space-y-2">
@@ -122,7 +113,10 @@ export const EditMealDialog = ({
               id="carbs"
               type="number"
               placeholder="30"
-              {...register("carbs", { required: true, valueAsNumber: true })}
+              {...register("macro.carbs", {
+                required: true,
+                valueAsNumber: true,
+              })}
             />
           </div>
           <div className="space-y-2">
@@ -131,7 +125,10 @@ export const EditMealDialog = ({
               id="fat"
               type="number"
               placeholder="15"
-              {...register("fat", { required: true, valueAsNumber: true })}
+              {...register("macro.fat", {
+                required: true,
+                valueAsNumber: true,
+              })}
             />
           </div>
           <div className="md:col-span-2 flex gap-2 pt-4">

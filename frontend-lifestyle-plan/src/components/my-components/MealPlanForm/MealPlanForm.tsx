@@ -5,8 +5,9 @@ import type {
   Meal,
   OpenAIResponseFromServer,
   Units,
+  ReplacementMeal,
 } from "@/types/openAIPlan";
-import { useApiGet } from "@/hooks";
+import { useApiGet, useApiRequest } from "@/hooks";
 import {
   Card,
   CardContent,
@@ -23,41 +24,26 @@ import {
   toggleMealStatus as toggleMealStatusHelper,
   saveReplacementMeal as saveReplacementMealHelper,
   calculateDayTotals,
-  getMealStatuses,
-  createEditingMeal,
   calculateMacroPercentages,
 } from "../helpers/meal-plan-form-helper-functions";
 import { useMealPlanStore, useSessionStore } from "@/store";
 import { useMealPlanSync } from "@/hooks";
 import { API_ENDPOINTS } from "@/lib/backendURLS";
 import { CustomSpinner } from "@/components";
-
-interface ReplacementMeal {
-  title: string;
-  portion: number;
-  calories: number;
-  carbs: number;
-  fat: number;
-  protein: number;
-}
+import { toast } from "sonner";
 
 export const MealPlanForm = () => {
   const { user } = useSessionStore();
   const userId = user?.id;
-  const apiEndPoint = `${API_ENDPOINTS.userMealPlan}/${userId}`;
-  console.log("API endpoint:", apiEndPoint);
-  //for submitting info to server, other endpoint is needed
-  const { mealStatus, setMealStatus } = useMealPlanStore();
+  const apiEndPointGET = `${API_ENDPOINTS.userMealPlan}/${userId}`;
+  const { mealStatus, updateMealStatus, setLastTouchedKey } =
+    useMealPlanStore();
   const [isSyncing, setIsSyncing] = useState(false);
-  const [editingMeal, setEditingMeal] = useState<{
-    day: string;
-    mealIndex: number;
-    meal: Meal;
-  } | null>(null);
+  const [editingMeal, setEditingMeal] = useState<Meal | null>(null);
 
   useEffect(() => {
     if (!userId) {
-      console.warn("⚠️ No userId detected — query is not triggered.");
+      console.warn("Warning: No userId detected - the query is not triggered.");
     }
   }, [userId]);
 
@@ -65,16 +51,32 @@ export const MealPlanForm = () => {
     success: boolean;
     data: OpenAIResponseFromServer;
   }>({
-    url: apiEndPoint,
+    url: apiEndPointGET,
     enabled: !!userId,
   });
-  console.log("Data from server:", data);
+
   const responseData = data?.data?.response;
-  console.log("Response data:", responseData);
-  const { syncToServer, hasUnsyncedChanges } = useMealPlanSync(
-    userId && responseData ? userId : undefined,
-    responseData ? `${API_ENDPOINTS.userMealProgress}/${userId}` : ""
-  );
+  console.log("responseData", responseData);
+
+  const { syncToServer, hasUnsyncedChanges } = useMealPlanSync(userId, {
+    consumedUrl: API_ENDPOINTS.userDailyConsumed,
+  });
+  const intakeReplacementMutation = useApiRequest({
+    url: API_ENDPOINTS.userDailyIntake,
+    method: "POST",
+  });
+  useEffect(() => {
+    if (intakeReplacementMutation.isSuccess) {
+      toast.success(intakeReplacementMutation.data.message);
+    } else if (intakeReplacementMutation.isError) {
+      toast.error(intakeReplacementMutation.error.message);
+    }
+  }, [
+    intakeReplacementMutation.isSuccess,
+    intakeReplacementMutation.isError,
+    intakeReplacementMutation.error?.message,
+    intakeReplacementMutation.data?.message,
+  ]);
 
   if (isLoading) return <CustomSpinner />;
 
@@ -94,38 +96,57 @@ export const MealPlanForm = () => {
   const { daily_calorie_target, macro_ratios, units, weekly_plan } =
     responseData;
 
-  const handleToggleMealStatus = (day: string, mealIndex: number) => {
-    const newMealStatus = toggleMealStatusHelper(mealStatus, day, mealIndex);
-    setMealStatus(newMealStatus);
+  const handleToggleMealStatus = (meal: Meal, completed: boolean) => {
+    const updatedStatus = toggleMealStatusHelper(mealStatus, meal, completed);
+    updateMealStatus(meal.id, updatedStatus[meal.id]);
+    setLastTouchedKey(meal.id);
   };
 
-  const handleOpenEditDialog = (day: string, mealIndex: number, meal: Meal) => {
-    setEditingMeal(createEditingMeal(day, mealIndex, meal));
+  const handleOpenEditDialog = (meal: Meal) => {
+    setEditingMeal(meal);
   };
 
   const handleCloseEditDialog = () => {
     setEditingMeal(null);
   };
 
-  const handleSaveReplacementMeal = (data: ReplacementMeal) => {
+  const handleSaveReplacementMeal = async (data: ReplacementMeal) => {
     if (!editingMeal) return;
+
     const newMealStatus = saveReplacementMealHelper(
       mealStatus,
-      editingMeal.day,
-      editingMeal.mealIndex,
+      editingMeal,
       data
     );
-    setMealStatus(newMealStatus);
+
+    updateMealStatus(editingMeal.id, newMealStatus[editingMeal.id]);
+    setLastTouchedKey(editingMeal.id);
+    const result = await intakeReplacementMutation.mutateAsync({
+      userDailyMealId: data.userDailyMealId,
+      consumedFood: data.consumedFood,
+      consumedPortion: data.consumedPortion,
+      consumedProtein: data.macro.protein,
+      consumedFat: data.macro.fat,
+      consumedCarbs: data.macro.carbs,
+      consumedEnergy: data.macro.energy,
+      consumed: data.consumed,
+      day: data.day,
+      date: data.date,
+      meal: data.meal,
+    });
+    console.log("intakeReplacementMutation", result);
     handleCloseEditDialog();
   };
 
   const handleSyncToServer = async () => {
+    console.log("Syncing to server from button...");
     setIsSyncing(true);
     await syncToServer();
     setIsSyncing(false);
   };
 
   const macroPercentages = calculateMacroPercentages(macro_ratios);
+  console.log("Macro percentages:", macroPercentages);
 
   return (
     <div className="container mx-auto p-4 md:p-6 space-y-6">
@@ -174,7 +195,6 @@ export const MealPlanForm = () => {
 
       {weekly_plan.map((day: DayPlan) => {
         const dayTotals = calculateDayTotals(day, mealStatus);
-        const mealStatuses = getMealStatuses(day, mealStatus);
 
         return (
           <Card key={day.day} className="overflow-hidden">
@@ -231,26 +251,28 @@ export const MealPlanForm = () => {
             <CardContent>
               <DesktopMealTable
                 meals={day.meals}
-                mealStatuses={mealStatuses}
+                mealStatuses={mealStatus}
                 units={units as Units}
                 onToggleComplete={(index) =>
-                  handleToggleMealStatus(day.day, index)
+                  handleToggleMealStatus(
+                    day.meals[index],
+                    !mealStatus[day.meals[index].id]?.completed
+                  )
                 }
-                onEdit={(index) =>
-                  handleOpenEditDialog(day.day, index, day.meals[index])
-                }
+                onEdit={(index) => handleOpenEditDialog(day.meals[index])}
               />
 
               <MobileMealList
                 meals={day.meals}
-                mealStatuses={mealStatuses}
+                mealStatuses={mealStatus}
                 units={units as Units}
                 onToggleComplete={(index) =>
-                  handleToggleMealStatus(day.day, index)
+                  handleToggleMealStatus(
+                    day.meals[index],
+                    !mealStatus[day.meals[index].id]?.completed
+                  )
                 }
-                onEdit={(index) =>
-                  handleOpenEditDialog(day.day, index, day.meals[index])
-                }
+                onEdit={(index) => handleOpenEditDialog(day.meals[index])}
               />
             </CardContent>
           </Card>
@@ -261,7 +283,7 @@ export const MealPlanForm = () => {
         isOpen={!!editingMeal}
         onClose={handleCloseEditDialog}
         onSave={handleSaveReplacementMeal}
-        meal={editingMeal?.meal || null}
+        meal={editingMeal}
         units={units as Units}
       />
     </div>

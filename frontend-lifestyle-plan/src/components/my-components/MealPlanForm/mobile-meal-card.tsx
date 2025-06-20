@@ -10,29 +10,13 @@ import {
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
+import type { Meal, ReplacementMeal } from "@/types/openAIPlan";
 
 interface MobileMealCardProps {
-  meal: {
-    meal: string;
-    food: string;
-    portion: number;
-    macro: {
-      protein: number;
-      carbs: number;
-      fat: number;
-      energy: number;
-    };
-  };
+  meal: Meal;
   isCompleted: boolean;
   hasReplacement: boolean;
-  replacement?: {
-    title: string;
-    portion: number;
-    calories: number;
-    carbs: number;
-    fat: number;
-    protein: number;
-  };
+  replacement?: ReplacementMeal;
   units: {
     macro: {
       protein: string;
@@ -66,21 +50,23 @@ export const MobileMealCard = ({
           <div className="flex-1">
             <CardTitle className="text-2xl">{meal.meal}</CardTitle>
             <CardDescription className="font-semibold text-foreground mt-1 text-base">
-              {isCompleted || !hasReplacement ? meal.food : replacement!.title}
+              {isCompleted || !hasReplacement
+                ? meal.targetFood
+                : replacement!.consumedFood}
             </CardDescription>
             <div className="mt-2 space-y-1">
               <Badge className="text-md" variant="outline">
                 <span className="font-medium">Portion - </span>{" "}
                 {isCompleted || !hasReplacement
-                  ? meal.portion
-                  : replacement!.portion}
+                  ? meal.targetPortion
+                  : replacement!.consumedPortion}
                 {units.portion}
               </Badge>
               <Badge className="text-md" variant="outline">
                 <span className="font-medium">Calories - </span>{" "}
                 {isCompleted || !hasReplacement
                   ? meal.macro.energy
-                  : replacement!.calories}
+                  : replacement!.consumedEnergy}
                 {units.macro.energy}
               </Badge>
             </div>
@@ -109,21 +95,21 @@ export const MobileMealCard = ({
               Protein:{" "}
               {isCompleted || !hasReplacement
                 ? meal.macro.protein
-                : replacement!.protein}
+                : replacement!.consumedProtein}
               {units.macro.protein}
             </Badge>
             <Badge variant="secondary" className="text-md">
               Carbs:{" "}
               {isCompleted || !hasReplacement
                 ? meal.macro.carbs
-                : replacement!.carbs}
+                : replacement!.consumedCarbs}
               {units.macro.carbs}
             </Badge>
             <Badge variant="secondary" className="text-md">
               Fats:{" "}
               {isCompleted || !hasReplacement
                 ? meal.macro.fat
-                : replacement!.fat}
+                : replacement!.consumedFat}
               {units.macro.fat}
             </Badge>
           </div>
