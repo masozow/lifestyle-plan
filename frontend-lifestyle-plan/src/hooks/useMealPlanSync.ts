@@ -1,22 +1,33 @@
 import { useEffect, useRef } from "react";
+import { useApiGet, useApiRequest } from "@/hooks";
 import { useMealPlanStore } from "@/store";
-import { useApiRequest } from "./useApiRequest";
-import type { ConsumedUpdate, Macro, ReplacementMeal } from "@/types/openAIPlan";
+import type {
+  ConsumedUpdate,
+  Meal,
+  MealStatus,
+  MealStatusItem,
+  OpenAIResponseFromServer,
+  ReplacementMeal,
+} from "@/types/openAIPlan";
+import { saveReplacementMeal } from "@/components/my-components/helpers/meal-plan-form-helper-functions";
 
 interface MealPlanSyncConfig {
   consumedUrl: string;
   intakeUrl: string;
+  getUrl: string;
 }
 
 export const useMealPlanSync = (
   userId: number | undefined,
-  { consumedUrl, intakeUrl }: MealPlanSyncConfig
+  { consumedUrl, intakeUrl, getUrl }: MealPlanSyncConfig
 ) => {
   const {
     mealStatus,
     lastTouchedKey,
     hasUnsyncedChanges,
     markAsSynced,
+    updateMealStatus,
+    setLastTouchedKey,
   } = useMealPlanStore();
 
   const lastSyncRef = useRef<number | null>(null);
@@ -30,6 +41,36 @@ export const useMealPlanSync = (
     url: intakeUrl,
     method: "POST",
   });
+
+  const planQuery = useApiGet<{ success: boolean; data: OpenAIResponseFromServer }>({
+    url: userId ? getUrl : "",
+    enabled: !!userId,
+  });
+
+  useEffect(() => {
+    if (planQuery.data?.data?.response?.weekly_plan) {
+      const weekly = planQuery.data.data.response.weekly_plan;
+      const newState: MealStatus = {};
+
+      for (const day of weekly) {
+        for (const meal of day.meals) {
+          newState[meal.id] = {
+            consumed: meal.intake?.consumed || meal.consumed,
+            userDailyMealId: meal.id,
+            userDailyIntakeId: meal.intake?.id,
+            replacement: meal?.intake
+              ? { ...meal?.intake, isIntake: true }
+              : undefined,
+            targetMeal: meal,
+          } satisfies MealStatusItem;
+        }
+      }
+
+      for (const [key, value] of Object.entries(newState)) {
+        updateMealStatus(Number(key), value);
+      }
+    }
+  }, [planQuery.data]);
 
   const syncToServer = async () => {
     if (!userId || !hasUnsyncedChanges() || lastTouchedKey === null) return false;
@@ -54,33 +95,34 @@ export const useMealPlanSync = (
     return true;
   };
 
-  const createOrUpdateIntake = async (data: ReplacementMeal) => {
+  const createOrUpdateIntake = async (
+    replacement: ReplacementMeal,
+    editingMeal: Meal
+  ) => {
+    console.log("Data received from frontend in hook function: ", replacement);
 
     const payload = {
-      userDailyMealId: data.userDailyMealId,
-      id: data.id,
-      food: data.food,
-      portion: data.portion,
-      consumed: data.consumed,
-      day: data.day,
-      date: data.date,
-      meal: data.meal,
-      macro:{...data.macro} as Macro
-    };
+      ...replacement,
+      userDailyMealId: editingMeal.id,
+      day: editingMeal.day,
+      meal: editingMeal.meal,
+      date: editingMeal.date,
+      consumed: true,
+    } satisfies ReplacementMeal;
 
     console.log("Data to be sent to backend: ", payload);
 
     const response = await intakeMutation.mutateAsync(payload);
+    console.log("Response from backend while upserting: ", response);
 
     if (response.isSuccess) {
-      const { updateMealStatus, mealStatus } = useMealPlanStore.getState();
-      const currentStatus = mealStatus[data.userDailyMealId];
-
-      updateMealStatus(data.userDailyMealId, {
-        ...currentStatus,
-        userDailyIntakeId: response.data,
-        consumed: true,
-      });
+      const newMealStatus = saveReplacementMeal(
+        mealStatus,
+        replacement,
+        payload
+      );
+      updateMealStatus(editingMeal.id, newMealStatus[editingMeal.id]);
+      setLastTouchedKey(editingMeal.id);
     }
 
     return response;
@@ -94,5 +136,13 @@ export const useMealPlanSync = (
     }
   }, [mealStatus, lastTouchedKey]);
 
-  return { syncToServer, hasUnsyncedChanges, createOrUpdateIntake };
+  return {
+    syncToServer,
+    hasUnsyncedChanges,
+    createOrUpdateIntake,
+    isLoading: planQuery.isLoading,
+    isError: planQuery.isError,
+    error: planQuery.error,
+    data: planQuery.data?.data?.response,
+  };
 };
