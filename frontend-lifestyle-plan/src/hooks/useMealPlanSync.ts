@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useMealPlanStore } from "@/store";
 import { useApiRequest } from "./useApiRequest";
-import type { ConsumedUpdate, ReplacementMeal } from "@/types/openAIPlan";
+import type { ConsumedUpdate, Macro, ReplacementMeal } from "@/types/openAIPlan";
 
 interface MealPlanSyncConfig {
   consumedUrl: string;
@@ -38,12 +38,12 @@ export const useMealPlanSync = (
     const status = mealStatus[lastTouchedKey];
     if (!status) return false;
 
-    const { userDailyMealId, userDailyIntakeId, completed } = status;
+    const { userDailyMealId, userDailyIntakeId, consumed } = status;
 
     const res = await consumedMutation.mutateAsync({
       userDailyMealId,
       userDailyIntakeId,
-      consumed: completed,
+      consumed,
       origin: userDailyIntakeId ? "intake" : "meal",
     });
 
@@ -55,32 +55,36 @@ export const useMealPlanSync = (
   };
 
   const createOrUpdateIntake = async (data: ReplacementMeal) => {
-  const macroProperties = Object.fromEntries(
-    Object.entries(data.macro).map(([k, v]) => [
-      `consumed${k.charAt(0).toUpperCase()}${k.slice(1)}`,
-      v,
-    ])
-  );
 
-  const response = await intakeMutation.mutateAsync({
-    ...data,
-    ...macroProperties,
-  });
+    const payload = {
+      userDailyMealId: data.userDailyMealId,
+      id: data.id,
+      food: data.food,
+      portion: data.portion,
+      consumed: data.consumed,
+      day: data.day,
+      date: data.date,
+      meal: data.meal,
+      macro:{...data.macro} as Macro
+    };
 
-  if (response.isSuccess) {
-    const { updateMealStatus, mealStatus } = useMealPlanStore.getState();
-    const currentStatus = mealStatus[data.userDailyMealId];
+    console.log("Data to be sent to backend: ", payload);
 
-    updateMealStatus(data.userDailyMealId, {
-      ...currentStatus,
-      userDailyIntakeId: response.data,
-    });
-  }
+    const response = await intakeMutation.mutateAsync(payload);
 
-  return response;
-};
+    if (response.isSuccess) {
+      const { updateMealStatus, mealStatus } = useMealPlanStore.getState();
+      const currentStatus = mealStatus[data.userDailyMealId];
 
+      updateMealStatus(data.userDailyMealId, {
+        ...currentStatus,
+        userDailyIntakeId: response.data,
+        consumed: true,
+      });
+    }
 
+    return response;
+  };
 
   useEffect(() => {
     if (!userId) return;

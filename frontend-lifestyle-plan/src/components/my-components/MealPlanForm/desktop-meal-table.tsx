@@ -38,7 +38,7 @@ export const DesktopMealTable = ({
               <DesktopTableRow
                 key={meal.id}
                 meal={meal}
-                isCompleted={!!status.completed}
+                isCompleted={!!status.consumed}
                 hasReplacement={!!status.replacement}
                 replacement={status.replacement}
                 units={units}

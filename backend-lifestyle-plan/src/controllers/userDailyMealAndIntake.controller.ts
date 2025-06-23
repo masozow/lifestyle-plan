@@ -10,56 +10,69 @@ const upsertUserDailyIntake = async (req: Request, res: Response) => {
     date,
     meal,
     userDailyMealId,
-    consumedFood,
-    consumedPortion,
-    consumedProtein,
-    consumedFat,
-    consumedCarbs,
-    consumedEnergy,
+    food,
+    portion,
+    macro,
     consumed,
   } = req.body;
-  console.log("~ log from upsertUserDailyIntake ~ line 17 req.body:", req.body, "\n");
+  const objectToStore = {
+    userDailyMealId,
+    consumedFood:food,
+    consumedPortion:portion,
+    consumedProtein:macro?.protein,
+    consumedFat:macro?.fat,
+    consumedCarbs:macro?.carbs,
+    consumedEnergy:macro?.energy,
+    consumed,
+    day,
+    date,
+    meal,
+  }
+  console.groupCollapsed(
+    "~ log from upsertUserDailyIntake ~ line 31 req.body:"
+  );
+  console.log(req.body);
+  console.log("~ log from upsertUserDailyIntake ~ line 32 objectToStore:", objectToStore);
+  console.groupEnd();
   if (!userId || !userDailyMealId) {
     return res.status(400).json({ error: "Missing userDailyMealId or userId" });
   }
   const registryID = [];
   try {
     const existing = await UserDailyIntake.findOne({ where: { userDailyMealId } });
-    registryID.push(existing?.id);
-    console.log("~ log from upsertUserDailyIntake ~ line 25 existing:", registryID[0], "\n");
     if (existing) {
       const updated = await existing.update({
-        consumedFood,
-        consumedPortion,
-        consumedProtein,
-        consumedFat,
-        consumedCarbs,
-        consumedEnergy,
+        consumedFood:food,
+        consumedPortion:portion,
+        consumedProtein:macro?.protein,
+        consumedFat:macro?.fat,
+        consumedCarbs:macro?.carbs,
+        consumedEnergy:macro?.energy,
         consumed,
         day,
         date,
         meal,
       });
       registryID.push(updated?.id);
-      console.log("~ log from upsertUserDailyIntake ~ line 32 updated:", registryID[0], "\n");
+      console.log("~ log from upsertUserDailyIntake ~ line 42 updated:", registryID[0], "\n");
     } else {
       const created = await UserDailyIntake.create({
         userDailyMealId,
-        consumedFood,
-        consumedPortion,
-        consumedProtein,
-        consumedFat,
-        consumedCarbs,
-        consumedEnergy,
+        consumedFood:food,
+        consumedPortion:portion,
+        consumedProtein:macro?.protein,
+        consumedFat:macro?.fat,
+        consumedCarbs:macro?.carbs,
+        consumedEnergy:macro?.energy,
         consumed,
         day,
         date,
         meal,
       });
       registryID.push(created?.id);
-      console.log("~ log from upsertUserDailyIntake ~ line 39 created:", registryID[0], "\n");
+      console.log("~ log from upsertUserDailyIntake ~ line 58 created:", registryID[0], "\n");
     }
-    return res.status(200).json({ success: true, data: registryID[0] });
+    return res.status(200).json({ success: true, message: `Daily intake upserted: ${registryID}`});
   } catch (error) {
     return res.status(500).json(
       await errorAndLogHandler({

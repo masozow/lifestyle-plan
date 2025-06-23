@@ -39,7 +39,7 @@ export const getCompletion = async (
     "top_p": 1,
     "stream": false,
     "response_format": {
-    "type": "json_object"
+      "type": "json_object"
   },
   "stop": null
   });

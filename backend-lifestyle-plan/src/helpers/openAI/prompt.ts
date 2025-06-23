@@ -66,5 +66,5 @@ ${JSON.stringify({
   userAnnotations: { extras}
 })}
 
-IMPORTANT: Respond ONLY with valid JSON, no commentary, and not forget the language, make sure JSON is valid.
+IMPORTANT: Respond ONLY with valid JSON, no commentary, and don't forget the language, make sure JSON is valid.
 `;

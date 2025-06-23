@@ -36,7 +36,18 @@ export const EditMealDialog = ({
   meal,
   units,
 }: EditMealDialogProps) => {
-  const { register, handleSubmit, reset } = useForm<ReplacementMeal>();
+  const { register, handleSubmit, reset } = useForm<ReplacementMeal>({
+    defaultValues: {
+      food: "",
+      portion: 0,
+      macro: {
+        protein: 0,
+        carbs: 0,
+        fat: 0,
+        energy: 0,
+      },
+    },
+  });
 
   const handleClose = () => {
     reset();
@@ -44,8 +55,19 @@ export const EditMealDialog = ({
   };
 
   const handleSave = (data: ReplacementMeal) => {
-    console.log("Saving data in the dialog:", data);
-    onSave(data);
+    if (!meal) return;
+
+    const finalPayload: ReplacementMeal = {
+      ...data,
+      day: meal.day,
+      date: meal.date,
+      meal: meal.meal,
+      userDailyMealId: meal.id,
+      consumed: true,
+    };
+
+    console.log("Saving data in the dialog:", finalPayload);
+    onSave(finalPayload);
     reset();
   };
 

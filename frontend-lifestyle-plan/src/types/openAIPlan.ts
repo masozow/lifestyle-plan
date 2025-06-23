@@ -62,7 +62,7 @@ export interface OpenAIResponseFromServer {
 }
 
 export interface MealStatusItem {
-  completed: boolean;
+  consumed: boolean;
   userDailyMealId: number;
   userDailyIntakeId?: number;
   replacement?: ReplacementMeal;

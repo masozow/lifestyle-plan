@@ -115,7 +115,16 @@ export const MealPlanForm = () => {
     setLastTouchedKey(editingMeal.id);
 
     try {
-      const result = await createOrUpdateIntake(data);
+      const payload = {
+        ...data,
+        userDailyMealId: editingMeal.id,
+        day: editingMeal.day,
+        meal: editingMeal.meal,
+        date: editingMeal.date,
+        consumed: editingMeal.consumed,
+      };
+      console.log("Data to be sent to save function: ", payload);
+      const result = await createOrUpdateIntake(payload);
       if (result.isSuccess) {
         toast.success(`Replacement meal saved! - ${result.message}`);
       } else {
@@ -246,7 +255,7 @@ export const MealPlanForm = () => {
                 onToggleComplete={(index) =>
                   handleToggleMealStatus(
                     day.meals[index],
-                    !mealStatus[day.meals[index].id]?.completed
+                    !mealStatus[day.meals[index].id]?.consumed
                   )
                 }
                 onEdit={(index) => handleOpenEditDialog(day.meals[index])}
@@ -259,7 +268,7 @@ export const MealPlanForm = () => {
                 onToggleComplete={(index) =>
                   handleToggleMealStatus(
                     day.meals[index],
-                    !mealStatus[day.meals[index].id]?.completed
+                    !mealStatus[day.meals[index].id]?.consumed
                   )
                 }
                 onEdit={(index) => handleOpenEditDialog(day.meals[index])}
