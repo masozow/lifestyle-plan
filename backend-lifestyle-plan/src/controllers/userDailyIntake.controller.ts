@@ -17,7 +17,7 @@ const upsertUserDailyIntake = async (req: Request, res: Response) => {
     consumedEnergy,
     consumed,
   } = req.body;
-
+  console.log("\n~ log from upsertUserDailyIntake ~ line 20 req.body:", req.body, "\n");
   if (!userId || !userDailyMealId) {
     return res.status(400).json({ error: "Missing userDailyMealId or userId" });
   }

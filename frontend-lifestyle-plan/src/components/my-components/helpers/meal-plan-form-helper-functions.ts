@@ -31,7 +31,7 @@ export const saveReplacementMeal = (
     userDailyMealId: meal.id,
     targetMeal: meal,
   };
-
+  
   return {
     ...mealStatus,
     [meal.id]: {
@@ -62,10 +62,8 @@ export const calculateDayTotals = (day: DayPlan, mealStatus: MealStatus) => {
     targetFat += meal.macro.fat;
 
     const status = mealStatus[meal.id];
-    console.log("mealStatus Item from calculateDayTotals: ", status);
     if (status?.completed) {
       const m = status.replacement || status.targetMeal;
-      console.log("m from calculateDayTotals: ", m);
       if (m && 'consumedEnergy' in m) {
         const replacement = m as ReplacementMeal;
         totalCalories += replacement.macro.energy;

@@ -56,7 +56,6 @@ export const MealPlanForm = () => {
   });
 
   const responseData = data?.data?.response;
-  console.log("responseData", responseData);
 
   const { syncToServer, hasUnsyncedChanges, createOrUpdateIntake } =
     useMealPlanSync(userId, {
@@ -82,13 +81,6 @@ export const MealPlanForm = () => {
   const { daily_calorie_target, macro_ratios, units, weekly_plan } =
     responseData;
 
-  console.group("Response Data");
-  console.log("daily_calorie_target", daily_calorie_target);
-  console.log("macro_ratios", macro_ratios);
-  console.log("units", units);
-  console.log("weekly_plan", weekly_plan);
-  console.groupEnd();
-
   const handleToggleMealStatus = (meal: Meal, completed: boolean) => {
     const updatedStatus = toggleMealStatusHelper(mealStatus, meal, completed);
     updateMealStatus(meal.id, updatedStatus[meal.id]);
@@ -96,6 +88,7 @@ export const MealPlanForm = () => {
   };
 
   const handleOpenEditDialog = (meal: Meal) => {
+    console.log("handleOpenEditDialog:", meal);
     setEditingMeal(meal);
   };
 
@@ -104,6 +97,12 @@ export const MealPlanForm = () => {
   };
 
   const handleSaveReplacementMeal = async (data: ReplacementMeal) => {
+    console.log(
+      "Saving data in handleSaveReplacementMeal:",
+      data,
+      "editingMeal",
+      editingMeal
+    );
     if (!editingMeal) return;
 
     const newMealStatus = saveReplacementMealHelper(
@@ -111,6 +110,7 @@ export const MealPlanForm = () => {
       editingMeal,
       data
     );
+    console.log("newMealStatus: ", newMealStatus);
     updateMealStatus(editingMeal.id, newMealStatus[editingMeal.id]);
     setLastTouchedKey(editingMeal.id);
 
@@ -137,7 +137,6 @@ export const MealPlanForm = () => {
   };
 
   const macroPercentages = calculateMacroPercentages(macro_ratios);
-  console.log("Macro percentages:", macroPercentages);
 
   return (
     <div className="container mx-auto p-4 md:p-6 space-y-6">

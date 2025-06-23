@@ -32,7 +32,6 @@ export const DesktopTableRow = ({
   onToggleComplete,
   onEdit,
 }: DesktopTableRowProps) => {
-  console.log("DesktopTableRow", { meal, isCompleted, hasReplacement });
   return (
     <TableRow className={isCompleted ? "" : "bg-red-50 dark:bg-red-950/20"}>
       <TableCell>

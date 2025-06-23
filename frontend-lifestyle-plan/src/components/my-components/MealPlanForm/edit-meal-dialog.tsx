@@ -44,6 +44,7 @@ export const EditMealDialog = ({
   };
 
   const handleSave = (data: ReplacementMeal) => {
+    console.log("Saving data in the dialog:", data);
     onSave(data);
     reset();
   };

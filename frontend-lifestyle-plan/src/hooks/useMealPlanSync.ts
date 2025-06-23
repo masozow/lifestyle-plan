@@ -55,28 +55,31 @@ export const useMealPlanSync = (
   };
 
   const createOrUpdateIntake = async (data: ReplacementMeal) => {
-    const macroProperties = Object.entries(data.macro).map(([k, v]) => [
+  const macroProperties = Object.fromEntries(
+    Object.entries(data.macro).map(([k, v]) => [
       `consumed${k.charAt(0).toUpperCase()}${k.slice(1)}`,
       v,
-    ]);
+    ])
+  );
 
-    const response = await intakeMutation.mutateAsync({
-      ...data,
-      ...macroProperties,
+  const response = await intakeMutation.mutateAsync({
+    ...data,
+    ...macroProperties,
+  });
+
+  if (response.isSuccess) {
+    const { updateMealStatus, mealStatus } = useMealPlanStore.getState();
+    const currentStatus = mealStatus[data.userDailyMealId];
+
+    updateMealStatus(data.userDailyMealId, {
+      ...currentStatus,
+      userDailyIntakeId: response.data,
     });
+  }
 
-    if (response.isSuccess) {
-      const { updateMealStatus, mealStatus } = useMealPlanStore.getState();
-      const currentStatus = mealStatus[data.userDailyMealId];
+  return response;
+};
 
-      updateMealStatus(data.userDailyMealId, {
-        ...currentStatus,
-        userDailyIntakeId: response.data,
-      });
-    }
-
-    return response;
-  };
 
 
   useEffect(() => {
