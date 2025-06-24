@@ -124,7 +124,8 @@ export const useMealPlanSync = (
     const response = await intakeMutation.mutateAsync(payload);
     console.log("Response from backend while upserting: ", response);
 
-    if (response.isSuccess) {
+    if (response.success) {
+      console.log("Success if: ", response);
       const newMealStatus = saveReplacementMeal(
         mealStatus,
         replacement,
