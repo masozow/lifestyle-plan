@@ -24,14 +24,21 @@ export const useMealPlanStore = create<MealPlanStore>()(
       setMealStatus: (mealStatus) => set({ mealStatus }),
 
       updateMealStatus: (key, status) => {
-        set((state) => ({
-          mealStatus: {
-            ...state.mealStatus,
-            [key]: status,
-          },
-          lastTouchedKey: key, // we capture the last touched key
-        }));
+        set((state) => {
+          const prevStatus = state.mealStatus[key];
+          const isSame = JSON.stringify(prevStatus) === JSON.stringify(status);
+          return isSame
+            ? { lastTouchedKey: key } 
+            : {
+                mealStatus: {
+                  ...state.mealStatus,
+                  [key]: { ...status },
+                },
+                lastTouchedKey: key,
+              };
+        });
       },
+
 
       setLastTouchedKey: (key) => set({ lastTouchedKey: key }),
 

@@ -48,6 +48,7 @@ export const useMealPlanSync = (
   const [hasInitialSyncCompleted, setHasInitialSyncCompleted] = useState(false);
   useEffect(() => {
     if (planQuery.data?.data?.response?.weekly_plan) {
+      console.log("Response from server: ", planQuery.data);
       const weekly = planQuery.data.data.response.weekly_plan;
       const newState: MealStatus = {};
 
@@ -108,8 +109,6 @@ export const useMealPlanSync = (
     replacement: ReplacementMeal,
     editingMeal: Meal
   ) => {
-    console.log("Data received from frontend in hook function: ", replacement);
-
     const payload = {
       ...replacement,
       userDailyMealId: editingMeal.id,
@@ -117,20 +116,25 @@ export const useMealPlanSync = (
       meal: editingMeal.meal,
       date: editingMeal.date,
       consumed: true,
-    } satisfies ReplacementMeal;
-
-    console.log("Data to be sent to backend: ", payload);
+    };
 
     const response = await intakeMutation.mutateAsync(payload);
-    console.log("Response from backend while upserting: ", response);
 
     if (response.success) {
-      console.log("Success if: ", response);
+      const idFromBackend = Number(response.message.split(":")[1]?.trim());
+
+      const replacementWithId: ReplacementMeal = {
+        ...replacement,
+        id: idFromBackend,
+        isIntake: true,
+      };
+
       const newMealStatus = saveReplacementMeal(
         mealStatus,
-        replacement,
-        payload
+        editingMeal,
+        replacementWithId
       );
+
       updateMealStatus(editingMeal.id, newMealStatus[editingMeal.id]);
       markAsSynced();
       setLastTouchedKey(editingMeal.id);
