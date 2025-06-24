@@ -7,6 +7,5 @@ export * from "./userPrompt.controller.js";
 export * from "./openAIResponse.controller.js";
 
 export * from "./userMealProgress.controller.js";
-export * from "./userDailyIntake.controller.js";
 export * from "./userMealPlan.controller.js";
 export * from "./userDailyMealAndIntake.controller.js";

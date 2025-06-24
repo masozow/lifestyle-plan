@@ -1,13 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Utensils, Calculator, Wifi, WifiOff, Save } from "lucide-react";
-import type {
-  DayPlan,
-  Meal,
-  OpenAIResponseFromServer,
-  Units,
-  ReplacementMeal,
-} from "@/types/openAIPlan";
-import { useApiGet, useApiRequest } from "@/hooks";
+import type { Meal, ReplacementMeal, Units } from "@/types/openAIPlan";
 import {
   Card,
   CardContent,
@@ -22,7 +15,6 @@ import { DesktopMealTable } from "./desktop-meal-table";
 import { MobileMealList } from "./mobile-meal-list";
 import {
   toggleMealStatus as toggleMealStatusHelper,
-  saveReplacementMeal as saveReplacementMealHelper,
   calculateDayTotals,
   calculateMacroPercentages,
 } from "../helpers/meal-plan-form-helper-functions";
@@ -40,52 +32,23 @@ export const MealPlanForm = () => {
     useMealPlanStore();
   const [isSyncing, setIsSyncing] = useState(false);
   const [editingMeal, setEditingMeal] = useState<Meal | null>(null);
-
-  useEffect(() => {
-    if (!userId) {
-      console.warn("Warning: No userId detected - the query is not triggered.");
-    }
-  }, [userId]);
-
-  const { data, isLoading, isError, error } = useApiGet<{
-    success: boolean;
-    data: OpenAIResponseFromServer;
-  }>({
-    url: apiEndPointGET,
-    enabled: !!userId,
-  });
-
-  const responseData = data?.data?.response;
-  console.log("responseData", responseData);
-
-  const { syncToServer, hasUnsyncedChanges } = useMealPlanSync(userId, {
+  const {
+    syncToServer,
+    hasUnsyncedChanges,
+    hasInitialSyncCompleted,
+    createOrUpdateIntake,
+    isLoading,
+    isError,
+    error,
+    data,
+  } = useMealPlanSync(userId, {
     consumedUrl: API_ENDPOINTS.userDailyConsumed,
+    intakeUrl: API_ENDPOINTS.userDailyIntake,
+    getUrl: apiEndPointGET,
   });
-  const intakeReplacementMutation = useApiRequest({
-    url: API_ENDPOINTS.userDailyIntake,
-    method: "POST",
-  });
-  useEffect(() => {
-    if (intakeReplacementMutation.isSuccess) {
-      toast.success(intakeReplacementMutation.data.message);
-    } else if (intakeReplacementMutation.isError) {
-      toast.error(intakeReplacementMutation.error.message);
-    }
-  }, [
-    intakeReplacementMutation.isSuccess,
-    intakeReplacementMutation.isError,
-    intakeReplacementMutation.error?.message,
-    intakeReplacementMutation.data?.message,
-  ]);
 
   if (isLoading) return <CustomSpinner />;
-
-  if (
-    isError ||
-    !responseData ||
-    !responseData.macro_ratios ||
-    !responseData.weekly_plan
-  ) {
+  if (isError || !data || !data.macro_ratios || !data.weekly_plan) {
     return (
       <div className="text-red-500">
         Error: {error?.message || "Invalid response structure"}
@@ -93,8 +56,7 @@ export const MealPlanForm = () => {
     );
   }
 
-  const { daily_calorie_target, macro_ratios, units, weekly_plan } =
-    responseData;
+  const { daily_calorie_target, macro_ratios, units } = data;
 
   const handleToggleMealStatus = (meal: Meal, completed: boolean) => {
     const updatedStatus = toggleMealStatusHelper(mealStatus, meal, completed);
@@ -113,40 +75,28 @@ export const MealPlanForm = () => {
   const handleSaveReplacementMeal = async (data: ReplacementMeal) => {
     if (!editingMeal) return;
 
-    const newMealStatus = saveReplacementMealHelper(
-      mealStatus,
-      editingMeal,
-      data
-    );
+    try {
+      const result = await createOrUpdateIntake(data, editingMeal);
+      if (result.success) {
+        toast.success(`Replacement meal saved! - ${result.message}`);
+      } else {
+        toast.error(`Error saving replacement meal. - ${result.message}`);
+      }
+    } catch (err) {
+      toast.error("Unexpected error saving replacement meal.");
+      console.error("createOrUpdateIntake failed", err);
+    }
 
-    updateMealStatus(editingMeal.id, newMealStatus[editingMeal.id]);
-    setLastTouchedKey(editingMeal.id);
-    const result = await intakeReplacementMutation.mutateAsync({
-      userDailyMealId: data.userDailyMealId,
-      consumedFood: data.consumedFood,
-      consumedPortion: data.consumedPortion,
-      consumedProtein: data.macro.protein,
-      consumedFat: data.macro.fat,
-      consumedCarbs: data.macro.carbs,
-      consumedEnergy: data.macro.energy,
-      consumed: data.consumed,
-      day: data.day,
-      date: data.date,
-      meal: data.meal,
-    });
-    console.log("intakeReplacementMutation", result);
     handleCloseEditDialog();
   };
 
   const handleSyncToServer = async () => {
-    console.log("Syncing to server from button...");
     setIsSyncing(true);
     await syncToServer();
     setIsSyncing(false);
   };
 
   const macroPercentages = calculateMacroPercentages(macro_ratios);
-  console.log("Macro percentages:", macroPercentages);
 
   return (
     <div className="container mx-auto p-4 md:p-6 space-y-6">
@@ -163,7 +113,7 @@ export const MealPlanForm = () => {
                   <Wifi className="h-3 w-3 animate-pulse" />
                   Syncing...
                 </Badge>
-              ) : hasUnsyncedChanges() ? (
+              ) : hasInitialSyncCompleted && hasUnsyncedChanges() ? (
                 <>
                   <Badge
                     variant="destructive"
@@ -193,7 +143,7 @@ export const MealPlanForm = () => {
         </CardHeader>
       </Card>
 
-      {weekly_plan.map((day: DayPlan) => {
+      {data.weekly_plan.map((day) => {
         const dayTotals = calculateDayTotals(day, mealStatus);
 
         return (
@@ -256,7 +206,7 @@ export const MealPlanForm = () => {
                 onToggleComplete={(index) =>
                   handleToggleMealStatus(
                     day.meals[index],
-                    !mealStatus[day.meals[index].id]?.completed
+                    !mealStatus[day.meals[index].id]?.consumed
                   )
                 }
                 onEdit={(index) => handleOpenEditDialog(day.meals[index])}
@@ -269,7 +219,7 @@ export const MealPlanForm = () => {
                 onToggleComplete={(index) =>
                   handleToggleMealStatus(
                     day.meals[index],
-                    !mealStatus[day.meals[index].id]?.completed
+                    !mealStatus[day.meals[index].id]?.consumed
                   )
                 }
                 onEdit={(index) => handleOpenEditDialog(day.meals[index])}
@@ -284,7 +234,7 @@ export const MealPlanForm = () => {
         onClose={handleCloseEditDialog}
         onSave={handleSaveReplacementMeal}
         meal={editingMeal}
-        units={units as Units}
+        units={data.units as Units}
       />
     </div>
   );

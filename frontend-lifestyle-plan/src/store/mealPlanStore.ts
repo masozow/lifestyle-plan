@@ -29,7 +29,7 @@ export const useMealPlanStore = create<MealPlanStore>()(
             ...state.mealStatus,
             [key]: status,
           },
-          lastTouchedKey: key, // capturamos el último modificado
+          lastTouchedKey: key, // we capture the last touched key
         }));
       },
 

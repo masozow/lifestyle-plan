@@ -32,15 +32,18 @@ export const DesktopMealTable = ({
         <DesktopTableHeader />
         <TableBody>
           {meals.map((meal, index) => {
-            const status = mealStatuses[meal.id] || {};
+            const status = mealStatuses[meal.id];
+            const isCompleted = status?.consumed ?? false;
+            const hasReplacement = !!status?.replacement;
+            const replacement = status?.replacement;
 
             return (
               <DesktopTableRow
                 key={meal.id}
                 meal={meal}
-                isCompleted={!!status.completed}
-                hasReplacement={!!status.replacement}
-                replacement={status.replacement}
+                isCompleted={isCompleted}
+                hasReplacement={hasReplacement}
+                replacement={replacement}
                 units={units}
                 onToggleComplete={() => onToggleComplete(index)}
                 onEdit={() => onEdit(index)}
