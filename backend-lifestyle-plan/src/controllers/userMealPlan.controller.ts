@@ -114,6 +114,7 @@ const getStructuredMealPlan = async (req: Request, res: Response) => {
             fat: intake?.consumedFat ?? meal.targetFat,
             energy: intake?.consumedEnergy ?? meal.targetEnergy,
           },
+          consumed: intake?.consumed ?? meal.consumed,
         });
       }
     

@@ -32,10 +32,10 @@ export const MealPlanForm = () => {
     useMealPlanStore();
   const [isSyncing, setIsSyncing] = useState(false);
   const [editingMeal, setEditingMeal] = useState<Meal | null>(null);
-
   const {
     syncToServer,
     hasUnsyncedChanges,
+    hasInitialSyncCompleted,
     createOrUpdateIntake,
     isLoading,
     isError,
@@ -48,7 +48,6 @@ export const MealPlanForm = () => {
   });
 
   if (isLoading) return <CustomSpinner />;
-
   if (isError || !data || !data.macro_ratios || !data.weekly_plan) {
     return (
       <div className="text-red-500">
@@ -66,7 +65,6 @@ export const MealPlanForm = () => {
   };
 
   const handleOpenEditDialog = (meal: Meal) => {
-    console.log("handleOpenEditDialog:", meal);
     setEditingMeal(meal);
   };
 
@@ -93,7 +91,6 @@ export const MealPlanForm = () => {
   };
 
   const handleSyncToServer = async () => {
-    console.log("Syncing to server from button...");
     setIsSyncing(true);
     await syncToServer();
     setIsSyncing(false);
@@ -116,7 +113,7 @@ export const MealPlanForm = () => {
                   <Wifi className="h-3 w-3 animate-pulse" />
                   Syncing...
                 </Badge>
-              ) : hasUnsyncedChanges() ? (
+              ) : hasInitialSyncCompleted && hasUnsyncedChanges() ? (
                 <>
                   <Badge
                     variant="destructive"

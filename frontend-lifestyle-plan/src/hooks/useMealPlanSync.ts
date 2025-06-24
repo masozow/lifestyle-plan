@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useApiGet, useApiRequest } from "@/hooks";
 import { useMealPlanStore } from "@/store";
 import type {
@@ -46,9 +46,10 @@ export const useMealPlanSync = (
     url: userId ? getUrl : "",
     enabled: !!userId,
   });
-
+  const [hasInitialSyncCompleted, setHasInitialSyncCompleted] = useState(false);
   useEffect(() => {
     if (planQuery.data?.data?.response?.weekly_plan) {
+      console.log("Response from server: ", planQuery.data.data.response);
       const weekly = planQuery.data.data.response.weekly_plan;
       const newState: MealStatus = {};
 
@@ -69,6 +70,7 @@ export const useMealPlanSync = (
       for (const [key, value] of Object.entries(newState)) {
         updateMealStatus(Number(key), value);
       }
+      setHasInitialSyncCompleted(true);
     }
   }, [planQuery.data]);
 
@@ -144,5 +146,6 @@ export const useMealPlanSync = (
     isError: planQuery.isError,
     error: planQuery.error,
     data: planQuery.data?.data?.response,
+    hasInitialSyncCompleted, 
   };
 };
