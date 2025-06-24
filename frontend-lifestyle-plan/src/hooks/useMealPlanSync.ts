@@ -30,8 +30,7 @@ export const useMealPlanSync = (
     setLastTouchedKey,
   } = useMealPlanStore();
 
-  const lastSyncRef = useRef<number | null>(null);
-
+  const lastSyncedConsumedByKey = useRef<Record<number, boolean>>({});
   const consumedMutation = useApiRequest<ConsumedUpdate>({
     url: consumedUrl,
     method: "POST",
@@ -49,7 +48,6 @@ export const useMealPlanSync = (
   const [hasInitialSyncCompleted, setHasInitialSyncCompleted] = useState(false);
   useEffect(() => {
     if (planQuery.data?.data?.response?.weekly_plan) {
-      console.log("Response from server: ", planQuery.data.data.response);
       const weekly = planQuery.data.data.response.weekly_plan;
       const newState: MealStatus = {};
 
@@ -70,32 +68,41 @@ export const useMealPlanSync = (
       for (const [key, value] of Object.entries(newState)) {
         updateMealStatus(Number(key), value);
       }
+      markAsSynced(); 
       setHasInitialSyncCompleted(true);
     }
   }, [planQuery.data]);
 
   const syncToServer = async () => {
-    if (!userId || !hasUnsyncedChanges() || lastTouchedKey === null) return false;
-    if (lastTouchedKey === lastSyncRef.current) return false;
+  if (!userId || !hasUnsyncedChanges() || lastTouchedKey === null) return false;
 
-    const status = mealStatus[lastTouchedKey];
-    if (!status) return false;
+  const status = mealStatus[lastTouchedKey];
+  if (!status) return false;
 
-    const { userDailyMealId, userDailyIntakeId, consumed } = status;
+  const { userDailyMealId, userDailyIntakeId, consumed } = status;
 
-    const res = await consumedMutation.mutateAsync({
-      userDailyMealId,
-      userDailyIntakeId,
-      consumed,
-      origin: userDailyIntakeId ? "intake" : "meal",
-    });
 
-    if (!res.isSuccess) return false;
+  if (lastSyncedConsumedByKey.current[userDailyMealId] === consumed) {
+    return false;
+  }
 
-    markAsSynced();
-    lastSyncRef.current = lastTouchedKey;
-    return true;
-  };
+  const res = await consumedMutation.mutateAsync({
+    userDailyMealId,
+    userDailyIntakeId,
+    consumed,
+    origin: userDailyIntakeId ? "intake" : "meal",
+  });
+
+  console.log("Response from server: ", res);
+  if (!res.success) return false;
+
+  
+  lastSyncedConsumedByKey.current[userDailyMealId] = consumed;
+
+  markAsSynced();
+  return true;
+};
+
 
   const createOrUpdateIntake = async (
     replacement: ReplacementMeal,
@@ -124,6 +131,7 @@ export const useMealPlanSync = (
         payload
       );
       updateMealStatus(editingMeal.id, newMealStatus[editingMeal.id]);
+      markAsSynced();
       setLastTouchedKey(editingMeal.id);
     }
 

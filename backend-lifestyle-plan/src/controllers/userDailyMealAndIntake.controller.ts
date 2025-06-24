@@ -129,13 +129,14 @@ const upsertConsumedStatus = async (req: Request, res: Response) => {
       const updated = await meal.update({ consumed });
       console.log("~ log from upsertConsumedStatus ~ line 117 meal updated:", updated, "\n");
     }
-
-    return res.status(200).json({
-      success: true,
-      data: {
+    const data={
         consumed,
         updated: origin === "intake" ? `intake ${userDailyIntakeId}` : `meal ${userDailyMealId}`,
-      },
+      };
+      console.log("~ log from upsertConsumedStatus ~ line 123 data:", data, "\n");
+    return res.status(200).json({
+      success: true,
+      data: data,
     });
   } catch (error) {
     return res.status(500).json(
