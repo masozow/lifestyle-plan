@@ -6,7 +6,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import type { Meal, ReplacementMeal } from "@/types/openAIPlan";
 
 interface DesktopTableRowProps {
-  meal: Meal;
+  meal: Meal | ReplacementMeal;
   isCompleted: boolean;
   hasReplacement: boolean;
   replacement?: ReplacementMeal;
@@ -26,8 +26,8 @@ interface DesktopTableRowProps {
 export const DesktopTableRow = ({
   meal,
   isCompleted,
-  hasReplacement,
-  replacement,
+  // hasReplacement,
+  // replacement,
   units,
   onToggleComplete,
   onEdit,
@@ -38,36 +38,22 @@ export const DesktopTableRow = ({
         <Checkbox checked={isCompleted} onCheckedChange={onToggleComplete} />
       </TableCell>
       <TableCell className="font-medium text-left">{meal.meal}</TableCell>
-      <TableCell className="text-left">
-        {isCompleted || !hasReplacement ? meal.food : replacement!.food}
-      </TableCell>
+      <TableCell className="text-left">{meal.food}</TableCell>
       <TableCell className="text-right">
-        {isCompleted || !hasReplacement ? meal.portion : replacement!.portion}
+        {meal.portion}
         {units.portion}
       </TableCell>
       <TableCell className="text-right">
-        {isCompleted || !hasReplacement
-          ? meal.macro.energy
-          : replacement!.macro.energy}{" "}
-        {units.macro.energy}
+        {meal.macro.energy} {units.macro.energy}
       </TableCell>
       <TableCell className="text-right">
-        {isCompleted || !hasReplacement
-          ? meal.macro.protein
-          : replacement!.macro.protein}
-        {units.macro.protein}
+        {meal.macro.protein} {units.macro.protein}
       </TableCell>
       <TableCell className="text-right">
-        {isCompleted || !hasReplacement
-          ? meal.macro.carbs
-          : replacement!.macro.carbs}
-        {units.macro.carbs}
+        {meal.macro.carbs} {units.macro.carbs}
       </TableCell>
       <TableCell className="text-right">
-        {isCompleted || !hasReplacement
-          ? meal.macro.fat
-          : replacement!.macro.fat}
-        {units.macro.fat}
+        {meal.macro.fat} {units.macro.fat}
       </TableCell>
       <TableCell>
         <Button variant="ghost" size="sm" onClick={onEdit}>

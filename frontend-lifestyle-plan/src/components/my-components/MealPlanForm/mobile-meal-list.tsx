@@ -1,5 +1,6 @@
 import type { MealStatusItem } from "@/types/openAIPlan";
 import { MobileMealCard } from "./mobile-meal-card";
+import { getEffectiveMeal } from "../helpers/meal-plan-form-helper-functions";
 
 interface MobileMealListProps {
   items: MealStatusItem[];
@@ -25,12 +26,12 @@ export const MobileMealList = ({
   return (
     <div className="md:hidden space-y-4">
       {items.map((item, index) => {
-        const meal = item.targetMeal;
+        const meal = getEffectiveMeal(item);
         if (!meal) return null;
 
         return (
           <MobileMealCard
-            key={meal.id}
+            key={item.userDailyMealId}
             meal={meal}
             isCompleted={!!item.consumed}
             hasReplacement={!!item.replacement}

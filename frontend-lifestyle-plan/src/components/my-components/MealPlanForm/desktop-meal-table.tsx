@@ -2,6 +2,7 @@ import { Table, TableBody } from "@/components/ui/table";
 import { DesktopTableHeader } from "./desktop-table-header";
 import { DesktopTableRow } from "./desktop-table-row";
 import type { MealStatusItem } from "@/types/openAIPlan";
+import { getEffectiveMeal } from "../helpers/meal-plan-form-helper-functions";
 
 interface DesktopMealTableProps {
   items: MealStatusItem[];
@@ -30,7 +31,7 @@ export const DesktopMealTable = ({
         <DesktopTableHeader />
         <TableBody>
           {items.map((item, index) => {
-            const meal = item.targetMeal;
+            const meal = getEffectiveMeal(item);
             if (!meal) return null;
 
             const isCompleted = item.consumed;
@@ -39,7 +40,7 @@ export const DesktopMealTable = ({
 
             return (
               <DesktopTableRow
-                key={meal.id}
+                key={item.userDailyMealId}
                 meal={meal}
                 isCompleted={isCompleted}
                 hasReplacement={hasReplacement}

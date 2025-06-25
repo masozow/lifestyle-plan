@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useApiGet, useApiRequest } from "@/hooks";
 import { useMealPlanStore } from "@/store";
-// import { shallow } from "zustand/shallow";
 import type {
   ConsumedUpdate,
-  DayPlan,
   Meal,
   MealStatus,
   MealStatusItem,
@@ -32,8 +30,8 @@ export const useMealPlanSync = (
     markAsSynced,
   } = useMealPlanStore();
 
-
   const lastSyncedConsumedByKey = useRef<Record<number, boolean>>({});
+
   const consumedMutation = useApiRequest<ConsumedUpdate>({
     url: consumedUrl,
     method: "POST",
@@ -48,50 +46,34 @@ export const useMealPlanSync = (
     url: userId ? getUrl : "",
     enabled: !!userId,
   });
+
   const [hasInitialSyncCompleted, setHasInitialSyncCompleted] = useState(false);
-  const [weeklyPlanWithState, setWeeklyPlanWithState] = useState<DayPlan[]>([]);
 
   useEffect(() => {
     if (planQuery.data?.data?.response?.weekly_plan) {
-      console.log("Response from server: ", planQuery.data);
       const weekly = planQuery.data.data.response.weekly_plan;
       const newState: MealStatus = {};
-      const enrichedPlan = weekly.map((day) => {
-        const enrichedMeals = day.meals.map((meal) => {
+
+      weekly.forEach((day) => {
+        day.meals.forEach((meal) => {
           const status: MealStatusItem = {
             consumed: meal.intake?.consumed ?? meal.consumed,
             userDailyMealId: meal.id,
             userDailyIntakeId: meal.intake?.id,
-            replacement: meal?.intake
-              ? { ...meal?.intake, isIntake: true }
-              : undefined,
+            replacement: meal.intake ? { ...meal.intake, isIntake: true } : undefined,
             targetMeal: meal,
           };
-
           newState[meal.id] = status;
-
-          return {
-            ...meal,
-            ...(status.replacement ?? {}),
-            consumed: status.consumed,
-          };
         });
-
-        return {
-          ...day,
-          meals: enrichedMeals,
-        };
       });
 
       for (const [key, value] of Object.entries(newState)) {
         updateMealStatus(Number(key), value);
       }
 
-      setWeeklyPlanWithState(enrichedPlan);
       markAsSynced();
       setHasInitialSyncCompleted(true);
     }
-
   }, [planQuery.data]);
 
   const syncToServer = async () => {
@@ -101,7 +83,6 @@ export const useMealPlanSync = (
     if (!status) return false;
 
     const { userDailyMealId, userDailyIntakeId, consumed } = status;
-
 
     if (lastSyncedConsumedByKey.current[userDailyMealId] === consumed) {
       return false;
@@ -114,16 +95,13 @@ export const useMealPlanSync = (
       origin: userDailyIntakeId ? "intake" : "meal",
     });
 
-    console.log("Response from server: ", res);
     if (!res.success) return false;
 
-    
     lastSyncedConsumedByKey.current[userDailyMealId] = consumed;
 
     markAsSynced();
     return true;
   };
-
 
   const createOrUpdateIntake = async (
     replacement: ReplacementMeal,
@@ -178,10 +156,7 @@ export const useMealPlanSync = (
     isLoading: planQuery.isLoading,
     isError: planQuery.isError,
     error: planQuery.error,
-    data: {
-      ...planQuery.data?.data?.response,
-      weekly_plan: weeklyPlanWithState,
-    },
-    hasInitialSyncCompleted, 
+    data: planQuery.data?.data?.response,
+    hasInitialSyncCompleted,
   };
 };
