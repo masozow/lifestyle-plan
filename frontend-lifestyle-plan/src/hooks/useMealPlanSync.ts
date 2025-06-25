@@ -82,7 +82,7 @@ export const useMealPlanSync = (
     const status = mealStatus[lastTouchedKey];
     if (!status) return false;
 
-    const { userDailyMealId, userDailyIntakeId, consumed } = status;
+    const { userDailyMealId,  consumed } = status;
 
     if (lastSyncedConsumedByKey.current[userDailyMealId] === consumed) {
       return false;
@@ -90,9 +90,7 @@ export const useMealPlanSync = (
 
     const res = await consumedMutation.mutateAsync({
       userDailyMealId,
-      userDailyIntakeId,
       consumed,
-      origin: userDailyIntakeId ? "intake" : "meal",
     });
 
     if (!res.success) return false;
