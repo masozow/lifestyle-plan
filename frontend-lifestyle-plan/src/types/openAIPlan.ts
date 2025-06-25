@@ -72,9 +72,7 @@ export interface MealStatusItem {
 // mutation payload for consumed status endpoint
 export interface ConsumedUpdate {
   userDailyMealId: number;
-  userDailyIntakeId?: number;
   consumed: boolean;
-  origin: "intake" | "meal";
 }
 export type MealStatus = Record<number, MealStatusItem>;
 

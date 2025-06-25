@@ -1,11 +1,11 @@
 import { Table, TableBody } from "@/components/ui/table";
 import { DesktopTableHeader } from "./desktop-table-header";
 import { DesktopTableRow } from "./desktop-table-row";
-import type { Meal, MealStatus } from "@/types/openAIPlan";
+import type { MealStatusItem } from "@/types/openAIPlan";
+import { getEffectiveMeal } from "../helpers/meal-plan-form-helper-functions";
 
 interface DesktopMealTableProps {
-  meals: Meal[];
-  mealStatuses: MealStatus;
+  items: MealStatusItem[];
   units: {
     macro: {
       protein: string;
@@ -20,8 +20,7 @@ interface DesktopMealTableProps {
 }
 
 export const DesktopMealTable = ({
-  meals,
-  mealStatuses,
+  items,
   units,
   onToggleComplete,
   onEdit,
@@ -31,15 +30,17 @@ export const DesktopMealTable = ({
       <Table>
         <DesktopTableHeader />
         <TableBody>
-          {meals.map((meal, index) => {
-            const status = mealStatuses[meal.id];
-            const isCompleted = status?.consumed ?? false;
-            const hasReplacement = !!status?.replacement;
-            const replacement = status?.replacement;
+          {items.map((item, index) => {
+            const meal = getEffectiveMeal(item);
+            if (!meal) return null;
+
+            const isCompleted = item.consumed;
+            const hasReplacement = !!item.replacement;
+            const replacement = item.replacement;
 
             return (
               <DesktopTableRow
-                key={meal.id}
+                key={item.userDailyMealId}
                 meal={meal}
                 isCompleted={isCompleted}
                 hasReplacement={hasReplacement}

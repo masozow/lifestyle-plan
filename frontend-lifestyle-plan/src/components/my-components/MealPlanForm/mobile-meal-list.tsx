@@ -1,9 +1,9 @@
-import type { Meal, MealStatus } from "@/types/openAIPlan";
+import type { MealStatusItem } from "@/types/openAIPlan";
 import { MobileMealCard } from "./mobile-meal-card";
+import { getEffectiveMeal } from "../helpers/meal-plan-form-helper-functions";
 
 interface MobileMealListProps {
-  meals: Meal[];
-  mealStatuses: MealStatus;
+  items: MealStatusItem[];
   units: {
     macro: {
       protein: string;
@@ -18,24 +18,24 @@ interface MobileMealListProps {
 }
 
 export const MobileMealList = ({
-  meals,
-  mealStatuses,
+  items,
   units,
   onToggleComplete,
   onEdit,
 }: MobileMealListProps) => {
   return (
     <div className="md:hidden space-y-4">
-      {meals.map((meal, index) => {
-        const status = mealStatuses[meal.id] || {};
+      {items.map((item, index) => {
+        const meal = getEffectiveMeal(item);
+        if (!meal) return null;
 
         return (
           <MobileMealCard
-            key={meal.id}
+            key={item.userDailyMealId}
             meal={meal}
-            isCompleted={!!status.consumed}
-            hasReplacement={!!status.replacement}
-            replacement={status.replacement}
+            isCompleted={!!item.consumed}
+            hasReplacement={!!item.replacement}
+            replacement={item.replacement}
             units={units}
             onToggleComplete={() => onToggleComplete(index)}
             onEdit={() => onEdit(index)}

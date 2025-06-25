@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import type { Meal, ReplacementMeal } from "@/types/openAIPlan";
 
 interface MobileMealCardProps {
-  meal: Meal;
+  meal: Meal | ReplacementMeal;
   isCompleted: boolean;
   hasReplacement: boolean;
   replacement?: ReplacementMeal;
@@ -33,8 +33,6 @@ interface MobileMealCardProps {
 export const MobileMealCard = ({
   meal,
   isCompleted,
-  hasReplacement,
-  replacement,
   units,
   onToggleComplete,
   onEdit,
@@ -50,22 +48,16 @@ export const MobileMealCard = ({
           <div className="flex-1">
             <CardTitle className="text-2xl">{meal.meal}</CardTitle>
             <CardDescription className="font-semibold text-foreground mt-1 text-base">
-              {isCompleted || !hasReplacement ? meal.food : replacement!.food}
+              {meal.food}
             </CardDescription>
             <div className="mt-2 space-y-1">
               <Badge className="text-md" variant="outline">
-                <span className="font-medium">Portion - </span>{" "}
-                {isCompleted || !hasReplacement
-                  ? meal.portion
-                  : replacement!.portion}
-                {units.portion}
+                <span className="font-medium">Portion - </span>
+                {meal.portion} {units.portion}
               </Badge>
               <Badge className="text-md" variant="outline">
                 <span className="font-medium">Calories - </span>{" "}
-                {isCompleted || !hasReplacement
-                  ? meal.macro.energy
-                  : replacement!.macro.energy}
-                {units.macro.energy}
+                {meal.macro.energy} {units.macro.energy}
               </Badge>
             </div>
           </div>
@@ -90,25 +82,13 @@ export const MobileMealCard = ({
           <p className="text-xl font-semibold mb-2">Macros</p>
           <div className="space-y-1 flex flex-col">
             <Badge variant="secondary" className="text-md">
-              Protein:{" "}
-              {isCompleted || !hasReplacement
-                ? meal.macro.protein
-                : replacement!.macro.protein}
-              {units.macro.protein}
+              Protein: {meal.macro.protein} {units.macro.protein}
             </Badge>
             <Badge variant="secondary" className="text-md">
-              Carbs:{" "}
-              {isCompleted || !hasReplacement
-                ? meal.macro.carbs
-                : replacement!.macro.carbs}
-              {units.macro.carbs}
+              Carbs: {meal.macro.carbs} {units.macro.carbs}
             </Badge>
             <Badge variant="secondary" className="text-md">
-              Fats:{" "}
-              {isCompleted || !hasReplacement
-                ? meal.macro.fat
-                : replacement!.macro.fat}
-              {units.macro.fat}
+              Fats: {meal.macro.fat} {units.macro.fat}
             </Badge>
           </div>
         </div>
