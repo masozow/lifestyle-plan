@@ -17,6 +17,7 @@ import {
   toggleMealStatus as toggleMealStatusHelper,
   calculateDayTotals,
   calculateMacroPercentages,
+  groupMealsByDay,
 } from "../helpers/meal-plan-form-helper-functions";
 import { useMealPlanStore, useSessionStore } from "@/store";
 import { useMealPlanSync } from "@/hooks";
@@ -143,8 +144,8 @@ export const MealPlanForm = () => {
         </CardHeader>
       </Card>
 
-      {data.weekly_plan.map((day) => {
-        const dayTotals = calculateDayTotals(day, mealStatus);
+      {groupMealsByDay(mealStatus).map((day) => {
+        const dayTotals = calculateDayTotals(day.meals);
 
         return (
           <Card key={day.day} className="overflow-hidden">
@@ -200,29 +201,31 @@ export const MealPlanForm = () => {
             </CardHeader>
             <CardContent>
               <DesktopMealTable
-                meals={day.meals}
-                mealStatuses={mealStatus}
+                items={day.meals}
                 units={units as Units}
                 onToggleComplete={(index) =>
                   handleToggleMealStatus(
-                    day.meals[index],
-                    !mealStatus[day.meals[index].id]?.consumed
+                    day.meals[index].targetMeal!,
+                    !day.meals[index].consumed
                   )
                 }
-                onEdit={(index) => handleOpenEditDialog(day.meals[index])}
+                onEdit={(index) =>
+                  handleOpenEditDialog(day.meals[index].targetMeal!)
+                }
               />
 
               <MobileMealList
-                meals={day.meals}
-                mealStatuses={mealStatus}
+                items={day.meals}
                 units={units as Units}
                 onToggleComplete={(index) =>
                   handleToggleMealStatus(
-                    day.meals[index],
-                    !mealStatus[day.meals[index].id]?.consumed
+                    day.meals[index].targetMeal!,
+                    !day.meals[index].consumed
                   )
                 }
-                onEdit={(index) => handleOpenEditDialog(day.meals[index])}
+                onEdit={(index) =>
+                  handleOpenEditDialog(day.meals[index].targetMeal!)
+                }
               />
             </CardContent>
           </Card>

@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useApiGet, useApiRequest } from "@/hooks";
 import { useMealPlanStore } from "@/store";
+// import { shallow } from "zustand/shallow";
 import type {
   ConsumedUpdate,
+  DayPlan,
   Meal,
   MealStatus,
   MealStatusItem,
@@ -22,13 +24,14 @@ export const useMealPlanSync = (
   { consumedUrl, intakeUrl, getUrl }: MealPlanSyncConfig
 ) => {
   const {
-    mealStatus,
     lastTouchedKey,
-    hasUnsyncedChanges,
-    markAsSynced,
+    mealStatus,
     updateMealStatus,
     setLastTouchedKey,
+    hasUnsyncedChanges,
+    markAsSynced,
   } = useMealPlanStore();
+
 
   const lastSyncedConsumedByKey = useRef<Record<number, boolean>>({});
   const consumedMutation = useApiRequest<ConsumedUpdate>({
@@ -46,63 +49,80 @@ export const useMealPlanSync = (
     enabled: !!userId,
   });
   const [hasInitialSyncCompleted, setHasInitialSyncCompleted] = useState(false);
+  const [weeklyPlanWithState, setWeeklyPlanWithState] = useState<DayPlan[]>([]);
+
   useEffect(() => {
     if (planQuery.data?.data?.response?.weekly_plan) {
       console.log("Response from server: ", planQuery.data);
       const weekly = planQuery.data.data.response.weekly_plan;
       const newState: MealStatus = {};
-
-      for (const day of weekly) {
-        for (const meal of day.meals) {
-          newState[meal.id] = {
-            consumed: meal.intake?.consumed || meal.consumed,
+      const enrichedPlan = weekly.map((day) => {
+        const enrichedMeals = day.meals.map((meal) => {
+          const status: MealStatusItem = {
+            consumed: meal.intake?.consumed ?? meal.consumed,
             userDailyMealId: meal.id,
             userDailyIntakeId: meal.intake?.id,
             replacement: meal?.intake
               ? { ...meal?.intake, isIntake: true }
               : undefined,
             targetMeal: meal,
-          } satisfies MealStatusItem;
-        }
-      }
+          };
+
+          newState[meal.id] = status;
+
+          return {
+            ...meal,
+            ...(status.replacement ?? {}),
+            consumed: status.consumed,
+          };
+        });
+
+        return {
+          ...day,
+          meals: enrichedMeals,
+        };
+      });
 
       for (const [key, value] of Object.entries(newState)) {
         updateMealStatus(Number(key), value);
       }
-      markAsSynced(); 
+
+      setWeeklyPlanWithState(enrichedPlan);
+      markAsSynced();
       setHasInitialSyncCompleted(true);
     }
+
   }, [planQuery.data]);
 
   const syncToServer = async () => {
-  if (!userId || !hasUnsyncedChanges() || lastTouchedKey === null) return false;
+    if (!userId || !hasUnsyncedChanges() || lastTouchedKey === null) return false;
 
-  const status = mealStatus[lastTouchedKey];
-  if (!status) return false;
+    const status = mealStatus[lastTouchedKey];
+    if (!status) return false;
 
-  const { userDailyMealId, userDailyIntakeId, consumed } = status;
+    const { userDailyMealId, userDailyIntakeId, consumed } = status;
 
 
-  if (lastSyncedConsumedByKey.current[userDailyMealId] === consumed) {
-    return false;
-  }
+    if (lastSyncedConsumedByKey.current[userDailyMealId] === consumed) {
+      return false;
+    }
 
-  const res = await consumedMutation.mutateAsync({
-    userDailyMealId,
-    userDailyIntakeId,
-    consumed,
-    origin: userDailyIntakeId ? "intake" : "meal",
-  });
+    const res = await consumedMutation.mutateAsync({
+      userDailyMealId,
+      userDailyIntakeId,
+      consumed,
+      origin: userDailyIntakeId ? "intake" : "meal",
+    });
 
-  console.log("Response from server: ", res);
-  if (!res.success) return false;
+    console.log("Response from server: ", res);
+    if (!res.success) return false;
 
-  
-  lastSyncedConsumedByKey.current[userDailyMealId] = consumed;
+    
+    lastSyncedConsumedByKey.current[userDailyMealId] = consumed;
 
-  markAsSynced();
-  return true;
-};
+    markAsSynced();
+    return true;
+  };
 
 
   const createOrUpdateIntake = async (
@@ -158,7 +178,10 @@ export const useMealPlanSync = (
     isLoading: planQuery.isLoading,
     isError: planQuery.isError,
     error: planQuery.error,
-    data: planQuery.data?.data?.response,
+    data: {
+      ...planQuery.data?.data?.response,
+      weekly_plan: weeklyPlanWithState,
+    },
     hasInitialSyncCompleted, 
   };
 };

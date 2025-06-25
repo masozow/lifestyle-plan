@@ -1,0 +1,674 @@
+{
+  "state": {
+    "mealStatus": {
+      "1": {
+        "consumed": true,
+        "userDailyMealId": 1,
+        "targetMeal": {
+          "id": 1,
+          "food": "Corn tortilla ",
+          "meal": "Desayuno",
+          "portion": 100,
+          "day": "Lunes",
+          "date": "2025-06-23",
+          "macro": {
+            "protein": 3,
+            "carbs": 80,
+            "fat": 1,
+            "energy": 300
+          },
+          "consumed": true
+        }
+      },
+      "2": {
+        "consumed": true,
+        "userDailyMealId": 2,
+        "targetMeal": {
+          "id": 2,
+          "food": "Rice cake",
+          "meal": "Almuerzo",
+          "portion": 30,
+          "day": "Lunes",
+          "date": "2025-06-23",
+          "macro": {
+            "protein": 1,
+            "carbs": 20,
+            "fat": 1,
+            "energy": 30
+          },
+          "consumed": true
+        }
+      },
+      "3": {
+        "consumed": true,
+        "userDailyMealId": 3,
+        "targetMeal": {
+          "id": 3,
+          "food": "Salmon salad 3",
+          "meal": "Cena",
+          "portion": 300,
+          "day": "Lunes",
+          "date": "2025-06-23",
+          "macro": {
+            "protein": 30,
+            "carbs": 30,
+            "fat": 30,
+            "energy": 300
+          },
+          "consumed": true
+        }
+      },
+      "4": {
+        "consumed": true,
+        "userDailyMealId": 4,
+        "targetMeal": {
+          "id": 4,
+          "food": "Frutas y almendras",
+          "meal": "Merienda 1",
+          "portion": 150,
+          "day": "Lunes",
+          "date": "2025-06-23",
+          "macro": {
+            "protein": 10,
+            "carbs": 30,
+            "fat": 10,
+            "energy": 200
+          },
+          "consumed": true
+        }
+      },
+      "5": {
+        "consumed": true,
+        "userDailyMealId": 5,
+        "targetMeal": {
+          "id": 5,
+          "food": "Batido de proteínas con leche de almendras y plátano",
+          "meal": "Merienda 2",
+          "portion": 250,
+          "day": "Lunes",
+          "date": "2025-06-23",
+          "macro": {
+            "protein": 30,
+            "carbs": 40,
+            "fat": 15,
+            "energy": 350
+          },
+          "consumed": true
+        }
+      },
+      "6": {
+        "consumed": true,
+        "userDailyMealId": 6,
+        "targetMeal": {
+          "id": 6,
+          "food": "Tortilla española",
+          "meal": "Desayuno",
+          "portion": 300,
+          "day": "Martes",
+          "date": "2025-06-24",
+          "macro": {
+            "protein": 20,
+            "carbs": 40,
+            "fat": 12,
+            "energy": 150
+          },
+          "consumed": true
+        }
+      },
+      "7": {
+        "consumed": true,
+        "userDailyMealId": 7,
+        "targetMeal": {
+          "id": 7,
+          "food": "Tacos de pescado con lechuga y tomate",
+          "meal": "Almuerzo",
+          "portion": 350,
+          "day": "Martes",
+          "date": "2025-06-24",
+          "macro": {
+            "protein": 35,
+            "carbs": 40,
+            "fat": 25,
+            "energy": 500
+          },
+          "consumed": true
+        }
+      },
+      "8": {
+        "consumed": false,
+        "userDailyMealId": 8,
+        "targetMeal": {
+          "id": 8,
+          "food": "Pollo al curry con arroz integral y vegetales",
+          "meal": "Cena",
+          "portion": 400,
+          "day": "Martes",
+          "date": "2025-06-24",
+          "macro": {
+            "protein": 40,
+            "carbs": 60,
+            "fat": 25,
+            "energy": 600
+          },
+          "consumed": false
+        }
+      },
+      "9": {
+        "consumed": false,
+        "userDailyMealId": 9,
+        "targetMeal": {
+          "id": 9,
+          "food": "Yogur griego con miel y nueces",
+          "meal": "Merienda 1",
+          "portion": 200,
+          "day": "Martes",
+          "date": "2025-06-24",
+          "macro": {
+            "protein": 20,
+            "carbs": 30,
+            "fat": 15,
+            "energy": 300
+          },
+          "consumed": false
+        }
+      },
+      "10": {
+        "consumed": false,
+        "userDailyMealId": 10,
+        "targetMeal": {
+          "id": 10,
+          "food": "Batido de proteínas con leche de soja y fresa",
+          "meal": "Merienda 2",
+          "portion": 250,
+          "day": "Martes",
+          "date": "2025-06-24",
+          "macro": {
+            "protein": 30,
+            "carbs": 40,
+            "fat": 15,
+            "energy": 350
+          },
+          "consumed": false
+        }
+      },
+      "11": {
+        "consumed": false,
+        "userDailyMealId": 11,
+        "targetMeal": {
+          "id": 11,
+          "food": "Avena con plátano y nueces",
+          "meal": "Desayuno",
+          "portion": 300,
+          "day": "Miércoles",
+          "date": "2025-06-18",
+          "macro": {
+            "protein": 20,
+            "carbs": 60,
+            "fat": 15,
+            "energy": 450
+          },
+          "consumed": false
+        }
+      },
+      "12": {
+        "consumed": false,
+        "userDailyMealId": 12,
+        "targetMeal": {
+          "id": 12,
+          "food": "Salmón a la parrilla con quinoa y brócoli",
+          "meal": "Almuerzo",
+          "portion": 350,
+          "day": "Miércoles",
+          "date": "2025-06-18",
+          "macro": {
+            "protein": 40,
+            "carbs": 60,
+            "fat": 25,
+            "energy": 550
+          },
+          "consumed": false
+        }
+      },
+      "13": {
+        "consumed": false,
+        "userDailyMealId": 13,
+        "targetMeal": {
+          "id": 13,
+          "food": "Pollo a la parrilla con arroz integral y vegetales",
+          "meal": "Cena",
+          "portion": 400,
+          "day": "Miércoles",
+          "date": "2025-06-18",
+          "macro": {
+            "protein": 50,
+            "carbs": 70,
+            "fat": 20,
+            "energy": 600
+          },
+          "consumed": false
+        }
+      },
+      "14": {
+        "consumed": false,
+        "userDailyMealId": 14,
+        "targetMeal": {
+          "id": 14,
+          "food": "Frutas y almendras",
+          "meal": "Merienda 1",
+          "portion": 150,
+          "day": "Miércoles",
+          "date": "2025-06-18",
+          "macro": {
+            "protein": 10,
+            "carbs": 30,
+            "fat": 10,
+            "energy": 200
+          },
+          "consumed": false
+        }
+      },
+      "15": {
+        "consumed": false,
+        "userDailyMealId": 15,
+        "targetMeal": {
+          "id": 15,
+          "food": "Batido de proteínas con leche de almendras y plátano",
+          "meal": "Merienda 2",
+          "portion": 250,
+          "day": "Miércoles",
+          "date": "2025-06-18",
+          "macro": {
+            "protein": 30,
+            "carbs": 40,
+            "fat": 15,
+            "energy": 350
+          },
+          "consumed": false
+        }
+      },
+      "16": {
+        "consumed": false,
+        "userDailyMealId": 16,
+        "targetMeal": {
+          "id": 16,
+          "food": "Huevos revueltos con espinacas y aguacate",
+          "meal": "Desayuno",
+          "portion": 250,
+          "day": "Jueves",
+          "date": "2025-06-19",
+          "macro": {
+            "protein": 25,
+            "carbs": 20,
+            "fat": 20,
+            "energy": 350
+          },
+          "consumed": false
+        }
+      },
+      "17": {
+        "consumed": false,
+        "userDailyMealId": 17,
+        "targetMeal": {
+          "id": 17,
+          "food": "Tacos de pescado con lechuga y tomate",
+          "meal": "Almuerzo",
+          "portion": 350,
+          "day": "Jueves",
+          "date": "2025-06-19",
+          "macro": {
+            "protein": 35,
+            "carbs": 40,
+            "fat": 25,
+            "energy": 500
+          },
+          "consumed": false
+        }
+      },
+      "18": {
+        "consumed": false,
+        "userDailyMealId": 18,
+        "targetMeal": {
+          "id": 18,
+          "food": "Pollo al curry con arroz integral y vegetales",
+          "meal": "Cena",
+          "portion": 400,
+          "day": "Jueves",
+          "date": "2025-06-19",
+          "macro": {
+            "protein": 40,
+            "carbs": 60,
+            "fat": 25,
+            "energy": 600
+          },
+          "consumed": false
+        }
+      },
+      "19": {
+        "consumed": false,
+        "userDailyMealId": 19,
+        "targetMeal": {
+          "id": 19,
+          "food": "Yogur griego con miel y nueces",
+          "meal": "Merienda 1",
+          "portion": 200,
+          "day": "Jueves",
+          "date": "2025-06-19",
+          "macro": {
+            "protein": 20,
+            "carbs": 30,
+            "fat": 15,
+            "energy": 300
+          },
+          "consumed": false
+        }
+      },
+      "20": {
+        "consumed": false,
+        "userDailyMealId": 20,
+        "targetMeal": {
+          "id": 20,
+          "food": "Batido de proteínas con leche de soja y fresa",
+          "meal": "Merienda 2",
+          "portion": 250,
+          "day": "Jueves",
+          "date": "2025-06-19",
+          "macro": {
+            "protein": 30,
+            "carbs": 40,
+            "fat": 15,
+            "energy": 350
+          },
+          "consumed": false
+        }
+      },
+      "21": {
+        "consumed": false,
+        "userDailyMealId": 21,
+        "targetMeal": {
+          "id": 21,
+          "food": "Avena con plátano y nueces",
+          "meal": "Desayuno",
+          "portion": 300,
+          "day": "Viernes",
+          "date": "2025-06-20",
+          "macro": {
+            "protein": 20,
+            "carbs": 60,
+            "fat": 15,
+            "energy": 450
+          },
+          "consumed": false
+        }
+      },
+      "22": {
+        "consumed": false,
+        "userDailyMealId": 22,
+        "targetMeal": {
+          "id": 22,
+          "food": "Salmón a la parrilla con quinoa y brócoli",
+          "meal": "Almuerzo",
+          "portion": 350,
+          "day": "Viernes",
+          "date": "2025-06-20",
+          "macro": {
+            "protein": 40,
+            "carbs": 60,
+            "fat": 25,
+            "energy": 550
+          },
+          "consumed": false
+        }
+      },
+      "23": {
+        "consumed": false,
+        "userDailyMealId": 23,
+        "targetMeal": {
+          "id": 23,
+          "food": "Pollo a la parrilla con arroz integral y vegetales",
+          "meal": "Cena",
+          "portion": 400,
+          "day": "Viernes",
+          "date": "2025-06-20",
+          "macro": {
+            "protein": 50,
+            "carbs": 70,
+            "fat": 20,
+            "energy": 600
+          },
+          "consumed": false
+        }
+      },
+      "24": {
+        "consumed": false,
+        "userDailyMealId": 24,
+        "targetMeal": {
+          "id": 24,
+          "food": "Frutas y almendras",
+          "meal": "Merienda 1",
+          "portion": 150,
+          "day": "Viernes",
+          "date": "2025-06-20",
+          "macro": {
+            "protein": 10,
+            "carbs": 30,
+            "fat": 10,
+            "energy": 200
+          },
+          "consumed": false
+        }
+      },
+      "25": {
+        "consumed": false,
+        "userDailyMealId": 25,
+        "targetMeal": {
+          "id": 25,
+          "food": "Batido de proteínas con leche de almendras y plátano",
+          "meal": "Merienda 2",
+          "portion": 250,
+          "day": "Viernes",
+          "date": "2025-06-20",
+          "macro": {
+            "protein": 30,
+            "carbs": 40,
+            "fat": 15,
+            "energy": 350
+          },
+          "consumed": false
+        }
+      },
+      "26": {
+        "consumed": false,
+        "userDailyMealId": 26,
+        "targetMeal": {
+          "id": 26,
+          "food": "Huevos revueltos con espinacas y aguacate",
+          "meal": "Desayuno",
+          "portion": 250,
+          "day": "Sábado",
+          "date": "2025-06-21",
+          "macro": {
+            "protein": 25,
+            "carbs": 20,
+            "fat": 20,
+            "energy": 350
+          },
+          "consumed": false
+        }
+      },
+      "27": {
+        "consumed": false,
+        "userDailyMealId": 27,
+        "targetMeal": {
+          "id": 27,
+          "food": "Tacos de pescado con lechuga y tomate",
+          "meal": "Almuerzo",
+          "portion": 350,
+          "day": "Sábado",
+          "date": "2025-06-21",
+          "macro": {
+            "protein": 35,
+            "carbs": 40,
+            "fat": 25,
+            "energy": 500
+          },
+          "consumed": false
+        }
+      },
+      "28": {
+        "consumed": false,
+        "userDailyMealId": 28,
+        "targetMeal": {
+          "id": 28,
+          "food": "Pollo al curry con arroz integral y vegetales",
+          "meal": "Cena",
+          "portion": 400,
+          "day": "Sábado",
+          "date": "2025-06-21",
+          "macro": {
+            "protein": 40,
+            "carbs": 60,
+            "fat": 25,
+            "energy": 600
+          },
+          "consumed": false
+        }
+      },
+      "29": {
+        "consumed": false,
+        "userDailyMealId": 29,
+        "targetMeal": {
+          "id": 29,
+          "food": "Yogur griego con miel y nueces",
+          "meal": "Merienda 1",
+          "portion": 200,
+          "day": "Sábado",
+          "date": "2025-06-21",
+          "macro": {
+            "protein": 20,
+            "carbs": 30,
+            "fat": 15,
+            "energy": 300
+          },
+          "consumed": false
+        }
+      },
+      "30": {
+        "consumed": false,
+        "userDailyMealId": 30,
+        "targetMeal": {
+          "id": 30,
+          "food": "Batido de proteínas con leche de soja y fresa",
+          "meal": "Merienda 2",
+          "portion": 250,
+          "day": "Sábado",
+          "date": "2025-06-21",
+          "macro": {
+            "protein": 30,
+            "carbs": 40,
+            "fat": 15,
+            "energy": 350
+          },
+          "consumed": false
+        }
+      },
+      "31": {
+        "consumed": false,
+        "userDailyMealId": 31,
+        "targetMeal": {
+          "id": 31,
+          "food": "Avena con plátano y nueces",
+          "meal": "Desayuno",
+          "portion": 300,
+          "day": "Domingo",
+          "date": "2025-06-22",
+          "macro": {
+            "protein": 20,
+            "carbs": 60,
+            "fat": 15,
+            "energy": 450
+          },
+          "consumed": false
+        }
+      },
+      "32": {
+        "consumed": false,
+        "userDailyMealId": 32,
+        "targetMeal": {
+          "id": 32,
+          "food": "Salmón a la parrilla con quinoa y brócoli",
+          "meal": "Almuerzo",
+          "portion": 350,
+          "day": "Domingo",
+          "date": "2025-06-22",
+          "macro": {
+            "protein": 40,
+            "carbs": 60,
+            "fat": 25,
+            "energy": 550
+          },
+          "consumed": false
+        }
+      },
+      "33": {
+        "consumed": false,
+        "userDailyMealId": 33,
+        "targetMeal": {
+          "id": 33,
+          "food": "Pollo a la parrilla con arroz integral y vegetales",
+          "meal": "Cena",
+          "portion": 400,
+          "day": "Domingo",
+          "date": "2025-06-22",
+          "macro": {
+            "protein": 50,
+            "carbs": 70,
+            "fat": 20,
+            "energy": 600
+          },
+          "consumed": false
+        }
+      },
+      "34": {
+        "consumed": false,
+        "userDailyMealId": 34,
+        "targetMeal": {
+          "id": 34,
+          "food": "Frutas y almendras",
+          "meal": "Merienda 1",
+          "portion": 150,
+          "day": "Domingo",
+          "date": "2025-06-22",
+          "macro": {
+            "protein": 10,
+            "carbs": 30,
+            "fat": 10,
+            "energy": 200
+          },
+          "consumed": false
+        }
+      },
+      "35": {
+        "consumed": false,
+        "userDailyMealId": 35,
+        "targetMeal": {
+          "id": 35,
+          "food": "Batido de proteínas con leche de almendras y plátano",
+          "meal": "Merienda 2",
+          "portion": 250,
+          "day": "Domingo",
+          "date": "2025-06-22",
+          "macro": {
+            "protein": 30,
+            "carbs": 40,
+            "fat": 15,
+            "energy": 350
+          },
+          "consumed": false
+        }
+      }
+    },
+    "lastSyncedAt": 1750869085135,
+    "lastTouchedKey": null
+  },
+  "version": 0
+}

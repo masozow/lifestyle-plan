@@ -51,32 +51,51 @@ export const saveReplacementMeal = (
   };
 };
 
-export const calculateDayTotals = (day: DayPlan, mealStatus: MealStatus) => {
+/**
+ * Return the effective meal for a given meal status, which is either the replacement
+ * meal if it exists, or the target meal if there is no replacement.
+ */
+export const getEffectiveMeal = (status: MealStatusItem): Meal | ReplacementMeal | undefined => {
+  return status.replacement ?? status.targetMeal;
+};
+export const calculateDayTotals = (
+  meals: MealStatusItem[]
+): {
+  totalCalories: number;
+  totalProtein: number;
+  totalCarbs: number;
+  totalFat: number;
+  targetCalories: number;
+  targetProtein: number;
+  targetCarbs: number;
+  targetFat: number;
+} => {
   let totalCalories = 0;
   let totalProtein = 0;
   let totalCarbs = 0;
   let totalFat = 0;
-
   let targetCalories = 0;
   let targetProtein = 0;
   let targetCarbs = 0;
   let targetFat = 0;
 
-  day.meals.forEach((meal) => {
-    targetCalories += meal.macro.energy;
-    targetProtein += meal.macro.protein;
-    targetCarbs += meal.macro.carbs;
-    targetFat += meal.macro.fat;
+  meals.forEach((item) => {
+    const target = item.targetMeal;
+    if (!target) return;
 
-    const status = mealStatus[meal.id];
-    if (status?.consumed) {
-      const m = status.replacement || status.targetMeal;
-      if (m && 'macro' in m) {
-        totalCalories += m.macro.energy;
-        totalProtein += m.macro.protein;
-        totalCarbs += m.macro.carbs;
-        totalFat += m.macro.fat;
-      }
+    targetCalories += target.macro.energy;
+    targetProtein += target.macro.protein;
+    targetCarbs += target.macro.carbs;
+    targetFat += target.macro.fat;
+
+    if (item.consumed) {
+      const actual = item.replacement ?? item.targetMeal;
+      if (!actual) return;
+
+      totalCalories += actual.macro.energy;
+      totalProtein += actual.macro.protein;
+      totalCarbs += actual.macro.carbs;
+      totalFat += actual.macro.fat;
     }
   });
 
@@ -91,6 +110,8 @@ export const calculateDayTotals = (day: DayPlan, mealStatus: MealStatus) => {
     targetFat,
   };
 };
+
+
 
 export const getMealStatuses = (day: DayPlan, mealStatus: MealStatus) => {
   return day.meals.map((meal) => {
@@ -118,4 +139,27 @@ export const calculateMacroPercentages = (macroRatios: MacroRatios) => {
     carbs: Math.round(macroRatios.carbs * 100),
     fat: Math.round(macroRatios.fat * 100),
   };
+};
+
+export const groupMealsByDay = (mealStatus: MealStatus) => {
+  const grouped = new Map<string, { day: string; date: string; meals: MealStatusItem[] }>();
+
+  Object.values(mealStatus).forEach((status) => {
+     const meal = getEffectiveMeal(status);
+    if (!meal) return;
+
+    const key = meal.date;
+
+    if (!grouped.has(key)) {
+      grouped.set(key, {
+        day: meal.day,
+        date: meal.date,
+        meals: [],
+      });
+    }
+
+    grouped.get(key)!.meals.push(status);
+  });
+
+  return [...grouped.values()];
 };
