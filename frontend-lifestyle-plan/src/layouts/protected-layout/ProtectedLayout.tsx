@@ -3,9 +3,9 @@ import { useSessionStore } from "@/store";
 import { SessionInitializer } from "@/components";
 
 export const ProtectedLayout = () => {
-  const { isAuthenticated, isLoading } = useSessionStore();
+  const { isAuthenticated, isLoading, hasTriedFetching } = useSessionStore();
 
-  if (isLoading) return <div>Loading...</div>;
+  if (!hasTriedFetching || isLoading) return <div>Loading...</div>;
 
   if (!isAuthenticated) return <Navigate to="/login" />;
 
