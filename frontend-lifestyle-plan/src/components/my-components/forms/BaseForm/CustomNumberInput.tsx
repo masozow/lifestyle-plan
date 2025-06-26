@@ -16,6 +16,7 @@ interface Props<T extends FieldValues> {
   label: string;
   error?: FieldError;
   unit?: string;
+  autoFocus?: boolean;
 }
 
 export const CustomNumberInput = <T extends FieldValues>({
@@ -24,6 +25,7 @@ export const CustomNumberInput = <T extends FieldValues>({
   label,
   error,
   unit,
+  autoFocus = true,
 }: Props<T>) => {
   const [isTouched, setIsTouched] = useState(false);
   return (
@@ -36,7 +38,7 @@ export const CustomNumberInput = <T extends FieldValues>({
     >
       <Label
         htmlFor={name.toString()}
-        className="text-2xl text-left mb-4 font-semibold"
+        className="text-md sm:text-2xl text-left mb-4 font-semibold"
       >
         {label} {unit && `(${unit})`}
       </Label>
@@ -53,11 +55,12 @@ export const CustomNumberInput = <T extends FieldValues>({
               const value = e.target.value;
               field.onChange(value === "" ? undefined : Number(value));
             }}
-            autoFocus
+            autoFocus={autoFocus}
             onBlur={() => {
               field.onBlur();
               setIsTouched(true);
             }}
+            onFocus={(e) => e.target.select()}
           />
         )}
       />

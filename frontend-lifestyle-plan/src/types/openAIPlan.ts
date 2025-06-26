@@ -32,8 +32,14 @@ export interface Meal {
 
 export interface DayPlan {
   day: string;
-  date: string;
+  date: string | null;
   meals: Meal[];
+  day_macro_targets: {
+    energy: number;
+    protein: number;
+    carbs: number;
+    fat: number;
+  };
 }
 
 export interface Units {

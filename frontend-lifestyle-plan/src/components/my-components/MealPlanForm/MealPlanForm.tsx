@@ -77,6 +77,7 @@ export const MealPlanForm = () => {
   };
 
   const handleSaveReplacementMeal = async (data: ReplacementMeal) => {
+    console.log("Saving replacement meal:", data);
     if (!editingMeal) return;
 
     try {
@@ -148,6 +149,9 @@ export const MealPlanForm = () => {
       </Card>
 
       {groupMealsByDay(mealStatus).map((day) => {
+        const matchingDay = data.weekly_plan.find((d) => d.day === day.day);
+        const backendTargets = matchingDay?.day_macro_targets;
+
         const dayTotals = calculateDayTotals(day.meals);
 
         return (
@@ -165,7 +169,7 @@ export const MealPlanForm = () => {
                       className="flex items-center gap-1"
                     >
                       <Calculator className="h-3 w-3" />
-                      {dayTotals.targetCalories} {units?.macro.energy}
+                      {backendTargets?.energy ?? 0} {units?.macro.energy}
                     </Badge>
                   </div>
                   <div className="flex flex-col items-center">
@@ -186,15 +190,16 @@ export const MealPlanForm = () => {
                     </span>
                     <div className="flex gap-2">
                       <Badge variant="secondary">
-                        P: {dayTotals.totalProtein}/{dayTotals.targetProtein}
+                        P: {dayTotals.totalProtein}/
+                        {backendTargets?.protein ?? 0}
                         {units?.macro.protein}
                       </Badge>
                       <Badge variant="secondary">
-                        C: {dayTotals.totalCarbs}/{dayTotals.targetCarbs}
+                        C: {dayTotals.totalCarbs}/{backendTargets?.carbs ?? 0}
                         {units?.macro.carbs}
                       </Badge>
                       <Badge variant="secondary">
-                        G: {dayTotals.totalFat}/{dayTotals.targetFat}
+                        G: {dayTotals.totalFat}/{backendTargets?.fat ?? 0}
                         {units?.macro.fat}
                       </Badge>
                     </div>
