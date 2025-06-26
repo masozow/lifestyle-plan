@@ -102,6 +102,9 @@ export const MealPlanForm = () => {
   };
 
   const macroPercentages = calculateMacroPercentages(macro_ratios);
+  const targetsByDay = Object.fromEntries(
+    data.weekly_plan.map((day) => [day.day, day.day_macro_targets])
+  );
 
   return (
     <div className="container mx-auto p-4 md:p-6 space-y-6">
@@ -149,8 +152,7 @@ export const MealPlanForm = () => {
       </Card>
 
       {groupMealsByDay(mealStatus).map((day) => {
-        const matchingDay = data.weekly_plan.find((d) => d.day === day.day);
-        const backendTargets = matchingDay?.day_macro_targets;
+        const backendTargets = targetsByDay[day.day];
 
         const dayTotals = calculateDayTotals(day.meals);
 
