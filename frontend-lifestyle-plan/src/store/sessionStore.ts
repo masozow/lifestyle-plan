@@ -76,20 +76,19 @@ export const useSessionStore = create<SessionStore>()(
 
       logout: async () => {
         try {
-          await fetch(
-            API_ENDPOINTS.logout,
-            {
-              method: "POST",
-              credentials: "include",
-            }
-          );
+          await fetch(API_ENDPOINTS.logout, {
+            method: "POST",
+            credentials: "include",
+          });
         } catch (error) {
           console.warn("Logout error", error);
         } finally {
           set({ user: null, isAuthenticated: false });
           toast.info("Session ended");
+          // window.location.href = "/login";
         }
       },
+
     }),
     {
       name: "session-store",

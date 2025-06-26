@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useSessionStore } from "@/store";
 import { toast } from "sonner";
+
 export const SessionInitializer = () => {
   const { fetchSession, hasTriedFetching } = useSessionStore();
 

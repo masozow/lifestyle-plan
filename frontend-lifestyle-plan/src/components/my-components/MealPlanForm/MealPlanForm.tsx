@@ -201,7 +201,7 @@ export const MealPlanForm = () => {
                         {units?.macro.carbs}
                       </Badge>
                       <Badge variant="secondary">
-                        G: {dayTotals.totalFat}/{backendTargets?.fat ?? 0}
+                        F: {dayTotals.totalFat}/{backendTargets?.fat ?? 0}
                         {units?.macro.fat}
                       </Badge>
                     </div>
