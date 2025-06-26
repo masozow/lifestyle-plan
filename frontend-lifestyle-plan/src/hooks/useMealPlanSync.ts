@@ -51,6 +51,7 @@ export const useMealPlanSync = (
 
   useEffect(() => {
     if (planQuery.data?.data?.response?.weekly_plan) {
+      console.log("Response frome server:", planQuery.data?.data?.response);
       const weekly = planQuery.data.data.response.weekly_plan;
       const newState: MealStatus = {};
 

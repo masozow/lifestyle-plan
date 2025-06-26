@@ -1,14 +1,18 @@
 import { useEffect } from "react";
 import { useSessionStore } from "@/store";
+import { toast } from "sonner";
 
 export const SessionInitializer = () => {
-  const { fetchSession, isAuthenticated, hasTriedFetching } = useSessionStore();
+  const { fetchSession, hasTriedFetching } = useSessionStore();
 
   useEffect(() => {
-    if (!isAuthenticated && !hasTriedFetching) {
-      fetchSession();
+    if (!hasTriedFetching) {
+      fetchSession().catch((err) => {
+        toast.error("Session invalid or expired.");
+        console.warn("Session invalid or expired:", err);
+      });
     }
-  }, [isAuthenticated, hasTriedFetching, fetchSession]);
+  }, [hasTriedFetching, fetchSession]);
 
   return null;
 };

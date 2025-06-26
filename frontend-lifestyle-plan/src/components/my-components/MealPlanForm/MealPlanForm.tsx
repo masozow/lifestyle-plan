@@ -77,6 +77,7 @@ export const MealPlanForm = () => {
   };
 
   const handleSaveReplacementMeal = async (data: ReplacementMeal) => {
+    console.log("Saving replacement meal:", data);
     if (!editingMeal) return;
 
     try {
@@ -101,6 +102,9 @@ export const MealPlanForm = () => {
   };
 
   const macroPercentages = calculateMacroPercentages(macro_ratios);
+  const targetsByDay = Object.fromEntries(
+    data.weekly_plan.map((day) => [day.day, day.day_macro_targets])
+  );
 
   return (
     <div className="container mx-auto p-4 md:p-6 space-y-6">
@@ -148,6 +152,8 @@ export const MealPlanForm = () => {
       </Card>
 
       {groupMealsByDay(mealStatus).map((day) => {
+        const backendTargets = targetsByDay[day.day];
+
         const dayTotals = calculateDayTotals(day.meals);
 
         return (
@@ -165,7 +171,7 @@ export const MealPlanForm = () => {
                       className="flex items-center gap-1"
                     >
                       <Calculator className="h-3 w-3" />
-                      {dayTotals.targetCalories} {units?.macro.energy}
+                      {backendTargets?.energy ?? 0} {units?.macro.energy}
                     </Badge>
                   </div>
                   <div className="flex flex-col items-center">
@@ -186,15 +192,16 @@ export const MealPlanForm = () => {
                     </span>
                     <div className="flex gap-2">
                       <Badge variant="secondary">
-                        P: {dayTotals.totalProtein}/{dayTotals.targetProtein}
+                        P: {dayTotals.totalProtein}/
+                        {backendTargets?.protein ?? 0}
                         {units?.macro.protein}
                       </Badge>
                       <Badge variant="secondary">
-                        C: {dayTotals.totalCarbs}/{dayTotals.targetCarbs}
+                        C: {dayTotals.totalCarbs}/{backendTargets?.carbs ?? 0}
                         {units?.macro.carbs}
                       </Badge>
                       <Badge variant="secondary">
-                        G: {dayTotals.totalFat}/{dayTotals.targetFat}
+                        F: {dayTotals.totalFat}/{backendTargets?.fat ?? 0}
                         {units?.macro.fat}
                       </Badge>
                     </div>

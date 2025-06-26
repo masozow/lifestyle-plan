@@ -86,7 +86,7 @@ const getStructuredMealPlan = async (req: Request, res: Response) => {
       ? JSON.parse(firstEntry.openAIResponse.response)
       : firstEntry.openAIResponse?.response;
 
-    const grouped: Record<string, { day: string; date: string | null; meals: any[] }> = {};
+    const grouped: Record<string, { day: string; date: string | null; meals: any[]; day_macro_targets: { energy: number; protein: number; carbs: number; fat: number; } }> = {};
 
     const entry = progressEntries;
       for (const meal of entry.dailyMeals ?? []) {
@@ -97,9 +97,20 @@ const getStructuredMealPlan = async (req: Request, res: Response) => {
           grouped[mealDay] = {
             day: mealDay,
             date: meal.date ?? null,
+            day_macro_targets: {
+              energy: 0,
+              protein: 0,
+              carbs: 0,
+              fat: 0,
+            },
             meals: [],
           };
         }
+        //accumulating macro targets, the original ones
+        grouped[mealDay].day_macro_targets.energy += meal.targetEnergy ?? 0;
+        grouped[mealDay].day_macro_targets.protein += meal.targetProtein ?? 0;
+        grouped[mealDay].day_macro_targets.carbs += meal.targetCarbs ?? 0;
+        grouped[mealDay].day_macro_targets.fat += meal.targetFat ?? 0;
 
         grouped[mealDay].meals.push({
           id: meal.id,
