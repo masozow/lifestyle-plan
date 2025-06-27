@@ -3,20 +3,13 @@ import { Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { TableCell, TableRow } from "@/components/ui/table";
-import type { Meal, ReplacementMeal } from "@/types/openAIPlan";
+import { useMealPlanStore } from "@/store";
+import { getEffectiveMeal } from "../helpers/meal-plan-form-helper-functions";
 
 interface DesktopTableRowProps {
-  meal: Meal | ReplacementMeal;
-  isCompleted: boolean;
-  hasReplacement: boolean;
-  replacement?: ReplacementMeal;
+  mealId: number;
   units: {
-    macro: {
-      protein: string;
-      carbs: string;
-      fat: string;
-      energy: string;
-    };
+    macro: { protein: string; carbs: string; fat: string; energy: string };
     portion: string;
   };
   onToggleComplete: () => void;
@@ -24,14 +17,17 @@ interface DesktopTableRowProps {
 }
 
 export const DesktopTableRow = ({
-  meal,
-  isCompleted,
-  // hasReplacement,
-  // replacement,
+  mealId,
   units,
   onToggleComplete,
   onEdit,
 }: DesktopTableRowProps) => {
+  const item = useMealPlanStore((state) => state.mealStatus[mealId]);
+  const meal = getEffectiveMeal(item);
+  if (!meal) return null;
+
+  const isCompleted = item.consumed;
+
   return (
     <TableRow className={isCompleted ? "" : "bg-red-50 dark:bg-red-950/20"}>
       <TableCell>

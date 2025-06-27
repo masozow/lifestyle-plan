@@ -28,6 +28,8 @@ export const useMealPlanSync = (
     setLastTouchedKey,
     hasUnsyncedChanges,
     markAsSynced,
+    clearMealPlan,
+    setMealStatus
   } = useMealPlanStore();
 
   const lastSyncedConsumedByKey = useRef<Record<number, boolean>>({});
@@ -51,7 +53,8 @@ export const useMealPlanSync = (
 
   useEffect(() => {
     if (planQuery.data?.data?.response?.weekly_plan) {
-      console.log("Response from server:", planQuery.data?.data?.response);
+      console.log("Response from server:", planQuery.data?.data?.response);      
+      clearMealPlan();
       const weekly = planQuery.data.data.response.weekly_plan;
       const newState: MealStatus = {};
 
@@ -68,9 +71,7 @@ export const useMealPlanSync = (
         });
       });
 
-      for (const [key, value] of Object.entries(newState)) {
-        updateMealStatus(Number(key), value);
-      }
+      setMealStatus(newState);
 
       markAsSynced();
       setHasInitialSyncCompleted(true);
