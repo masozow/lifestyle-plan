@@ -32,7 +32,8 @@ export const useMealPlanStore = create<MealPlanStore>()(
             : {
                 mealStatus: {
                   ...state.mealStatus,
-                  [key]: { ...status },
+                  //  [key]: { ...status },
+                  [key]: status ,
                 },
                 lastTouchedKey: key,
               };

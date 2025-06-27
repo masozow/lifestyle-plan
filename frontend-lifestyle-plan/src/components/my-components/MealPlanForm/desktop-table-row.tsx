@@ -5,6 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { useMealPlanStore } from "@/store";
 import { getEffectiveMeal } from "../helpers/meal-plan-form-helper-functions";
+import { useMemo } from "react";
 
 interface DesktopTableRowProps {
   mealId: number;
@@ -23,7 +24,7 @@ export const DesktopTableRow = ({
   onEdit,
 }: DesktopTableRowProps) => {
   const item = useMealPlanStore((state) => state.mealStatus[mealId]);
-  const meal = getEffectiveMeal(item);
+  const meal = useMemo(() => getEffectiveMeal(item), [item]);
   if (!meal) return null;
 
   const isCompleted = item.consumed;
