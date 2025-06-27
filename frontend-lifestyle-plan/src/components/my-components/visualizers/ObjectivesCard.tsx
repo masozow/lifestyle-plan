@@ -1,25 +1,33 @@
 import { API_ENDPOINTS } from "@/lib/backendURLS";
-import { useSessionStore } from "@/store";
+import { useSessionStore, usePlanStore } from "@/store";
 import { Card, CardHeader, CardTitle } from "../../ui/card";
 import { CardContentBaseVisualizer } from "./CardContentBaseVisualizer";
+import { mapPlanToFormValues } from "./mappers";
+import { useMemo } from "react";
 
-type Plan = {
-  id: number;
+export type Plan = {
   objective: string;
   restriction?: string;
   preference?: string;
   extras?: string;
-  userId: number;
-  createdAt: string;
-  updatedAt: string;
 };
 
 interface Props {
   className?: string;
 }
+
 export const ObjectivesCard = ({ className }: Props) => {
   const { user } = useSessionStore();
   const userId = user?.id;
+  const { setPlan } = usePlanStore();
+  const setPlanHandler = (data: Plan) => {
+    const mappedPlan = mapPlanToFormValues(data);
+    setPlan(mappedPlan);
+  };
+  const url = useMemo(
+    () => (userId ? `${API_ENDPOINTS.plan}/${userId}` : ""),
+    [userId]
+  );
 
   return (
     <Card className={className}>
@@ -27,7 +35,8 @@ export const ObjectivesCard = ({ className }: Props) => {
         <CardTitle className="text-2xl">Objectives</CardTitle>
       </CardHeader>
       <CardContentBaseVisualizer<Plan>
-        url={`${API_ENDPOINTS.plan}/${userId}`}
+        url={url}
+        onDataLoaded={setPlanHandler}
       />
     </Card>
   );

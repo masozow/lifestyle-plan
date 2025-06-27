@@ -6,25 +6,44 @@ import { format } from "@formkit/tempo";
 import { CustomSpinner } from "@/components";
 import { useTranslation } from "react-i18next";
 import type { LocaleCode } from "@/locales/localesTypes";
+import { useEffect, useRef } from "react";
 
-interface Props {
+interface Props<T> {
   url: string;
+  onDataLoaded?: (data: T) => void;
 }
+
 export const CardContentBaseVisualizer = <T extends Record<string, unknown>>({
   url,
-}: Props) => {
+  onDataLoaded,
+}: Props<T>) => {
   const { user } = useSessionStore();
   const userId = user?.id;
   const { i18n } = useTranslation();
   const locale = i18n.language as LocaleCode;
+
   const { data, isLoading, isError, error } = useApiGet<{
     success: boolean;
     data: T;
   }>({
-    url: url,
+    url,
     enabled: !!userId,
   });
 
+  const prevDataRef = useRef<T | null>(null);
+  useEffect(() => {
+    const newData = data?.data;
+    if (newData && onDataLoaded) {
+      const isSame =
+        JSON.stringify(prevDataRef.current) === JSON.stringify(newData);
+      if (!isSame) {
+        prevDataRef.current = newData;
+        onDataLoaded(newData);
+      }
+    }
+  }, [data, onDataLoaded]);
+
+  if (!userId || !url) return null;
   if (isLoading) return <CustomSpinner />;
   if (isError) return <div>Error: {(error as Error).message}</div>;
 

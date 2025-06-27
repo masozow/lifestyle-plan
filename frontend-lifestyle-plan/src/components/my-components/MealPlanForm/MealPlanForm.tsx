@@ -27,6 +27,7 @@ import { toast } from "sonner";
 
 export const MealPlanForm = () => {
   const { user } = useSessionStore();
+  console.log("user", user);
   const userId = user?.id;
   const apiEndPointGET = `${API_ENDPOINTS.userMealPlan}/${userId}`;
   const mealStatus = useMealPlanStore((state) => state.mealStatus);
