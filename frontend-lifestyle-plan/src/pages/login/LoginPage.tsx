@@ -2,7 +2,7 @@ import { LoginForm } from "@/components";
 import landing_image from "../landing/landing_image.png";
 import { AuthFormWrapper } from "@/layouts";
 
-export const LoginPage = () => {
+const LoginPage = () => {
   return (
     <AuthFormWrapper
       landing_image_url={landing_image}
@@ -12,3 +12,5 @@ export const LoginPage = () => {
     </AuthFormWrapper>
   );
 };
+
+export default LoginPage;

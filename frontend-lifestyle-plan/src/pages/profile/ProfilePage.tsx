@@ -2,7 +2,7 @@ import { ProfileForm } from "@/components";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-export const ProfilePage = () => {
+const ProfilePage = () => {
   const { t } = useTranslation();
   const [customTitle, setCustomTitle] = useState<string | undefined>();
 
@@ -21,3 +21,5 @@ export const ProfilePage = () => {
     </div>
   );
 };
+
+export default ProfilePage;

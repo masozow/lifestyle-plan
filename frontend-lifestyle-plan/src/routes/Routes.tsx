@@ -1,29 +1,38 @@
 import { createBrowserRouter } from "react-router";
 import { AuthLayout, ProtectedLayout } from "@/layouts";
-
-import {
-  LandingPage,
-  LoginPage,
-  PlannerPage,
-  ProfilePage,
-  RegisterPage,
-  MealPlanPage,
-  NewPlanPage,
-  DashboardPage,
-  ObjectivesPage,
-  ViewProfilePage,
-  UserPage,
-} from "@/pages";
 import DashboardHome from "@/components/my-components/dashboard/DashboardHome";
+import { Suspense } from "react";
+import * as Pages from "@/pages";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <AuthLayout />,
     children: [
-      { path: "", element: <LandingPage /> },
-      { path: "login", element: <LoginPage /> },
-      { path: "register", element: <RegisterPage /> },
+      {
+        path: "",
+        element: (
+          <Suspense fallback={<div>Loading landing...</div>}>
+            <Pages.LandingPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "login",
+        element: (
+          <Suspense fallback={<div>Loading landing...</div>}>
+            <Pages.LoginPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "register",
+        element: (
+          <Suspense fallback={<div>Loading landing...</div>}>
+            <Pages.RegisterPage />
+          </Suspense>
+        ),
+      },
     ],
   },
   {
@@ -32,16 +41,76 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <DashboardPage />,
+        element: (
+          <Suspense fallback={<div>Loading landing...</div>}>
+            <Pages.DashboardPage />
+          </Suspense>
+        ),
         children: [
-          { path: "", element: <DashboardHome /> },
-          { path: "profile", element: <ProfilePage /> },
-          { path: "view-profile", element: <ViewProfilePage /> },
-          { path: "planner", element: <PlannerPage /> },
-          { path: "new-plan", element: <NewPlanPage /> },
-          { path: "meal-plan", element: <MealPlanPage /> },
-          { path: "objectives", element: <ObjectivesPage /> },
-          { path: "user", element: <UserPage /> },
+          {
+            path: "",
+            element: (
+              <Suspense fallback={<div>Loading landing...</div>}>
+                <DashboardHome />
+              </Suspense>
+            ),
+          },
+          {
+            path: "profile",
+            element: (
+              <Suspense fallback={<div>Loading landing...</div>}>
+                <Pages.ProfilePage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "view-profile",
+            element: (
+              <Suspense fallback={<div>Loading landing...</div>}>
+                <Pages.ViewProfilePage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "planner",
+            element: (
+              <Suspense fallback={<div>Loading landing...</div>}>
+                <Pages.PlannerPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "new-plan",
+            element: (
+              <Suspense fallback={<div>Loading landing...</div>}>
+                <Pages.NewPlanPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "meal-plan",
+            element: (
+              <Suspense fallback={<div>Loading landing...</div>}>
+                <Pages.MealPlanPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "objectives",
+            element: (
+              <Suspense fallback={<div>Loading landing...</div>}>
+                <Pages.ObjectivesPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "user",
+            element: (
+              <Suspense fallback={<div>Loading landing...</div>}>
+                <Pages.UserPage />
+              </Suspense>
+            ),
+          },
         ],
       },
     ],

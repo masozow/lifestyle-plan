@@ -1,7 +1,7 @@
 import { ObjectivesCard } from "@/components";
 import { motion } from "motion/react";
 
-export const ObjectivesPage = () => {
+const ObjectivesPage = () => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -13,3 +13,5 @@ export const ObjectivesPage = () => {
     </motion.div>
   );
 };
+
+export default ObjectivesPage;

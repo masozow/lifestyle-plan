@@ -56,8 +56,10 @@ export const saveReplacementMeal = (
  * Return the effective meal for a given meal status, which is either the replacement
  * meal if it exists, or the target meal if there is no replacement.
  */
-export const getEffectiveMeal = (status: MealStatusItem): Meal | ReplacementMeal | undefined => {
-  console.log("getEffectiveMeal:", status);
+export const getEffectiveMeal = (
+  status: MealStatusItem
+): Meal | ReplacementMeal | undefined => {
+  // console.debug(`getEffectiveMeal | mealId:${status.userDailyMealId}`, status);
   return status.replacement ?? status.targetMeal;
 };
 export const calculateDayTotals = (

@@ -1,7 +1,7 @@
 import { NewPlanForm } from "@/components";
 import { useTranslation } from "react-i18next";
 
-export const NewPlanPage = () => {
+const NewPlanPage = () => {
   const { t } = useTranslation();
 
   return (
@@ -13,3 +13,5 @@ export const NewPlanPage = () => {
     </div>
   );
 };
+
+export default NewPlanPage;
