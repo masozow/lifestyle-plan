@@ -1,7 +1,7 @@
 import { Dashboard } from "@/components";
 
-const DashboardPage = () => {
+export const DashboardPage = () => {
   return <Dashboard />;
 };
 
-export default DashboardPage;
+// export default DashboardPage;

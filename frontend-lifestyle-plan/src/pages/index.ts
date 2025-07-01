@@ -7,11 +7,12 @@ export const NewPlanPage = lazy(() => import("./new-plan/NewPlanPage"));
 export const ObjectivesPage = lazy(() => import("./planner/ObjectivesPage"));
 export const UserPage = lazy(() => import("./user/UserPage"));
 export const MealPlanPage = lazy(() => import("./meal-plan/MealPlanPage"));
-export const DashboardPage = lazy(() => import("./dashboard/DashboardPage"));
+// export const DashboardPage = lazy(() => import("./dashboard/DashboardPage"));
 
 export * from "./landing/LandingPage.tsx";
 export * from "./login/LoginPage.tsx";
 export * from "./register/RegisterPage.tsx";
+export * from  "./dashboard/DashboardPage.tsx";
 // export * from "./planner/PlannerPage.tsx";
 // export * from "./dashboard/DashboardPage.tsx";
 // export * from "./profile/ProfilePage.tsx";

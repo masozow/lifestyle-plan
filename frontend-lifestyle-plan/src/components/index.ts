@@ -24,4 +24,7 @@ export * from "@/components/my-components/nav-bar/LanguageMenu.tsx";
 export * from "@/components/my-components/loaders/CustomSpinner.tsx";
 export * from "@/components/my-components/visualizers/CardContentBaseVisualizer.tsx"
 export * from "@/components/my-components/visualizers/UserCard.tsx";
+//skeletons
+export * from "@/components/my-components/dashboard/DashboardHomeSkeleton.tsx";
+export * from "@/components/my-components/MealPlanForm/MealPlanFormSkeleton.tsx";
 // export * from "./my-components/forms/BaseForm/CustomInput.tsx";
