@@ -16,44 +16,50 @@ interface MealPlanStore {
 
 export const useMealPlanStore = create<MealPlanStore>()(
   persist(
-    (set, get) => ({
-      mealStatus: {},
-      lastSyncedAt: null,
-      lastTouchedKey: null,
+    (set, get) => {
+      const emptyMealStatus: MealStatus = {};
+      return {
+        mealStatus: emptyMealStatus,
+        lastSyncedAt: null,
+        lastTouchedKey: null,
 
-      setMealStatus: (mealStatus) => set({ mealStatus }),
+        setMealStatus: (mealStatus) => set({ mealStatus }),
 
-      updateMealStatus: (key, status) => {
-        set((state) => {
-          const prevStatus = state.mealStatus[key];
-          const isSame = JSON.stringify(prevStatus) === JSON.stringify(status);
-          return isSame
-            ? { lastTouchedKey: key } 
-            : {
-                mealStatus: {
-                  ...state.mealStatus,
-                  [key]: { ...status },
-                },
-                lastTouchedKey: key,
-              };
-        });
-      },
+        updateMealStatus: (key, status) => {
+          set((state) => {
+            const prevStatus = state.mealStatus[key];
+            const isSame = JSON.stringify(prevStatus) === JSON.stringify(status);
+            return isSame
+              ? { lastTouchedKey: key }
+              : {
+                  mealStatus: {
+                    ...state.mealStatus,
+                    [key]: status,
+                  },
+                  lastTouchedKey: key,
+                };
+          });
+        },
 
+        setLastTouchedKey: (key) => set({ lastTouchedKey: key }),
 
-      setLastTouchedKey: (key) => set({ lastTouchedKey: key }),
+        markAsSynced: () => {
+          set({ lastSyncedAt: Date.now(), lastTouchedKey: null });
+        },
 
-      markAsSynced: () => {
-        set({ lastSyncedAt: Date.now(), lastTouchedKey: null });
-      },
+        clearMealPlan: () =>
+          set({
+            mealStatus: emptyMealStatus,
+            lastSyncedAt: null,
+            lastTouchedKey: null,
+          }),
 
-      clearMealPlan: () =>
-        set({ mealStatus: {}, lastSyncedAt: null, lastTouchedKey: null }),
-
-      hasUnsyncedChanges: () => {
-        const state = get();
-        return state.lastSyncedAt === null || state.lastTouchedKey !== null;
-      },
-    }),
+        hasUnsyncedChanges: () => {
+          const state = get();
+          return state.lastSyncedAt === null || state.lastTouchedKey !== null;
+        },
+      };
+    },
     { name: "meal-plan-storage" }
   )
 );

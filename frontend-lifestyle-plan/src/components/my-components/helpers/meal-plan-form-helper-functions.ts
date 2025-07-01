@@ -12,13 +12,13 @@ export const toggleMealStatus = (
   meal: Meal,
   consumed: boolean
 ): MealStatus => {
+  const existing = mealStatus[meal.id];
+
   const updatedStatus: MealStatusItem = {
     consumed,
     userDailyMealId: meal.id,
-    userDailyIntakeId: meal.intake?.id,
-    replacement: meal.intake
-      ? { ...meal.intake, isIntake: true }
-      : undefined,
+    userDailyIntakeId: existing?.userDailyIntakeId ?? meal.intake?.id,
+    replacement: existing?.replacement ?? (meal.intake ? { ...meal.intake, isIntake: true } : undefined),
     targetMeal: meal,
   };
 
@@ -27,6 +27,7 @@ export const toggleMealStatus = (
     [meal.id]: updatedStatus,
   };
 };
+
 
 export const saveReplacementMeal = (
   mealStatus: MealStatus,
@@ -55,7 +56,10 @@ export const saveReplacementMeal = (
  * Return the effective meal for a given meal status, which is either the replacement
  * meal if it exists, or the target meal if there is no replacement.
  */
-export const getEffectiveMeal = (status: MealStatusItem): Meal | ReplacementMeal | undefined => {
+export const getEffectiveMeal = (
+  status: MealStatusItem
+): Meal | ReplacementMeal | undefined => {
+  // console.debug(`getEffectiveMeal | mealId:${status.userDailyMealId}`, status);
   return status.replacement ?? status.targetMeal;
 };
 export const calculateDayTotals = (

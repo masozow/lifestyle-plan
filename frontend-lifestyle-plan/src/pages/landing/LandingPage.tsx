@@ -2,8 +2,9 @@ import { Link } from "react-router";
 import landing_image from "./landing_image.png";
 import { Button } from "@/components/ui/button";
 import "./LandingPage.module.css";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+// const LazyMotion = await import("motion/react");
 export const LandingPage = () => {
   const { t } = useTranslation();
   return (
@@ -63,6 +64,7 @@ export const LandingPage = () => {
           src={landing_image}
           alt="woman cooking"
           className="hover:filter hover:drop-shadow-lg transition-all duration-200 hover:scale-y-[0.98] hover:scale-x-[0.98]"
+          loading="lazy"
         />
       </div>
     </div>

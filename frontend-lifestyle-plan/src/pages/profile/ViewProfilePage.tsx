@@ -1,7 +1,7 @@
 import { ProfileCard } from "@/components";
 import { motion } from "motion/react";
 
-export const ViewProfilePage = () => {
+const ViewProfilePage = () => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -13,3 +13,5 @@ export const ViewProfilePage = () => {
     </motion.div>
   );
 };
+
+export default ViewProfilePage;

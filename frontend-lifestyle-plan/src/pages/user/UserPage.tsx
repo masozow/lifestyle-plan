@@ -1,7 +1,7 @@
 import { UserCard } from "@/components";
 import { motion } from "motion/react";
 
-export const UserPage = () => {
+const UserPage = () => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -13,3 +13,5 @@ export const UserPage = () => {
     </motion.div>
   );
 };
+
+export default UserPage;

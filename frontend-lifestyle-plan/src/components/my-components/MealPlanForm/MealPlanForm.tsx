@@ -22,11 +22,12 @@ import {
 import { useMealPlanStore, useSessionStore } from "@/store";
 import { useMealPlanSync } from "@/hooks";
 import { API_ENDPOINTS } from "@/lib/backendURLS";
-import { CustomSpinner } from "@/components";
+import { MealPlanFormSkeleton } from "@/components";
 import { toast } from "sonner";
 
 export const MealPlanForm = () => {
   const { user } = useSessionStore();
+  console.log("user", user);
   const userId = user?.id;
   const apiEndPointGET = `${API_ENDPOINTS.userMealPlan}/${userId}`;
   const mealStatus = useMealPlanStore((state) => state.mealStatus);
@@ -51,7 +52,7 @@ export const MealPlanForm = () => {
     getUrl: apiEndPointGET,
   });
 
-  if (isLoading) return <CustomSpinner />;
+  if (isLoading) return <MealPlanFormSkeleton />;
   if (isError || !data || !data.macro_ratios || !data.weekly_plan) {
     return (
       <div className="text-red-500">

@@ -14,3 +14,5 @@ export const RegisterPage = () => {
     </AuthFormWrapper>
   );
 };
+
+export default RegisterPage;

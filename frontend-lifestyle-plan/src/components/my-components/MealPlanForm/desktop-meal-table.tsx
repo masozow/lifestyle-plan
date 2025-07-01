@@ -34,17 +34,14 @@ export const DesktopMealTable = ({
             const meal = getEffectiveMeal(item);
             if (!meal) return null;
 
-            const isCompleted = item.consumed;
-            const hasReplacement = !!item.replacement;
-            const replacement = item.replacement;
+            // const isCompleted = item.consumed;
+            // const hasReplacement = !!item.replacement;
+            // const replacement = item.replacement;
 
             return (
               <DesktopTableRow
+                mealId={item.userDailyMealId}
                 key={item.userDailyMealId}
-                meal={meal}
-                isCompleted={isCompleted}
-                hasReplacement={hasReplacement}
-                replacement={replacement}
                 units={units}
                 onToggleComplete={() => onToggleComplete(index)}
                 onEdit={() => onEdit(index)}
