@@ -2,24 +2,24 @@ import { Link } from "react-router";
 import landing_image from "./landing_image.png";
 import { Button } from "@/components/ui/button";
 import "./LandingPage.module.css";
-// import { motion } from "LazyMotion/react";
+import { motion } from "motion/react";
 import { useTranslation } from "react-i18next";
-const LazyMotion = await import("motion/react");
+// const LazyMotion = await import("motion/react");
 const LandingPage = () => {
   const { t } = useTranslation();
   return (
     <div className="container flex flex-col justify-center items-center gap-12 pt-10 px-4 mx-auto sm:flex-row lg:px-40">
       <div className="flex flex-col w-full m-2 lg:m-5 xl:m-10 lg:mt:16 md:w-1/2 lg:w-1/3 xl:w-1/2">
-        <LazyMotion.motion.h1
+        <motion.h1
           className="text-4xl font-bold text-center md:text-5xl lg:text-6xl lg:max-w-md sm:text-left"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ duration: 1, ease: "easeInOut" }}
         >
           {t("landingPage.title")}
-        </LazyMotion.motion.h1>
-        <LazyMotion.motion.div className="h-[72px] relative overflow-hidden">
-          <LazyMotion.motion.p
+        </motion.h1>
+        <motion.div className="h-[72px] relative overflow-hidden">
+          <motion.p
             className="text-1xl md:text-2xl text-center text-gray-400 lg:max-w-md sm:text-left absolute w-full"
             initial={{ y: 0, opacity: 1 }}
             animate={{
@@ -34,9 +34,9 @@ const LandingPage = () => {
             }}
           >
             {t("landingPage.subtitle1")}
-          </LazyMotion.motion.p>
+          </motion.p>
 
-          <LazyMotion.motion.p
+          <motion.p
             className="text-1xl md:text-2xl text-center text-gray-400 lg:max-w-md sm:text-left absolute w-full"
             initial={{ y: 72, opacity: 0 }}
             animate={{
@@ -51,8 +51,8 @@ const LandingPage = () => {
             }}
           >
             {t("landingPage.subtitle2")}
-          </LazyMotion.motion.p>
-        </LazyMotion.motion.div>
+          </motion.p>
+        </motion.div>
         <div className="text-center ">
           <Button asChild className="mt-4 p-4 md:p-8 text-1xl md:text-2xl">
             <Link to="/app">{t("landingPage.button")}</Link>
