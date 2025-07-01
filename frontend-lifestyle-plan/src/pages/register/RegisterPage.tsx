@@ -3,7 +3,7 @@ import landing_image from "../landing/landing_image.png";
 import { AuthFormWrapper } from "@/layouts";
 import { RegisterFormSteps } from "@/components";
 
-const RegisterPage = () => {
+export const RegisterPage = () => {
   return (
     <AuthFormWrapper
       landing_image_url={landing_image}

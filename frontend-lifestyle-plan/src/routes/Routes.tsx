@@ -11,27 +11,15 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: (
-          <Suspense fallback={<div>Loading landing...</div>}>
-            <Pages.LandingPage />
-          </Suspense>
-        ),
+        element: <Pages.LandingPage />,
       },
       {
         path: "login",
-        element: (
-          <Suspense fallback={<div>Loading landing...</div>}>
-            <Pages.LoginPage />
-          </Suspense>
-        ),
+        element: <Pages.LoginPage />,
       },
       {
         path: "register",
-        element: (
-          <Suspense fallback={<div>Loading landing...</div>}>
-            <Pages.RegisterPage />
-          </Suspense>
-        ),
+        element: <Pages.RegisterPage />,
       },
     ],
   },

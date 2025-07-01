@@ -5,7 +5,7 @@ import "./LandingPage.module.css";
 import { motion } from "motion/react";
 import { useTranslation } from "react-i18next";
 // const LazyMotion = await import("motion/react");
-const LandingPage = () => {
+export const LandingPage = () => {
   const { t } = useTranslation();
   return (
     <div className="container flex flex-col justify-center items-center gap-12 pt-10 px-4 mx-auto sm:flex-row lg:px-40">
@@ -69,5 +69,3 @@ const LandingPage = () => {
     </div>
   );
 };
-
-export default LandingPage;
