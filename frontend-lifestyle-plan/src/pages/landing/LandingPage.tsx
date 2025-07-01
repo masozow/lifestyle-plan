@@ -64,6 +64,7 @@ export const LandingPage = () => {
           src={landing_image}
           alt="woman cooking"
           className="hover:filter hover:drop-shadow-lg transition-all duration-200 hover:scale-y-[0.98] hover:scale-x-[0.98]"
+          loading="lazy"
         />
       </div>
     </div>
