@@ -1,4 +1,4 @@
-import { IconDots, type Icon } from "@tabler/icons-react";
+import { IconDotsVertical, type Icon } from "@tabler/icons-react";
 
 import {
   DropdownMenu,
@@ -10,12 +10,12 @@ import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { NavLink } from "react-router";
+import { useState } from "react";
 
 export interface NavDocumentItem {
   name: string;
@@ -32,29 +32,27 @@ export function NavDocuments({
   title?: string;
 }) {
   const { isMobile } = useSidebar();
-
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>{title}</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild>
-              <a href={item.url}>
-                <item.icon />
-                <span>{item.name}</span>
-              </a>
-            </SidebarMenuButton>
             {item.name !== "Progress" && (
-              <DropdownMenu>
+              <DropdownMenu
+                open={openMenu === item.name}
+                onOpenChange={(open) => setOpenMenu(open ? item.name : null)}
+              >
                 <DropdownMenuTrigger asChild>
-                  <SidebarMenuAction
-                    showOnHover
-                    className="data-[state=open]:bg-accent rounded-sm"
+                  <SidebarMenuButton
+                    size="lg"
+                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                   >
-                    <IconDots />
-                    <span className="sr-only">More</span>
-                  </SidebarMenuAction>
+                    <item.icon />
+                    <span>{item.name}</span>
+                    <IconDotsVertical className="ml-auto size-4" />
+                  </SidebarMenuButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   className="w-24 rounded-lg"
