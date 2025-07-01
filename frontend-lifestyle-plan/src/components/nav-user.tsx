@@ -1,16 +1,16 @@
 import {
-  IconCreditCard,
+  // IconCreditCard,
   IconDotsVertical,
   IconLogout,
-  IconNotification,
-  IconUserCircle,
+  // IconNotification,
+  // IconUserCircle,
 } from "@tabler/icons-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
+  // DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -23,20 +23,34 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-import { useSessionStore } from "@/store";
+import { useAuthStore } from "@/store";
+import { useApiRequest } from "@/hooks";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string;
-    email: string;
-    avatar: string;
-  };
-}) {
+export interface User {
+  name: string;
+  email: string;
+  avatar: string;
+}
+
+export function NavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar();
-  const { logout } = useSessionStore();
-
+  const logoutMutation = useApiRequest({
+    url: `${import.meta.env.VITE_BACKEND_BASE_URL}/api/logout`,
+    method: "POST",
+  });
+  const { logout } = useAuthStore();
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    const result = await logout(logoutMutation);
+    if (result.success) {
+      toast.success(result.message || "Logged out successfully");
+    } else {
+      toast.error(result.message || "Logout failed");
+      navigate("/login");
+    }
+  };
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -86,7 +100,7 @@ export function NavUser({
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
+            {/* <DropdownMenuGroup>
               <DropdownMenuItem>
                 <IconUserCircle />
                 Account
@@ -100,8 +114,8 @@ export function NavUser({
                 Notifications
               </DropdownMenuItem>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => logout}>
+            <DropdownMenuSeparator /> */}
+            <DropdownMenuItem onClick={handleLogout}>
               <IconLogout />
               Log out
             </DropdownMenuItem>
