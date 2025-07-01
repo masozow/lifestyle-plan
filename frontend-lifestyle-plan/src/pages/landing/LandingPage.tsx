@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import landing_image from "./landing_image.png";
 import { Button } from "@/components/ui/button";
 import "./LandingPage.module.css";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 // const LazyMotion = await import("motion/react");
 export const LandingPage = () => {
