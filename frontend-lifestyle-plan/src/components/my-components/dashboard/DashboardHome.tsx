@@ -1,8 +1,11 @@
-import { ChartAreaInteractive } from "@/components/chart-area-interactive";
-import { DataTable } from "@/components/data-table";
+// import { ChartAreaInteractive } from "@/components/chart-area-interactive";
+// import { DataTable } from "@/components/data-table";
 import { SectionCards } from "@/components/section-cards";
-import data from "./data.json";
-
+// import data from "./data.json";
+import { lazy } from "react";
+const ChartAreaInteractive = lazy(
+  () => import("@/components/chart-area-interactive")
+);
 const DashboardHome = () => {
   return (
     <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
@@ -10,7 +13,7 @@ const DashboardHome = () => {
       <div className="px-4 lg:px-6">
         <ChartAreaInteractive />
       </div>
-      <DataTable data={data} />
+      {/* <DataTable data={data} /> */}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
-import { useState } from "react";
+// import { useState } from "react";
 import {
   Controller,
   type Control,
@@ -27,7 +27,7 @@ export const CustomNumberInput = <T extends FieldValues>({
   unit,
   autoFocus = true,
 }: Props<T>) => {
-  const [isTouched, setIsTouched] = useState(false);
+  // const [isTouched, setIsTouched] = useState(false);
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -58,7 +58,7 @@ export const CustomNumberInput = <T extends FieldValues>({
             autoFocus={autoFocus}
             onBlur={() => {
               field.onBlur();
-              setIsTouched(true);
+              // setIsTouched(true);
             }}
             onFocus={(e) => e.target.select()}
           />

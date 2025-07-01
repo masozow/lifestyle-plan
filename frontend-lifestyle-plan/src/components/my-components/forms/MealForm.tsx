@@ -18,7 +18,7 @@ export const MealForm = ({ onAdd }: { onAdd: () => void }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    // formState: { errors },
     reset,
   } = useForm<MealFormType>({
     resolver: zodResolver(schema),
