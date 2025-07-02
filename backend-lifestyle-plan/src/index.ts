@@ -1,4 +1,4 @@
-import "dotenv/config"; //needed to deploy on railway
+import dotenv from "dotenv"; //needed to deploy on railway
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -18,6 +18,7 @@ import openAIResponseRoutes from "./routes/openAIResponse.route.js";
 import userMealPlanRoutes from "./routes/userMealPlan.route.js";
 import userDailyMealAndIntakeRoutes from "./routes/userDailyMealAndIntake.route.js";
 
+dotenv.config();
 const app = express();
 
 // Global middlewares
