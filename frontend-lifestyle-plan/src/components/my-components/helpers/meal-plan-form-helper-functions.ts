@@ -145,11 +145,20 @@ export const calculateMacroPercentages = (macroRatios: MacroRatios) => {
   };
 };
 
-export const groupMealsByDay = (mealStatus: MealStatus) => {
-  const grouped = new Map<string, { day: string; date: string; meals: MealStatusItem[] }>();
+export const groupMealsByDay = (
+  mealStatus: MealStatus,
+  options?: {
+    limitDays?: number;
+    dateToFilter?: Date;
+  }
+) => {
+  const grouped = new Map<
+    string,
+    { day: string; date: string; meals: MealStatusItem[] }
+  >();
 
   Object.values(mealStatus).forEach((status) => {
-     const meal = getEffectiveMeal(status);
+    const meal = getEffectiveMeal(status);
     if (!meal) return;
 
     const key = meal.date;
@@ -165,5 +174,31 @@ export const groupMealsByDay = (mealStatus: MealStatus) => {
     grouped.get(key)!.meals.push(status);
   });
 
-  return [...grouped.values()];
+  let result = [...grouped.values()];
+
+  // Convert date string to Date and sort ascending
+  result = result.sort((a, b) => {
+    const dateA = new Date(a.date || "1970-01-01");
+    const dateB = new Date(b.date || "1970-01-01");
+    return dateA.getTime() - dateB.getTime();
+  });
+
+  // Optionally filter only from today onward
+  if (options?.dateToFilter) {
+    result = result.filter((day) => {
+      if (!day.date) return false;
+      const date = new Date(day.date);
+      // Remove time part
+      const today = new Date(options.dateToFilter || new Date());
+      today.setHours(0, 0, 0, 0);
+      return date >= today;
+    });
+  }
+
+  // Optionally limit number of days
+  if (options?.limitDays) {
+    result = result.slice(0, options.limitDays);
+  }
+
+  return result;
 };
