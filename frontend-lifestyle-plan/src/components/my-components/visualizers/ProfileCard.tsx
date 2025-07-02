@@ -28,7 +28,7 @@ export const ProfileCard = ({ className }: Props) => {
     setProfile(mappedProfile);
   };
   const url = useMemo(
-    () => (userId ? `${API_ENDPOINTS.plan}/${userId}` : ""),
+    () => (userId ? `${API_ENDPOINTS.profile}/${userId}` : ""),
     [userId]
   );
   return (
