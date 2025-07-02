@@ -15,7 +15,7 @@ export const AuthFormWrapper = ({
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 my-5">
-        <div className="flex sm:justify-center gap-2 justify-start">
+        <div className="flex justify-center gap-2">
           <Link
             to="/"
             className="flex items-center gap-2 font-medium justify-center"
