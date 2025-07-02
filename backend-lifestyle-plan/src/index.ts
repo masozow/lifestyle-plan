@@ -1,3 +1,4 @@
+import "dotenv/config"; //needed to deploy on railway
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
