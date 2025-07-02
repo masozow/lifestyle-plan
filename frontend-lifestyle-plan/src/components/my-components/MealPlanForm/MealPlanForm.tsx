@@ -24,13 +24,22 @@ import { useMealPlanSync } from "@/hooks";
 import { API_ENDPOINTS } from "@/lib/backendURLS";
 import { MealPlanFormSkeleton } from "@/components";
 import { toast } from "sonner";
-
-export const MealPlanForm = () => {
+interface MealPlanFormProps {
+  limitDays?: number;
+  dateToFilter?: Date;
+  showHeader?: boolean;
+}
+export const MealPlanForm = ({
+  limitDays,
+  dateToFilter,
+  showHeader = true,
+}: MealPlanFormProps = {}) => {
   const { user } = useSessionStore();
   // console.log("user", user);
   const userId = user?.id;
   const apiEndPointGET = `${API_ENDPOINTS.userMealPlan}/${userId}`;
   const mealStatus = useMealPlanStore((state) => state.mealStatus);
+  console.log("mealStatus", mealStatus);
   const updateMealStatus = useMealPlanStore((state) => state.updateMealStatus);
   const setLastTouchedKey = useMealPlanStore(
     (state) => state.setLastTouchedKey
@@ -103,56 +112,65 @@ export const MealPlanForm = () => {
   };
 
   const macroPercentages = calculateMacroPercentages(macro_ratios);
+
   const targetsByDay = Object.fromEntries(
     data.weekly_plan.map((day) => [day.day, day.day_macro_targets])
   );
 
   return (
     <div className="container mx-auto p-4 md:p-6 space-y-6">
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Utensils className="h-6 w-6" />
-              <CardTitle>Weekly Meal Plan</CardTitle>
-            </div>
-            <div className="flex items-center gap-2">
-              {isSyncing ? (
-                <Badge variant="secondary" className="flex items-center gap-1">
-                  <Wifi className="h-3 w-3 animate-pulse" />
-                  Syncing...
-                </Badge>
-              ) : hasInitialSyncCompleted && hasUnsyncedChanges() ? (
-                <>
+      {showHeader && (
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Utensils className="h-6 w-6" />
+                <CardTitle>Weekly Meal Plan</CardTitle>
+              </div>
+              <div className="flex items-center gap-2">
+                {isSyncing ? (
                   <Badge
-                    variant="destructive"
+                    variant="secondary"
                     className="flex items-center gap-1"
                   >
-                    <WifiOff className="h-3 w-3" />
-                    Unsaved changes
+                    <Wifi className="h-3 w-3 animate-pulse" />
+                    Syncing...
                   </Badge>
-                  <Button size="sm" onClick={handleSyncToServer}>
-                    <Save className="h-3 w-3 mr-1" />
-                    Sync
-                  </Button>
-                </>
-              ) : (
-                <Badge variant="default" className="flex items-center gap-1">
-                  <Wifi className="h-3 w-3" />
-                  Synced
-                </Badge>
-              )}
+                ) : hasInitialSyncCompleted && hasUnsyncedChanges() ? (
+                  <>
+                    <Badge
+                      variant="destructive"
+                      className="flex items-center gap-1"
+                    >
+                      <WifiOff className="h-3 w-3" />
+                      Unsaved changes
+                    </Badge>
+                    <Button size="sm" onClick={handleSyncToServer}>
+                      <Save className="h-3 w-3 mr-1" />
+                      Sync
+                    </Button>
+                  </>
+                ) : (
+                  <Badge variant="default" className="flex items-center gap-1">
+                    <Wifi className="h-3 w-3" />
+                    Synced
+                  </Badge>
+                )}
+              </div>
             </div>
-          </div>
-          <CardDescription>
-            Daily Target: {daily_calorie_target} {units?.macro.energy} |
-            Protein: {macroPercentages.protein}% | Carbohydrates:{" "}
-            {macroPercentages.carbs}% | Fats: {macroPercentages.fat}%
-          </CardDescription>
-        </CardHeader>
-      </Card>
+            <CardDescription>
+              Daily Target: {daily_calorie_target} {units?.macro.energy} |
+              Protein: {macroPercentages.protein}% | Carbohydrates:{" "}
+              {macroPercentages.carbs}% | Fats: {macroPercentages.fat}%
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      )}
 
-      {groupMealsByDay(mealStatus).map((day) => {
+      {groupMealsByDay(mealStatus, {
+        dateToFilter: dateToFilter,
+        limitDays: limitDays,
+      }).map((day) => {
         const backendTargets = targetsByDay[day.day];
 
         const dayTotals = calculateDayTotals(day.meals);
