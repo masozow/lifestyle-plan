@@ -29,7 +29,7 @@ export const NewPlanForm = () => {
       ...profile,
       language: locale,
     };
-    console.log(payLoad);
+    // console.log("Data to send to server:", payLoad);
     newPlanMutation.mutate(payLoad);
   };
 

@@ -35,9 +35,9 @@ export const PlannerForm = ({ titleChangeFunction, initialValues }: Props) => {
   });
 
   const onSubmit = async (data: PlannerFormValues) => {
-    console.log("onSubmit", {
-      ...data,
-    });
+    // console.log("onSubmit", {
+    //   ...data,
+    // });
     if (user?.id) {
       try {
         const result = await plannerMutation.mutateAsync({

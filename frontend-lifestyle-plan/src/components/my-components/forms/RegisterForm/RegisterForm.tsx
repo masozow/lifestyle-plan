@@ -18,7 +18,7 @@ import { X } from "lucide-react";
 import { useAuthStore, useSessionStore } from "@/store";
 import { CustomRadiogroup } from "@/components";
 import { useEffect } from "react";
-import i18n from "@/lib/i18n";
+// import i18n from "@/lib/i18n";
 
 export const RegisterForm = () => {
   const navigate = useNavigate();
@@ -50,11 +50,11 @@ export const RegisterForm = () => {
       gender: "male",
     },
   });
-  useEffect(() => {
-    console.log("i18n ready status:", i18n.isInitialized);
-    console.log("Current language:", i18n.language);
-    console.log("Sample translation:", i18n.t("zod:phone_invalid_format"));
-  }, []);
+  // useEffect(() => {
+  //   console.log("i18n ready status:", i18n.isInitialized);
+  //   console.log("Current language:", i18n.language);
+  //   console.log("Sample translation:", i18n.t("zod:phone_invalid_format"));
+  // }, []);
   useEffect(() => {
     if (loginMutation.isSuccess) {
       const handleSessionFetch = async () => {
@@ -66,7 +66,7 @@ export const RegisterForm = () => {
   }, [loginMutation.isSuccess, fetchSession, navigate]);
 
   const onSubmit = async (data: RegisterFormValues) => {
-    console.log("Form values: ", data);
+    // console.log("Form values: ", data);
     const { email, password } = data;
     setCredentials(email, password);
 

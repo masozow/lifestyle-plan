@@ -27,7 +27,7 @@ import { toast } from "sonner";
 
 export const MealPlanForm = () => {
   const { user } = useSessionStore();
-  console.log("user", user);
+  // console.log("user", user);
   const userId = user?.id;
   const apiEndPointGET = `${API_ENDPOINTS.userMealPlan}/${userId}`;
   const mealStatus = useMealPlanStore((state) => state.mealStatus);
@@ -78,7 +78,7 @@ export const MealPlanForm = () => {
   };
 
   const handleSaveReplacementMeal = async (data: ReplacementMeal) => {
-    console.log("Saving replacement meal:", data);
+    // console.log("Saving replacement meal:", data);
     if (!editingMeal) return;
 
     try {

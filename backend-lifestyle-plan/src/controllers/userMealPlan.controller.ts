@@ -73,7 +73,7 @@ const getStructuredMealPlan = async (req: Request, res: Response) => {
           attributes: ["id", "userPromptId", "userId", "response", "createdAt", "updatedAt"],
         },
       ],
-      order: [["createdAt", "ASC"]],
+      order: [["updatedAt", "DESC"]],
     });
 
     if (!progressEntries) {
