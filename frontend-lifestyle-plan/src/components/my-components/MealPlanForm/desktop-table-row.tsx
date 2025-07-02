@@ -27,7 +27,9 @@ export const DesktopTableRow = memo(
     const isCompleted = item.consumed;
 
     return (
-      <TableRow className={isCompleted ? "" : "bg-red-50 dark:bg-red-950/20"}>
+      <TableRow
+        className={isCompleted ? "" : "bg-emerald-50 dark:bg-emerald-950/20"}
+      >
         <TableCell>
           <Checkbox checked={isCompleted} onCheckedChange={onToggleComplete} />
         </TableCell>

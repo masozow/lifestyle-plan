@@ -40,7 +40,7 @@ export const MobileMealCard = ({
   return (
     <Card
       className={
-        isCompleted ? "text-left" : "bg-red-50 dark:bg-red-950/20 text-left"
+        isCompleted ? "text-left" : "bg-emerald-50 dark:bg-emerald-950/20"
       }
     >
       <CardHeader className="pb-3">
