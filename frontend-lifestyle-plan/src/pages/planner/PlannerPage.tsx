@@ -18,11 +18,9 @@ const PlannerPage = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeInOut" }}
-      className="max-w-xl mx-auto pt-10 sm:pt-1"
+      className="max-w-md mx-auto p-4"
     >
-      <h2 className="text-3xl font-bold tracking-wider mx-auto p-4">
-        {formTitle}
-      </h2>
+      <h2 className="text-3xl font-bold tracking-wider">{formTitle}</h2>
       <PlannerForm titleChangeFunction={handleFormTitleChange} />
     </motion.div>
   );

@@ -11,7 +11,6 @@ import { MealPlanForm } from "../MealPlanForm/MealPlanForm";
 const DashboardHome = () => {
   return (
     <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-      <SectionCards />
       <div className="px-4 lg:px-6">
         <MealPlanForm
           limitDays={1}
@@ -20,6 +19,9 @@ const DashboardHome = () => {
         />
         {/* add this later */}
         {/* <ChartAreaInteractive /> */}
+      </div>
+      <div className="hidden sm:block">
+        <SectionCards />
       </div>
       {/* <DataTable data={data} /> */}
     </div>
