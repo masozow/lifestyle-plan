@@ -35,7 +35,7 @@ export const MealPlanForm = ({
   showHeader = true,
 }: MealPlanFormProps = {}) => {
   const { user } = useSessionStore();
-  // console.log("user", user);
+  console.log("user", user);
   const userId = user?.id;
   const apiEndPointGET = `${API_ENDPOINTS.userMealPlan}/${userId}`;
   const mealStatus = useMealPlanStore((state) => state.mealStatus);
@@ -69,7 +69,9 @@ export const MealPlanForm = ({
       </div>
     );
   }
-
+  if (Object.keys(mealStatus).length === 0) {
+    return <MealPlanFormSkeleton />;
+  }
   const { daily_calorie_target, macro_ratios, units } = data;
 
   const handleToggleMealStatus = (meal: Meal, completed: boolean) => {
