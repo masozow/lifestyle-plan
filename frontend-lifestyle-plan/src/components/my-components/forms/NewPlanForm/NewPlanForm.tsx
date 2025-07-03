@@ -8,6 +8,10 @@ import type { LocaleCode } from "@/locales/localesTypes";
 import { useApiRequest } from "@/hooks";
 import { API_ENDPOINTS } from "@/lib/backendURLS";
 import { useEffect } from "react";
+
+import { toast } from "sonner";
+import { NeuralNetworkLoader } from "@/components";
+
 export const NewPlanForm = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
@@ -15,32 +19,45 @@ export const NewPlanForm = () => {
   const { profile } = useProfileStore();
   const { user } = useSessionStore();
   const locale = i18n.language as LocaleCode;
+
   const newPlanMutation = useApiRequest({
     url: `${API_ENDPOINTS.openai}/sendPrompt`,
     method: "POST",
   });
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const age = diffYears(date(user?.birthDate), new Date());
     const payLoad = {
       ...plan,
-      age: age,
+      age,
       gender: user?.gender,
       ...profile,
       language: locale,
     };
-    // console.log("Data to send to server:", payLoad);
+
+    if (!payLoad) return;
     newPlanMutation.mutate(payLoad);
   };
 
   useEffect(() => {
     if (newPlanMutation.isSuccess) {
+      toast.success(newPlanMutation.data.message);
       setTimeout(() => {
         navigate("/app/meal-plan");
       }, 0);
+    } else if (newPlanMutation.isError) {
+      toast.error(newPlanMutation.error.message);
     }
-  }, [navigate, newPlanMutation.isSuccess]);
-  return (
+  }, [
+    navigate,
+    newPlanMutation.isSuccess,
+    newPlanMutation.isError,
+    newPlanMutation.error?.message,
+    newPlanMutation.data?.message,
+  ]);
+
+  return !newPlanMutation.isPending ? (
     <motion.form
       className="flex flex-col justify-between gap-6"
       initial={{ opacity: 0, y: 20 }}
@@ -70,5 +87,9 @@ export const NewPlanForm = () => {
         </div>
       </motion.div>
     </motion.form>
+  ) : (
+    <div className="flex items-center justify-center w-full h-full">
+      <NeuralNetworkLoader width={400} height={400} />
+    </div>
   );
 };
