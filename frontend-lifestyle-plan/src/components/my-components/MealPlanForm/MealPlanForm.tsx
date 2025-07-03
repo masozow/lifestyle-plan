@@ -35,11 +35,11 @@ export const MealPlanForm = ({
   showHeader = true,
 }: MealPlanFormProps = {}) => {
   const { user } = useSessionStore();
-  console.log("user", user);
+  // console.log("user", user);
   const userId = user?.id;
   const apiEndPointGET = `${API_ENDPOINTS.userMealPlan}/${userId}`;
   const mealStatus = useMealPlanStore((state) => state.mealStatus);
-  console.log("mealStatus", mealStatus);
+  // console.log("mealStatus", mealStatus);
   const updateMealStatus = useMealPlanStore((state) => state.updateMealStatus);
   const setLastTouchedKey = useMealPlanStore(
     (state) => state.setLastTouchedKey
