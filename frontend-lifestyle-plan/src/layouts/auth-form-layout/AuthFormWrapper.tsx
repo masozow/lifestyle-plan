@@ -29,7 +29,7 @@ export const AuthFormWrapper = ({
           </Link>
         </div>
         <div className="flex flex-1 items-start sm:mt-0 sm:items-center justify-center">
-          <div className="w-full max-w-xs">{children}</div>
+          <div className="w-full max-w-xs px-2">{children}</div>
         </div>
       </div>
       <div className="relative hidden bg-muted lg:block">
