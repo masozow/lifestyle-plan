@@ -7,48 +7,7 @@ import {
 } from "../models/index.js";
 import { errorAndLogHandler, errorLevels } from "../utils/index.js";
 
-
-const getUserMealPlan = async (req: Request, res: Response) => {
-  const { userId } = req.params;
-  if (!userId) {
-    return res.status(400).json(
-      await errorAndLogHandler({
-        level: errorLevels.warn,
-        message: "Missing userId in request params",
-      })
-    );
-  }
-  try {
-    const progress = await UserMealProgress.findOne({
-      where: { userId },
-      include: [
-        {
-          model: UserDailyMeal,
-          include: [
-            {
-              model: UserDailyIntake,
-              required: false,
-            },
-          ],
-        },
-      ],
-      order: [["date", "ASC"]],
-    });
-
-    return res.status(200).json({ success: true, data: progress });
-  } catch (error) {
-    return res.status(500).json(
-      await errorAndLogHandler({
-        level: errorLevels.error,
-        message: `Error fetching meal plan for user ${userId}: ${(error as Error).message}`,
-        userId: Number(userId),
-        genericId: userId,
-      })
-    );
-  }
-};
-
-const getStructuredMealPlan = async (req: Request, res: Response) => {
+const getUserProgressData = async (req: Request, res: Response) => {
   const userId = req.user?.id;
   if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
@@ -77,13 +36,7 @@ const getStructuredMealPlan = async (req: Request, res: Response) => {
     });
 
     if (!progressEntries) {
-      return res.status(404).json(
-        await errorAndLogHandler({
-          level: errorLevels.error,
-          message: `Error structuring meal plan: No meal plan found.`,
-          userId,
-        })
-      );
+      return res.status(404).json({ success: false, message: "No meal plan found." });
     }
 
     const firstEntry = progressEntries;
@@ -180,8 +133,6 @@ const getStructuredMealPlan = async (req: Request, res: Response) => {
   }
 };
 
-export const UserMealPlanController = {
-  getUserMealPlan,
-  getStructuredMealPlan,
+export const ProgressChartController = {
+   getUserProgressData,
 };
-

@@ -1,4 +1,5 @@
 import { ProfileForm } from "@/components";
+import { motion } from "motion/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -13,12 +14,15 @@ const ProfilePage = () => {
   const formTitle = customTitle || t("profilePage.title");
 
   return (
-    <div className="max-w-md mx-auto p-4">
-      <h2 className="text-3xl font-bold tracking-wider mx-auto p-4">
-        {formTitle}
-      </h2>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeInOut" }}
+      className="max-w-md mx-auto p-4"
+    >
+      <h2 className="text-3xl font-bold tracking-wider">{formTitle}</h2>
       <ProfileForm titleChangeFunction={handleFormTitleChange} />
-    </div>
+    </motion.div>
   );
 };
 
