@@ -7,7 +7,7 @@ export const MealPlanPage = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeInOut" }}
-      className="w-full mx-auto pt-10 sm:pt-1"
+      className="w-full mx-auto pt-10 sm:pt-1  p-4 md:p-6 "
     >
       <MealPlanForm />
     </motion.div>

@@ -1,38 +1,33 @@
 import { useEffect, useState } from "react";
-import { Navigate, Outlet } from "react-router";
+import { Navigate, Outlet, useNavigate } from "react-router";
 import { useSessionStore } from "@/store";
-import { SessionInitializer } from "@/components";
+import { CheckingCredentialsLoader, SessionInitializer } from "@/components";
 
 export const ProtectedLayout = () => {
   const { isAuthenticated, hasTriedFetching } = useSessionStore();
   const [timeoutExceeded, setTimeoutExceeded] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (hasTriedFetching) {
-      setTimeoutExceeded(false);
-      return;
-    }
+    let timer: NodeJS.Timeout;
 
-    const timer = setTimeout(() => {
-      setTimeoutExceeded(true);
-    }, 8000);
+    if (!hasTriedFetching) {
+      timer = setTimeout(() => {
+        setTimeoutExceeded(true);
+      }, 8000);
+    }
 
     return () => clearTimeout(timer);
   }, [hasTriedFetching]);
 
-  if (!hasTriedFetching) {
-    if (timeoutExceeded) {
-      return (
-        <div className="text-red-500 p-4">
-          Unable to verify session. Please{" "}
-          <a href="/login" className="underline">
-            log in again
-          </a>
-          .
-        </div>
-      );
+  useEffect(() => {
+    if (timeoutExceeded && !hasTriedFetching) {
+      navigate("/login");
     }
-    return <div>Loading...</div>;
+  }, [timeoutExceeded, hasTriedFetching, navigate]);
+
+  if (!hasTriedFetching) {
+    return <CheckingCredentialsLoader textSize="text-3xl" />;
   }
 
   if (!isAuthenticated) return <Navigate to="/login" />;
