@@ -131,7 +131,7 @@ export const EditMealDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="max-h-[100vh] overflow-y-auto sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>Edit meal replacement for {meal.meal}</DialogTitle>
           <DialogDescription>
