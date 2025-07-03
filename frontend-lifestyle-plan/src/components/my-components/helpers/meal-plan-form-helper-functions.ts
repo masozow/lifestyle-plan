@@ -182,20 +182,8 @@ export const groupMealsByDay = (
     const dateB = new Date(b.date || "1970-01-01");
     return dateA.getTime() - dateB.getTime();
   });
-
-  // Optionally filter only from today onward
-  if (options?.dateToFilter) {
-    result = result.filter((day) => {
-      if (!day.date) return false;
-      const date = new Date(day.date);
-      // Remove time part
-      const today = new Date(options.dateToFilter || new Date());
-      today.setHours(0, 0, 0, 0);
-      return date >= today;
-    });
-  }
-
-  // Optionally limit number of days
+  
+  // Limit number of days
   if (options?.limitDays) {
     result = result.slice(0, options.limitDays);
   }

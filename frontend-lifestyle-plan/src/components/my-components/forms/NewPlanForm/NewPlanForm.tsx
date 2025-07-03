@@ -88,8 +88,8 @@ export const NewPlanForm = () => {
       </motion.div>
     </motion.form>
   ) : (
-    <div className="flex items-center justify-center w-full h-full">
-      <NeuralNetworkLoader width={400} height={400} />
+    <div className="flex items-center justify-center w-full h-full mx-auto">
+      <NeuralNetworkLoader style={{ height: "100%", width: "100%" }} />
     </div>
   );
 };
