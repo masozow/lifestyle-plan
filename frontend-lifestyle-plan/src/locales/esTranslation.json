@@ -117,7 +117,8 @@
       "title": "Nombre"
     },
     "email": {
-      "title": "Correo electrónico"
+      "title": "Correo electrónico",
+      "placeHolder": "correo@ejemplo.com"
     },
     "password": {
       "title": "Contraseña"
@@ -133,6 +134,56 @@
     },
     "gender": {
       "title": "Género"
+    }
+  },
+  "loginForm":{
+    "title": "Inicia sesión en tu cuenta",
+    "subTitle":" Introduce tu correo electrónico a continuación para iniciar sesión en tu cuenta",
+    "registerMessage": "¿No tienes una cuenta?",
+    "signUp": "Regístrate",
+    "submit":{
+      "title": "Iniciar",
+      "pending": "Iniciando..."
+    }
+  },
+  "dashboard": {
+    "navMain":{
+      "title":"Inicio"
+    },
+    "documents": {
+      "profile": "Perfil",
+      "mealPlan": "Plan de comidas",
+      "objectives": "Objetivos",
+      "progress": "Progreso",
+      "children":{
+        "new": "Nuevo",
+        "view": "Ver"
+      }
+    },
+    "logout":{  
+      "title": "Cerrar sesión"
+    }
+  },
+  "charts": {
+    "progressChart": {
+      "title": "Progreso Nutricional",
+      "description": "Comparación entre el objetivo y los macro nutrientes  consumidos",
+      "macroItems":{
+        "energy": "Energía",
+        "protein": "Proteínas",
+        "carbs": "Carbos",
+        "fat": "Grasas"
+      },
+      "timeItems":{
+        "all": "Todo",
+        "30d": "30 días",
+        "7d": "7 días",
+        "1d": "1 día"
+      },
+      "labels": {
+        "consumed": "Consumido",
+        "target": "Objetivo"
+      }
     }
   },
   "nutrition": {
