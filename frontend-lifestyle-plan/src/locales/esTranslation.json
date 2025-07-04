@@ -117,7 +117,8 @@
       "title": "Nombre"
     },
     "email": {
-      "title": "Correo electrónico"
+      "title": "Correo electrónico",
+      "placeHolder": "correo@ejemplo.com"
     },
     "password": {
       "title": "Contraseña"
@@ -133,6 +134,16 @@
     },
     "gender": {
       "title": "Género"
+    }
+  },
+  "loginForm":{
+    "title": "Inicia sesión en tu cuenta",
+    "subTitle":" Introduce tu correo electrónico a continuación para iniciar sesión en tu cuenta",
+    "registerMessage": "¿No tienes una cuenta?",
+    "signUp": "Regístrate",
+    "submit":{
+      "title": "Iniciar",
+      "pending": "Iniciando..."
     }
   },
   "charts": {

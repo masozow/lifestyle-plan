@@ -117,7 +117,8 @@
       "title": "Name"
     },
     "email": {
-      "title": "Email"
+      "title": "Email",
+      "placeHolder": "mail@example.com"
     },
     "password": {
       "title": "Password"
@@ -133,6 +134,16 @@
     },
     "gender": {
       "title": "Gender"
+    }
+  },
+  "loginForm":{
+    "title": "Login to your account",
+    "subTitle":" Enter your email below to login to your account",
+    "registerMessage": "Don't have an account?",
+    "signUp": "Sign up",
+    "submit":{
+      "title": "Login",
+      "pending": "Logging in..."
     }
   },
   "charts": {

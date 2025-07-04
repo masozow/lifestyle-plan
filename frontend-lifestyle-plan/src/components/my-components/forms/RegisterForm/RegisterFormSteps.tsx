@@ -21,6 +21,7 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { registerGroupedSteps } from "@/config/stepsForForms/registerSteps";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 export const RegisterFormSteps = () => {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ export const RegisterFormSteps = () => {
   const { fetchSession } = useSessionStore();
   const [currentStep, setCurrentStep] = useState(0);
   const [showSubmit, setShowSubmit] = useState(false);
-
+  const { t } = useTranslation();
   const registerMutation = useApiRequest<RegisterFormValues>({
     url: `${import.meta.env.VITE_BACKEND_BASE_URL}/api/user`,
     method: "POST",
@@ -136,7 +137,7 @@ export const RegisterFormSteps = () => {
         className="flex flex-col gap-6 justify-start"
       >
         <div className="text-center">
-          <h1 className="text-2xl font-bold">Create your account</h1>
+          <h1 className="text-2xl font-bold">{t("registerPage.title")}</h1>
         </div>
 
         <AnimatePresence mode="wait">

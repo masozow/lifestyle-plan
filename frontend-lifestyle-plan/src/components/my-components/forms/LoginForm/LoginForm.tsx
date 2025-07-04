@@ -17,11 +17,14 @@ import {
 import { toast } from "sonner";
 import { X } from "lucide-react";
 import { useAuthStore, useSessionStore } from "@/store";
+import { useTranslation } from "react-i18next";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
   const { fetchSession } = useSessionStore();
   const { setCredentials } = useAuthStore();
+  const { t } = useTranslation();
+
   const loginMutation = useApiRequest<LoginFormValues>({
     url: `${import.meta.env.VITE_BACKEND_BASE_URL}/api/login`,
     method: "POST",
@@ -79,9 +82,9 @@ export const LoginForm = () => {
         className="flex flex-col gap-6 justify-start"
       >
         <div className="flex flex-col items-center gap-2 text-center">
-          <h1 className="text-2xl font-bold">Login to your account</h1>
+          <h1 className="text-2xl font-bold">{t("loginForm.title")}</h1>
           <p className="text-muted-foreground text-sm text-balance">
-            Enter your email below to login to your account
+            {t("loginForm.subTitle")}
           </p>
         </div>
 
@@ -91,9 +94,13 @@ export const LoginForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{t("registerForm.email.title")}</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="m@example.com" {...field} />
+                  <Input
+                    type="email"
+                    placeholder={t("registerForm.email.placeHolder")}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -105,7 +112,7 @@ export const LoginForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>{t("registerForm.password.title")}</FormLabel>
                 <FormControl>
                   <Input type="password" {...field} />
                 </FormControl>
@@ -125,13 +132,15 @@ export const LoginForm = () => {
             className="w-full"
             disabled={loginMutation.isPending}
           >
-            {loginMutation.isPending ? "Logging in..." : "Login"}
+            {loginMutation.isPending
+              ? t("loginForm.submit.pending")
+              : t("loginForm.submit.title")}
           </Button>
         </div>
         <div className="text-center text-sm">
-          Don&apos;t have an account?{" "}
+          {t("loginForm.registerMessage")}{" "}
           <Link className="underline underline-offset-4" to="/register">
-            Sign up
+            {t("loginForm.signUp")}
           </Link>
         </div>
       </form>
