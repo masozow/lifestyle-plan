@@ -1,5 +1,4 @@
 import { IconDotsVertical, type Icon } from "@tabler/icons-react";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,13 +32,14 @@ export function NavDocuments({
 }) {
   const { isMobile } = useSidebar();
   const [openMenu, setOpenMenu] = useState<string | null>(null);
+
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>{title}</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.name}>
-            {item.name !== "Progress" && (
+            {item.children ? (
               <DropdownMenu
                 open={openMenu === item.name}
                 onOpenChange={(open) => setOpenMenu(open ? item.name : null)}
@@ -55,20 +55,33 @@ export function NavDocuments({
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
-                  className="w-24 rounded-lg"
+                  className="w-40 rounded-lg"
                   side={isMobile ? "bottom" : "right"}
                   align={isMobile ? "end" : "start"}
                 >
-                  {item.children?.map((child) => (
+                  {item.children.map((child) => (
                     <DropdownMenuItem key={child.name} asChild>
-                      <NavLink key={child.name} to={child.url}>
-                        <child.icon />
+                      <NavLink
+                        to={child.url}
+                        className="flex items-center gap-2 w-full"
+                      >
+                        <child.icon className="size-4" />
                         <span>{child.name}</span>
                       </NavLink>
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
+            ) : (
+              <SidebarMenuButton asChild size="lg" className="w-full">
+                <NavLink
+                  to={item.url}
+                  className="flex items-center gap-2 w-full"
+                >
+                  <item.icon />
+                  <span>{item.name}</span>
+                </NavLink>
+              </SidebarMenuButton>
             )}
           </SidebarMenuItem>
         ))}

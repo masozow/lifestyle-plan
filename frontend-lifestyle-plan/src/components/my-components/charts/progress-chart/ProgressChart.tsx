@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/card";
 import {
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
@@ -23,18 +25,19 @@ import {
 } from "@/components/ui/select";
 import { useEffect, useState, type JSX } from "react";
 
+export interface MacroRow {
+  Date: string;
+  Target: number;
+  Consumed: number;
+}
+
 export interface ProgressChartProps {
   data: {
-    date: string;
-    energyTarget: number;
-    energyConsumed: number;
-    proteinTarget: number;
-    proteinConsumed: number;
-    carbsTarget: number;
-    carbsConsumed: number;
-    fatTarget: number;
-    fatConsumed: number;
-  }[];
+    energy: MacroRow[];
+    protein: MacroRow[];
+    carbs: MacroRow[];
+    fat: MacroRow[];
+  };
 }
 
 const chartConfig = {
@@ -61,28 +64,34 @@ export const ProgressChart = ({ data }: ProgressChartProps): JSX.Element => {
     }
   }, [isMobile]);
 
-  const filteredData = data.filter((item) => {
-    const date = new Date(item.date);
-    const referenceDate = new Date();
-    let daysToSubtract = 90;
-    if (timeRange === "30d") {
-      daysToSubtract = 30;
-    } else if (timeRange === "7d") {
-      daysToSubtract = 7;
-    }
-    const startDate = new Date(referenceDate);
-    startDate.setDate(startDate.getDate() - daysToSubtract);
-    return date >= startDate;
-  });
+  const filteredData =
+    timeRange === "all"
+      ? data[macro]
+      : data[macro].filter((item) => {
+          const date = new Date(item.Date);
+          const referenceDate = new Date();
+          let daysToSubtract = 90;
+          if (timeRange === "30d") {
+            daysToSubtract = 30;
+          } else if (timeRange === "7d") {
+            daysToSubtract = 7;
+          }
+          const startDate = new Date(referenceDate);
+          startDate.setDate(startDate.getDate() - daysToSubtract);
+          return date >= startDate;
+        });
 
   return (
     <Card className="@container/card">
-      <CardHeader>
-        <CardTitle>Nutrition Progress</CardTitle>
-        <CardDescription>
-          Comparison between target and consumed nutrients
-        </CardDescription>
+      <CardHeader className="flex justify-between">
+        <div>
+          <CardTitle>Nutrition Progress</CardTitle>
+          <CardDescription>
+            Comparison between target and consumed nutrients
+          </CardDescription>
+        </div>
         <CardAction className="flex flex-wrap gap-2">
+          {/* Desktop Macro Toggle */}
           <ToggleGroup
             type="single"
             value={macro}
@@ -97,14 +106,46 @@ export const ProgressChart = ({ data }: ProgressChartProps): JSX.Element => {
               }
             }}
             variant="outline"
-            className="flex"
+            className="hidden @[767px]/card:flex"
           >
             <ToggleGroupItem value="energy">Energy</ToggleGroupItem>
-            <ToggleGroupItem value="protein">Protein</ToggleGroupItem>
+            <ToggleGroupItem value="protein">
+              <span className="mx-2">Protein</span>
+            </ToggleGroupItem>
             <ToggleGroupItem value="carbs">Carbs</ToggleGroupItem>
             <ToggleGroupItem value="fat">Fat</ToggleGroupItem>
           </ToggleGroup>
 
+          {/* Mobile Macro Select */}
+          <Select
+            value={macro}
+            onValueChange={(value) => {
+              if (
+                value === "energy" ||
+                value === "protein" ||
+                value === "carbs" ||
+                value === "fat"
+              ) {
+                setMacro(value);
+              }
+            }}
+          >
+            <SelectTrigger
+              className="flex w-40 @[767px]/card:hidden"
+              size="sm"
+              aria-label="Select a nutrient"
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl">
+              <SelectItem value="energy">Energy</SelectItem>
+              <SelectItem value="protein">Protein</SelectItem>
+              <SelectItem value="carbs">Carbs</SelectItem>
+              <SelectItem value="fat">Fat</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {/* Desktop Time Toggle */}
           <ToggleGroup
             type="single"
             value={timeRange}
@@ -112,20 +153,24 @@ export const ProgressChart = ({ data }: ProgressChartProps): JSX.Element => {
             variant="outline"
             className="hidden @[767px]/card:flex"
           >
-            <ToggleGroupItem value="90d">Last 3 months</ToggleGroupItem>
-            <ToggleGroupItem value="30d">Last 30 days</ToggleGroupItem>
-            <ToggleGroupItem value="7d">Last 7 days</ToggleGroupItem>
+            <ToggleGroupItem value="all">All</ToggleGroupItem>
+            <ToggleGroupItem value="30d">
+              <span className="mx-4">30 days</span>
+            </ToggleGroupItem>
+            <ToggleGroupItem value="7d">7 days</ToggleGroupItem>
           </ToggleGroup>
+
+          {/* Mobile Time Select */}
           <Select value={timeRange} onValueChange={setTimeRange}>
             <SelectTrigger
               className="flex w-40 @[767px]/card:hidden"
               size="sm"
-              aria-label="Select a value"
+              aria-label="Select a range"
             >
-              <SelectValue placeholder="Last 3 months" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
-              <SelectItem value="90d">Last 3 months</SelectItem>
+              <SelectItem value="all">All</SelectItem>
               <SelectItem value="30d">Last 30 days</SelectItem>
               <SelectItem value="7d">Last 7 days</SelectItem>
             </SelectContent>
@@ -140,7 +185,7 @@ export const ProgressChart = ({ data }: ProgressChartProps): JSX.Element => {
           <LineChart data={filteredData}>
             <CartesianGrid vertical={false} strokeDasharray="3 3" />
             <XAxis
-              dataKey="date"
+              dataKey="Date"
               tickLine={false}
               axisLine={false}
               minTickGap={32}
@@ -169,18 +214,19 @@ export const ProgressChart = ({ data }: ProgressChartProps): JSX.Element => {
             />
             <Line
               type="monotone"
-              dataKey={`${macro}Target`}
+              dataKey="Target"
               stroke="var(--color-target)"
               strokeWidth={2}
               dot={{ r: 3 }}
             />
             <Line
               type="monotone"
-              dataKey={`${macro}Consumed`}
+              dataKey="Consumed"
               stroke="var(--color-consumed)"
               strokeWidth={2}
               dot={{ r: 3 }}
             />
+            <ChartLegend content={<ChartLegendContent />} />1
           </LineChart>
         </ChartContainer>
       </CardContent>
