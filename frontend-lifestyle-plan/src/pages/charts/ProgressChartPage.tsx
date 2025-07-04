@@ -1,15 +1,13 @@
-import { ProgressChart } from "@/components";
+import {
+  ProgressChart,
+  ProgressChartSkeleton,
+  type MacroRow,
+} from "@/components";
 import { useApiGet } from "@/hooks";
 import { API_ENDPOINTS } from "@/lib/backendURLS";
 import { useSessionStore } from "@/store";
 import { motion } from "motion/react";
 import type { JSX } from "react";
-
-interface MacroRow {
-  Date: string;
-  Target: number;
-  Consumed: number;
-}
 
 export const ProgressChartPage = (): JSX.Element => {
   const { user } = useSessionStore();
@@ -27,9 +25,19 @@ export const ProgressChartPage = (): JSX.Element => {
     enabled: !!user?.id,
   });
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error: {error?.message}</div>;
-  if (!data) return <div>No data</div>;
+  if (isLoading) return <ProgressChartSkeleton />;
+  if (isError)
+    return (
+      <div className="flex justify-center items-center m-auto text-6xl">
+        Error: {error?.message}
+      </div>
+    );
+  if (!data)
+    return (
+      <div className="flex justify-center items-center m-auto text-6xl">
+        No data
+      </div>
+    );
   console.log("data:", data);
   return (
     <motion.div

@@ -26,9 +26,9 @@ import {
 import { useEffect, useState, type JSX } from "react";
 
 export interface MacroRow {
-  Date: string;
-  Target: number;
-  Consumed: number;
+  date: string;
+  target: number;
+  consumed: number;
 }
 
 export interface ProgressChartProps {
@@ -68,7 +68,7 @@ export const ProgressChart = ({ data }: ProgressChartProps): JSX.Element => {
     timeRange === "all"
       ? data[macro]
       : data[macro].filter((item) => {
-          const date = new Date(item.Date);
+          const date = new Date(item.date);
           const referenceDate = new Date();
           let daysToSubtract = 90;
           if (timeRange === "30d") {
@@ -87,7 +87,7 @@ export const ProgressChart = ({ data }: ProgressChartProps): JSX.Element => {
         <div>
           <CardTitle>Nutrition Progress</CardTitle>
           <CardDescription>
-            Comparison between target and consumed nutrients
+            Comparison between target and consumed macro nutrients
           </CardDescription>
         </div>
         <CardAction className="flex flex-wrap gap-2">
@@ -185,7 +185,7 @@ export const ProgressChart = ({ data }: ProgressChartProps): JSX.Element => {
           <LineChart data={filteredData}>
             <CartesianGrid vertical={false} strokeDasharray="3 3" />
             <XAxis
-              dataKey="Date"
+              dataKey="date"
               tickLine={false}
               axisLine={false}
               minTickGap={32}
@@ -214,14 +214,14 @@ export const ProgressChart = ({ data }: ProgressChartProps): JSX.Element => {
             />
             <Line
               type="monotone"
-              dataKey="Target"
+              dataKey="target"
               stroke="var(--color-target)"
               strokeWidth={2}
               dot={{ r: 3 }}
             />
             <Line
               type="monotone"
-              dataKey="Consumed"
+              dataKey="consumed"
               stroke="var(--color-consumed)"
               strokeWidth={2}
               dot={{ r: 3 }}

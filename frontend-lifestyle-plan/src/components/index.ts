@@ -26,6 +26,7 @@ export * from "@/components/my-components/visualizers/UserCard.tsx";
 //skeletons
 export * from "@/components/my-components/dashboard/DashboardHomeSkeleton.tsx";
 export * from "@/components/my-components/MealPlanForm/MealPlanFormSkeleton.tsx";
+export * from "@/components/my-components/charts/progress-chart/ProgressChartSkeleton.tsx"
 
 //loaders
 export * from "@/components/my-components/loaders/CustomSpinner.tsx";
