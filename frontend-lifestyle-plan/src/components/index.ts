@@ -32,6 +32,8 @@ export * from "@/components/my-components/charts/progress-chart/ProgressChartSke
 export * from "@/components/my-components/loaders/CustomSpinner.tsx";
 export * from "@/components/my-components/loaders/CheckingCredentials.tsx";
 export * from "@/components/my-components/loaders/NeuralNetwork.tsx";
+export * from "@/components/my-components/loaders/TextWaveBase.tsx";
+export * from "./my-components/loaders/Loading.tsx";
 // export * from "./my-components/forms/BaseForm/CustomInput.tsx";
 
 //charts

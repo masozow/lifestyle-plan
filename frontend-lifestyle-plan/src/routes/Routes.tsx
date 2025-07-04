@@ -4,10 +4,10 @@ import DashboardHome from "@/components/my-components/dashboard/DashboardHome";
 import { Suspense } from "react";
 import * as Pages from "@/pages";
 import {
-  CheckingCredentialsLoader,
   DashBoardHomeSkeleton,
   MealPlanFormSkeleton,
   ProgressChartSkeleton,
+  TextWaveBase,
 } from "@/components";
 
 export const router = createBrowserRouter([
@@ -36,9 +36,9 @@ export const router = createBrowserRouter([
       {
         path: "",
         element: (
-          // <Suspense fallback={<div>Loading dashboard...</div>}>
-          <Pages.DashboardPage />
-          // </Suspense>
+          <Suspense fallback={<TextWaveBase text="Loading dashboard..." />}>
+            <Pages.DashboardPage />
+          </Suspense>
         ),
         children: [
           {
@@ -52,7 +52,7 @@ export const router = createBrowserRouter([
           {
             path: "profile",
             element: (
-              <Suspense fallback={<div>Loading profile...</div>}>
+              <Suspense fallback={<TextWaveBase text="Loading profile..." />}>
                 <Pages.ProfilePage />
               </Suspense>
             ),
@@ -60,7 +60,9 @@ export const router = createBrowserRouter([
           {
             path: "view-profile",
             element: (
-              <Suspense fallback={<div>Loading profile preview...</div>}>
+              <Suspense
+                fallback={<TextWaveBase text="Loading profile preview..." />}
+              >
                 <Pages.ViewProfilePage />
               </Suspense>
             ),
@@ -68,7 +70,9 @@ export const router = createBrowserRouter([
           {
             path: "planner",
             element: (
-              <Suspense fallback={<div>Loading planner page...</div>}>
+              <Suspense
+                fallback={<TextWaveBase text="Loading planner page..." />}
+              >
                 <Pages.PlannerPage />
               </Suspense>
             ),
@@ -76,7 +80,9 @@ export const router = createBrowserRouter([
           {
             path: "new-plan",
             element: (
-              <Suspense fallback={<div>Loading new plan page...</div>}>
+              <Suspense
+                fallback={<TextWaveBase text="Loading new plan page..." />}
+              >
                 <Pages.NewPlanPage />
               </Suspense>
             ),
@@ -92,7 +98,9 @@ export const router = createBrowserRouter([
           {
             path: "objectives",
             element: (
-              <Suspense fallback={<div>Loading objectives page...</div>}>
+              <Suspense
+                fallback={<TextWaveBase text="Loading objectives page..." />}
+              >
                 <Pages.ObjectivesPage />
               </Suspense>
             ),
@@ -100,7 +108,7 @@ export const router = createBrowserRouter([
           {
             path: "user",
             element: (
-              <Suspense fallback={<div>Loading user page...</div>}>
+              <Suspense fallback={<TextWaveBase text="Loading user page..." />}>
                 <Pages.UserPage />
               </Suspense>
             ),
@@ -112,10 +120,6 @@ export const router = createBrowserRouter([
                 <Pages.ProgressChartPage />
               </Suspense>
             ),
-          },
-          {
-            path: "loaders",
-            element: <CheckingCredentialsLoader />,
           },
         ],
       },
