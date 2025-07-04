@@ -4,6 +4,7 @@ import DashboardHome from "@/components/my-components/dashboard/DashboardHome";
 import { Suspense } from "react";
 import * as Pages from "@/pages";
 import {
+  CheckingCredentialsLoader,
   DashBoardHomeSkeleton,
   MealPlanFormSkeleton,
   ProgressChartSkeleton,
@@ -111,6 +112,10 @@ export const router = createBrowserRouter([
                 <Pages.ProgressChartPage />
               </Suspense>
             ),
+          },
+          {
+            path: "loaders",
+            element: <CheckingCredentialsLoader />,
           },
         ],
       },
