@@ -146,6 +146,24 @@
       "pending": "Iniciando..."
     }
   },
+  "dashboard": {
+    "navMain":{
+      "title":"Inicio"
+    },
+    "documents": {
+      "profile": "Perfil",
+      "mealPlan": "Plan de comidas",
+      "objectives": "Objetivos",
+      "progress": "Progreso",
+      "children":{
+        "new": "Nuevo",
+        "view": "Ver"
+      }
+    },
+    "logout":{  
+      "title": "Cerrar sesión"
+    }
+  },
   "charts": {
     "progressChart": {
       "title": "Progreso Nutricional",

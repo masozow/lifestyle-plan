@@ -146,6 +146,24 @@
       "pending": "Logging in..."
     }
   },
+  "dashboard": {
+    "navMain":{
+      "title":"Dashboard"
+    },
+    "documents":{
+      "profile": "Profile",
+      "mealPlan": "Meal Plan",
+      "objectives": "Objectives",
+      "progress": "Progress",
+      "children":{
+        "new": "New",
+        "view": "View"
+      }
+    },
+    "logout":{  
+      "title": "Logout"
+    }
+  },
   "charts": {
     "progressChart": {
       "title": "Nutrition Progress",

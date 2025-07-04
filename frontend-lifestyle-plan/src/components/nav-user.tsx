@@ -27,6 +27,7 @@ import { useAuthStore } from "@/store";
 import { useApiRequest } from "@/hooks";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 export interface User {
   name: string;
@@ -36,6 +37,7 @@ export interface User {
 
 export function NavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar();
+  const { t } = useTranslation();
   const logoutMutation = useApiRequest({
     url: `${import.meta.env.VITE_BACKEND_BASE_URL}/api/logout`,
     method: "POST",
@@ -117,7 +119,7 @@ export function NavUser({ user }: { user: User }) {
             <DropdownMenuSeparator /> */}
             <DropdownMenuItem onClick={handleLogout}>
               <IconLogout />
-              Log out
+              {t("dashboard.logout.title")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
