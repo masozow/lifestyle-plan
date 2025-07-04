@@ -4,8 +4,8 @@ type Props = {
   textSize?: string;
 };
 
-const text = "Checking credentials";
+const text = "Loading...";
 
-export const CheckingCredentialsLoader = ({ textSize }: Props) => {
+export const LoadingLoader = ({ textSize }: Props) => {
   return <TextWaveBase textSize={textSize} text={text} />;
 };

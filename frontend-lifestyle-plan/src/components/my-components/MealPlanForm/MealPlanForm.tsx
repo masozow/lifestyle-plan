@@ -61,7 +61,7 @@ export const MealPlanForm = ({
     getUrl: apiEndPointGET,
   });
 
-  if (isLoading) return <MealPlanFormSkeleton />;
+  if (isLoading) return <MealPlanFormSkeleton showHeader />;
   if (isError || !data || !data.macro_ratios || !data.weekly_plan) {
     return (
       <div className="text-red-500">
