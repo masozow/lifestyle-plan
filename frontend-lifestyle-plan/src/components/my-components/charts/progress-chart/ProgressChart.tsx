@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useEffect, useState, type JSX } from "react";
+import { useTranslation } from "react-i18next";
 
 export interface MacroRow {
   date: string;
@@ -40,24 +41,24 @@ export interface ProgressChartProps {
   };
 }
 
-const chartConfig = {
-  target: {
-    label: "Target",
-    color: "var(--primary)",
-  },
-  consumed: {
-    label: "Consumed",
-    color: "var(--ring)",
-  },
-};
-
 export const ProgressChart = ({ data }: ProgressChartProps): JSX.Element => {
   const isMobile = useIsMobile();
   const [timeRange, setTimeRange] = useState("90d");
   const [macro, setMacro] = useState<"energy" | "protein" | "carbs" | "fat">(
     "energy"
   );
+  const { t } = useTranslation();
 
+  const chartConfig = {
+    target: {
+      label: t("charts.progressChart.labels.target"),
+      color: "var(--primary)",
+    },
+    consumed: {
+      label: t("charts.progressChart.labels.consumed"),
+      color: "var(--ring)",
+    },
+  };
   useEffect(() => {
     if (isMobile) {
       setTimeRange("7d");
@@ -85,9 +86,9 @@ export const ProgressChart = ({ data }: ProgressChartProps): JSX.Element => {
     <Card className="@container/card">
       <CardHeader className="flex justify-between">
         <div>
-          <CardTitle>Nutrition Progress</CardTitle>
+          <CardTitle>{t("charts.progressChart.title")}</CardTitle>
           <CardDescription>
-            Comparison between target and consumed macro nutrients
+            {t("charts.progressChart.description")}
           </CardDescription>
         </div>
         <CardAction className="flex flex-wrap gap-2">
@@ -108,12 +109,20 @@ export const ProgressChart = ({ data }: ProgressChartProps): JSX.Element => {
             variant="outline"
             className="hidden @[767px]/card:flex"
           >
-            <ToggleGroupItem value="energy">Energy</ToggleGroupItem>
-            <ToggleGroupItem value="protein">
-              <span className="mx-2">Protein</span>
+            <ToggleGroupItem value="energy">
+              {t("charts.progressChart.macroItems.energy")}
             </ToggleGroupItem>
-            <ToggleGroupItem value="carbs">Carbs</ToggleGroupItem>
-            <ToggleGroupItem value="fat">Fat</ToggleGroupItem>
+            <ToggleGroupItem value="protein">
+              <span className="mx-2">
+                {t("charts.progressChart.macroItems.protein")}
+              </span>
+            </ToggleGroupItem>
+            <ToggleGroupItem value="carbs">
+              {t("charts.progressChart.macroItems.carbs")}
+            </ToggleGroupItem>
+            <ToggleGroupItem value="fat">
+              {t("charts.progressChart.macroItems.fat")}
+            </ToggleGroupItem>
           </ToggleGroup>
 
           {/* Mobile Macro Select */}
@@ -138,10 +147,18 @@ export const ProgressChart = ({ data }: ProgressChartProps): JSX.Element => {
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
-              <SelectItem value="energy">Energy</SelectItem>
-              <SelectItem value="protein">Protein</SelectItem>
-              <SelectItem value="carbs">Carbs</SelectItem>
-              <SelectItem value="fat">Fat</SelectItem>
+              <SelectItem value="energy">
+                {t("charts.progressChart.macroItems.energy")}
+              </SelectItem>
+              <SelectItem value="protein">
+                {t("charts.progressChart.macroItems.protein")}
+              </SelectItem>
+              <SelectItem value="carbs">
+                {t("charts.progressChart.macroItems.carbs")}
+              </SelectItem>
+              <SelectItem value="fat">
+                {t("charts.progressChart.macroItems.fat")}
+              </SelectItem>
             </SelectContent>
           </Select>
 
@@ -153,11 +170,17 @@ export const ProgressChart = ({ data }: ProgressChartProps): JSX.Element => {
             variant="outline"
             className="hidden @[767px]/card:flex"
           >
-            <ToggleGroupItem value="all">All</ToggleGroupItem>
-            <ToggleGroupItem value="30d">
-              <span className="mx-4">30 days</span>
+            <ToggleGroupItem value="all">
+              {t("charts.progressChart.timeItems.all")}
             </ToggleGroupItem>
-            <ToggleGroupItem value="7d">7 days</ToggleGroupItem>
+            <ToggleGroupItem value="30d">
+              <span className="mx-4">
+                {t("charts.progressChart.timeItems.30d")}
+              </span>
+            </ToggleGroupItem>
+            <ToggleGroupItem value="7d">
+              {t("charts.progressChart.timeItems.7d")}
+            </ToggleGroupItem>
           </ToggleGroup>
 
           {/* Mobile Time Select */}

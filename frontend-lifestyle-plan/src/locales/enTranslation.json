@@ -135,6 +135,28 @@
       "title": "Gender"
     }
   },
+  "charts": {
+    "progressChart": {
+      "title": "Nutrition Progress",
+      "description": "Comparison between target and consumed macro nutrients",
+      "macroItems":{
+        "energy": "Energy",
+        "protein": "Protein",
+        "carbs": "Carbs",
+        "fat": "Fat"
+      },
+      "timeItems":{
+        "all": "All",
+        "30d": "30 days",
+        "7d": "7 days",
+        "1d": "1 day"
+      },
+      "labels": {
+        "consumed": "Consumed",
+        "target": "Target"
+      }
+    }
+  },
   "nutrition": {
     "title": "Nutrition Plan",
     "submit": "Generate Plan"
