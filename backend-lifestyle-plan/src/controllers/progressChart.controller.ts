@@ -1,132 +1,102 @@
 import { Request, Response } from "express";
-import {
-  UserMealProgress,
-  UserDailyMeal,
-  UserDailyIntake,
-  OpenAIResponse,
-} from "../models/index.js";
+import sequelize from "../config/sequelize.js";
+import { QueryTypes } from "sequelize";
 import { errorAndLogHandler, errorLevels } from "../utils/index.js";
 
 const getUserProgressData = async (req: Request, res: Response) => {
   const userId = req.user?.id;
-  if (!userId) return res.status(401).json({ error: "Unauthorized" });
+  if (!userId) {
+    return res.status(401).json(
+      await errorAndLogHandler({
+        level: errorLevels.error,
+        message: `Unauthorized: User not authenticated`,
+        userId,
+      })
+    );
+  }
 
   try {
-    const progressEntries = await UserMealProgress.findOne({
-      where: { userId },
-      include: [
-        {
-          model: UserDailyMeal,
-          as: "dailyMeals",
-          include: [
-            {
-              model: UserDailyIntake,
-              as: "intake",
-              required: false,
-            },
-          ],
-        },
-        {
-          model: OpenAIResponse,
-          as: "openAIResponse",
-          attributes: ["id", "userPromptId", "userId", "response", "createdAt", "updatedAt"],
-        },
-      ],
-      order: [["updatedAt", "DESC"]],
+    const result = await sequelize.transaction(async (t) => {
+      const makeQuery = (column: string) => `
+        SELECT
+          T.date AS 'date',
+          T.value AS 'target',
+          COALESCE(C.value, 0) AS 'consumed'
+        FROM (
+          SELECT
+            M.date,
+            SUM(M.target${column}) AS value
+          FROM nutrition.userDailyMeal AS M
+          JOIN nutrition.userMealProgress AS U
+            ON M.userMealProgressId = U.id
+          JOIN (
+            SELECT 
+              M2.date,
+              MAX(M2.userMealProgressId) AS MaxProgressId
+            FROM nutrition.userDailyMeal AS M2
+            JOIN nutrition.userMealProgress AS U2
+              ON M2.userMealProgressId = U2.id
+            WHERE U2.userId = :userId
+            GROUP BY M2.date
+          ) AS latest
+            ON M.date = latest.date
+          AND M.userMealProgressId = latest.MaxProgressId
+          WHERE U.userId = :userId
+          GROUP BY M.date
+        ) AS T
+        LEFT JOIN (
+          SELECT
+            M.date,
+            SUM(COALESCE(I.consumed${column},M.target${column})) AS value
+          FROM nutrition.userDailyMeal AS M
+          JOIN nutrition.userMealProgress AS U
+            ON M.userMealProgressId = U.id
+          JOIN nutrition.userDailyIntake AS I
+            ON I.userDailyMealId = M.id
+          WHERE U.userId = :userId
+            AND (I.consumed = 1 OR M.consumed = 1)
+          GROUP BY M.date
+        ) AS C
+        ON T.date = C.date
+        ORDER BY T.date;
+      `;
+
+      const energy = await sequelize.query(makeQuery("Energy"), {
+        replacements: { userId },
+        type: QueryTypes.SELECT,
+        transaction: t,
+      });
+
+      const protein = await sequelize.query(makeQuery("Protein"), {
+        replacements: { userId },
+        type: QueryTypes.SELECT,
+        transaction: t,
+      });
+
+      const carbs = await sequelize.query(makeQuery("Carbs"), {
+        replacements: { userId },
+        type: QueryTypes.SELECT,
+        transaction: t,
+      });
+
+      const fat = await sequelize.query(makeQuery("Fat"), {
+        replacements: { userId },
+        type: QueryTypes.SELECT,
+        transaction: t,
+      });
+
+      return { energy, protein, carbs, fat };
     });
-
-    if (!progressEntries) {
-      return res.status(404).json({ success: false, message: "No meal plan found." });
-    }
-
-    const firstEntry = progressEntries;
-
-    const parsedResponse = typeof firstEntry.openAIResponse?.response === "string"
-      ? JSON.parse(firstEntry.openAIResponse.response)
-      : firstEntry.openAIResponse?.response;
-
-    const grouped: Record<string, { day: string; date: string | null; meals: any[]; day_macro_targets: { energy: number; protein: number; carbs: number; fat: number; } }> = {};
-
-    const entry = progressEntries;
-      for (const meal of entry.dailyMeals ?? []) {
-        const intake = meal.intake;
-        const mealDay = meal.day;
-
-        if (!grouped[mealDay]) {
-          grouped[mealDay] = {
-            day: mealDay,
-            date: meal.date ?? null,
-            day_macro_targets: {
-              energy: 0,
-              protein: 0,
-              carbs: 0,
-              fat: 0,
-            },
-            meals: [],
-          };
-        }
-        //accumulating macro targets, the original ones
-        grouped[mealDay].day_macro_targets.energy += meal.targetEnergy ?? 0;
-        grouped[mealDay].day_macro_targets.protein += meal.targetProtein ?? 0;
-        grouped[mealDay].day_macro_targets.carbs += meal.targetCarbs ?? 0;
-        grouped[mealDay].day_macro_targets.fat += meal.targetFat ?? 0;
-
-        grouped[mealDay].meals.push({
-          id: meal.id,
-          food: intake?.consumedFood ?? meal.recommendedMeal,
-          meal: meal.meal,
-          portion: intake?.consumedPortion ?? meal.targetPortion,
-          day: mealDay,
-          date: meal.date,
-          macro: {
-            protein: intake?.consumedProtein ?? meal.targetProtein,
-            carbs: intake?.consumedCarbs ?? meal.targetCarbs,
-            fat: intake?.consumedFat ?? meal.targetFat,
-            energy: intake?.consumedEnergy ?? meal.targetEnergy,
-          },
-          consumed: intake?.consumed ?? meal.consumed,
-        });
-      }
-    
-
-    const response = {
-      meta: parsedResponse?.meta ?? null,
-      unit_system: firstEntry.unitSystem ?? null,
-      units: {
-        portion: firstEntry.portionUnit ?? null,
-        macro: {
-          protein: firstEntry.macroProteinUnit ?? null,
-          carbs: firstEntry.macroCarbsUnit ?? null,
-          fat: firstEntry.macroFatUnit ?? null,
-          energy: firstEntry.macroEnergyUnit ?? null,
-        },
-      },
-      macro_ratios: {
-        protein: firstEntry.ratioProtein ?? null,
-        carbs: firstEntry.ratioCarbs ?? null,
-        fat: firstEntry.ratioFat ?? null,
-      },
-      daily_calorie_target: firstEntry.dailyCalorieTarget ?? null,
-      weekly_plan: Object.values(grouped),
-    };
 
     return res.status(200).json({
       success: true,
-      data: 
-        {
-          id: firstEntry.openAIResponseId,
-          userPromptId: firstEntry.openAIResponse?.userPromptId,
-          userId,
-          response,
-          createdAt: firstEntry.openAIResponse?.createdAt,
-          updatedAt: firstEntry.openAIResponse?.updatedAt,
-        },
+      data: result,
     });
   } catch (error) {
     return res.status(500).json(
       await errorAndLogHandler({
         level: errorLevels.error,
-        message: `Error structuring meal plan: ${(error as Error).message}`,
+        message: `Error getting progress data: ${(error as Error).message}`,
         userId,
       })
     );
@@ -134,5 +104,5 @@ const getUserProgressData = async (req: Request, res: Response) => {
 };
 
 export const ProgressChartController = {
-   getUserProgressData,
+  getUserProgressData,
 };

@@ -3,7 +3,12 @@ import { AuthLayout, ProtectedLayout } from "@/layouts";
 import DashboardHome from "@/components/my-components/dashboard/DashboardHome";
 import { Suspense } from "react";
 import * as Pages from "@/pages";
-import { DashBoardHomeSkeleton, MealPlanFormSkeleton } from "@/components";
+import {
+  CheckingCredentialsLoader,
+  DashBoardHomeSkeleton,
+  MealPlanFormSkeleton,
+  ProgressChartSkeleton,
+} from "@/components";
 
 export const router = createBrowserRouter([
   {
@@ -99,6 +104,18 @@ export const router = createBrowserRouter([
                 <Pages.UserPage />
               </Suspense>
             ),
+          },
+          {
+            path: "progress-chart",
+            element: (
+              <Suspense fallback={<ProgressChartSkeleton />}>
+                <Pages.ProgressChartPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "loaders",
+            element: <CheckingCredentialsLoader />,
           },
         ],
       },

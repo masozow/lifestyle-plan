@@ -13,6 +13,8 @@ export const API_ENDPOINTS = {
   userMealPlan: `${BASE_URL}/api/user-meal-plan`,
   userDailyIntake: `${BASE_URL}/api/user-daily/intake`,
   userDailyConsumed: `${BASE_URL}/api/user-daily/consumed`,
+  //charts
+  progressChart: `${BASE_URL}/api/progress-chart`
 } as const;
 
 // Tipado automático

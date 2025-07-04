@@ -106,7 +106,7 @@ const data = {
     },
     {
       name: "Progress",
-      url: "#",
+      url: "progress-chart",
       icon: IconChartArea,
     },
   ],
