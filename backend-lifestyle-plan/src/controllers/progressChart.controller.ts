@@ -5,7 +5,13 @@ import { errorAndLogHandler, errorLevels } from "../utils/index.js";
 
 const getUserProgressData = async (req: Request, res: Response) => {
   const userId = req.user?.id;
-  if (!userId) return res.status(401).json({ error: "Unauthorized" });
+  if (!userId) return res.status(401).json(
+      await errorAndLogHandler({
+        level: errorLevels.error,
+        message: `Unauthorized: User not authenticated`,
+        userId,
+      })
+    );
 
   try {
     // Consumed Energy Query
@@ -82,3 +88,4 @@ const getUserProgressData = async (req: Request, res: Response) => {
 export const ProgressChartController = {
   getUserProgressData,
 };
+

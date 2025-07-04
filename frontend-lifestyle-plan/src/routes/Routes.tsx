@@ -100,6 +100,14 @@ export const router = createBrowserRouter([
               </Suspense>
             ),
           },
+          {
+            path: "progress-chart",
+            element: (
+              <Suspense fallback={<div>Loading progress chart page...</div>}>
+                <Pages.ProgressChartPage />
+              </Suspense>
+            ),
+          },
         ],
       },
     ],

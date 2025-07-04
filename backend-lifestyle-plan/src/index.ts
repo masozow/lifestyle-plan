@@ -17,6 +17,7 @@ import userMealProgressRoutes from "./routes/userMealProgress.route.js";
 import openAIResponseRoutes from "./routes/openAIResponse.route.js";
 import userMealPlanRoutes from "./routes/userMealPlan.route.js";
 import userDailyMealAndIntakeRoutes from "./routes/userDailyMealAndIntake.route.js";
+import progressChartRoutes from "./routes/charts.route.js";
 
 dotenv.config();
 const app = express();
@@ -49,6 +50,7 @@ app.use("/api", userMealProgressRoutes);
 app.use("/api", openAIResponseRoutes);
 app.use("/api", userMealPlanRoutes);
 app.use("/api", userDailyMealAndIntakeRoutes);
+app.use("/api", progressChartRoutes);
 
 // Global error middleware
 app.use((err, req, res, next) => {

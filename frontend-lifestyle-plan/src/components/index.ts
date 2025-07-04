@@ -32,3 +32,6 @@ export * from "@/components/my-components/loaders/CustomSpinner.tsx";
 export * from "@/components/my-components/loaders/CheckingCredentials.tsx";
 export * from "@/components/my-components/loaders/NeuralNetwork.tsx";
 // export * from "./my-components/forms/BaseForm/CustomInput.tsx";
+
+//charts
+export * from "./my-components/charts/progress-chart/ProgressChart.tsx";
