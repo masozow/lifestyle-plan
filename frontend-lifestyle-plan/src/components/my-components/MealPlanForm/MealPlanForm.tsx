@@ -26,6 +26,8 @@ import { MealPlanFormSkeleton } from "@/components";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { Navigate } from "react-router";
+import type { LocaleCode } from "@/locales/localesTypes";
+import { format } from "@formkit/tempo";
 interface MealPlanFormProps {
   limitDays?: number;
   dateToFilter?: Date;
@@ -37,7 +39,8 @@ export const MealPlanForm = ({
   showHeader = true,
 }: MealPlanFormProps = {}) => {
   const { user } = useSessionStore();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language as LocaleCode;
   // console.log("user", user);
   const userId = user?.id;
   const apiEndPointGET = `${API_ENDPOINTS.userMealPlan}/${userId}`;
@@ -193,7 +196,13 @@ export const MealPlanForm = ({
           <Card key={day.day} className="overflow-hidden">
             <CardHeader className="pb-4">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <CardTitle className="text-xl">{day.day}</CardTitle>
+                <CardTitle className="text-xl">
+                  {format(String(day.date), "dddd", locale).replace(
+                    /^./,
+                    (char) => char.toUpperCase()
+                  )}
+                </CardTitle>
+
                 <div className="flex flex-col md:flex-row md:items-center gap-4 text-sm">
                   <div className="flex flex-col items-center">
                     <span className="text-xs text-muted-foreground">

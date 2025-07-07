@@ -205,6 +205,25 @@
       "target":"Objetivo",
       "actual":"Consumido",
       "macros":"Macros"
+    },
+    "mealTable":{
+      "header":{
+        "meal": "Comida",
+        "food": "Alimento",
+        "portion": "Porción",
+        "calories": "Calorías",
+        "protein": "Proteínas",
+        "carbs": "Carbohidratos",
+        "fats": "Grasas",
+        "actions": "Acciones"
+      },
+      "row":{
+        "breakfast":"Desayuno",
+        "lunch":"Almuerzo",
+        "dinner":"Cena",
+        "snack1":"Merienda",
+        "snack2":"Merienda nocturna"
+      }
     }
   },
   "nutrition": {
