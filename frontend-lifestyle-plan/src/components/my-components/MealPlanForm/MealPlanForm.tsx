@@ -24,6 +24,7 @@ import { useMealPlanSync } from "@/hooks";
 import { API_ENDPOINTS } from "@/lib/backendURLS";
 import { MealPlanFormSkeleton } from "@/components";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 interface MealPlanFormProps {
   limitDays?: number;
   dateToFilter?: Date;
@@ -35,6 +36,7 @@ export const MealPlanForm = ({
   showHeader = true,
 }: MealPlanFormProps = {}) => {
   const { user } = useSessionStore();
+  const { t } = useTranslation();
   // console.log("user", user);
   const userId = user?.id;
   const apiEndPointGET = `${API_ENDPOINTS.userMealPlan}/${userId}`;
@@ -127,7 +129,7 @@ export const MealPlanForm = ({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Utensils className="h-6 w-6" />
-                <CardTitle>Weekly Meal Plan</CardTitle>
+                <CardTitle>{t("mealPlanForm.header.title")}</CardTitle>
               </div>
               <div className="flex items-center gap-2">
                 {isSyncing ? (
@@ -136,7 +138,7 @@ export const MealPlanForm = ({
                     className="flex items-center gap-1"
                   >
                     <Wifi className="h-3 w-3 animate-pulse" />
-                    Syncing...
+                    {t("mealPlanForm.header.buttonSyncing")}
                   </Badge>
                 ) : hasInitialSyncCompleted && hasUnsyncedChanges() ? (
                   <>
@@ -145,25 +147,28 @@ export const MealPlanForm = ({
                       className="flex items-center gap-1"
                     >
                       <WifiOff className="h-3 w-3" />
-                      Unsaved changes
+                      {t("mealPlanForm.header.buttonUnsaved")}
                     </Badge>
                     <Button size="sm" onClick={handleSyncToServer}>
                       <Save className="h-3 w-3 mr-1" />
-                      Sync
+                      {t("mealPlanForm.header.buttonSync")}
                     </Button>
                   </>
                 ) : (
                   <Badge variant="default" className="flex items-center gap-1">
                     <Wifi className="h-3 w-3" />
-                    Synced
+                    {t("mealPlanForm.header.buttonSynced")}
                   </Badge>
                 )}
               </div>
             </div>
             <CardDescription>
-              Daily Target: {daily_calorie_target} {units?.macro.energy} |
-              Protein: {macroPercentages.protein}% | Carbohydrates:{" "}
-              {macroPercentages.carbs}% | Fats: {macroPercentages.fat}%
+              {t("mealPlanForm.description.dailyTarget")}:{" "}
+              {daily_calorie_target} {units?.macro.energy} |
+              {t("mealPlanForm.description.protein")}:{" "}
+              {macroPercentages.protein}% |{" "}
+              {t("mealPlanForm.description.carbs")}: {macroPercentages.carbs}% |
+              {t("mealPlanForm.description.fat")}: {macroPercentages.fat}%
             </CardDescription>
           </CardHeader>
         </Card>
