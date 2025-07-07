@@ -66,25 +66,21 @@ const getUserProgressData = async (req: Request, res: Response) => {
         type: QueryTypes.SELECT,
         transaction: t,
       });
-      console.log("📊 Energy query result:", energy);
       const protein = await sequelize.query(makeQuery("Protein"), {
         replacements: { userId },
         type: QueryTypes.SELECT,
         transaction: t,
       });
-      console.log("💪 Protein query result:", protein);
       const carbs = await sequelize.query(makeQuery("Carbs"), {
         replacements: { userId },
         type: QueryTypes.SELECT,
         transaction: t,
       });
-      console.log("🥔 Carbs query result:", carbs);
       const fat = await sequelize.query(makeQuery("Fat"), {
         replacements: { userId },
         type: QueryTypes.SELECT,
         transaction: t,
       });
-      console.log("💦 Fat query result:", fat);
       return { energy, protein, carbs, fat };
     });
 
