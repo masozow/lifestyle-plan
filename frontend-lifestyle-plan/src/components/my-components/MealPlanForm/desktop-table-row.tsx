@@ -6,6 +6,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { useMealPlanStore } from "@/store";
 import { getEffectiveMeal } from "../helpers/meal-plan-form-helper-functions";
+import { useTranslation } from "react-i18next";
+import { mealTextMapper } from "./mappers";
 
 interface DesktopTableRowProps {
   mealId: number;
@@ -21,6 +23,7 @@ export const DesktopTableRow = memo(
   ({ mealId, units, onToggleComplete, onEdit }: DesktopTableRowProps) => {
     const item = useMealPlanStore((state) => state.mealStatus[mealId]);
     const meal = useMemo(() => getEffectiveMeal(item), [item]);
+    const { t } = useTranslation();
 
     if (!meal) return null;
 
@@ -33,7 +36,9 @@ export const DesktopTableRow = memo(
         <TableCell>
           <Checkbox checked={isCompleted} onCheckedChange={onToggleComplete} />
         </TableCell>
-        <TableCell className="font-medium text-left">{meal.meal}</TableCell>
+        <TableCell className="font-medium text-left">
+          {mealTextMapper(meal.meal, t)}
+        </TableCell>
         <TableCell className="text-left">{meal.food}</TableCell>
         <TableCell className="text-right">
           {meal.portion}

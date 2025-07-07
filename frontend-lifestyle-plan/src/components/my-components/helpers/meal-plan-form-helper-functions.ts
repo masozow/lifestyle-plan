@@ -176,12 +176,12 @@ export const groupMealsByDay = (
 
   let result = [...grouped.values()];
 
-  // Sort by date in ascending order
-  result.sort((a, b) => {
-    const dateA = new Date(a.date);
-    const dateB = new Date(b.date);
-    return dateA.getTime() - dateB.getTime();
-  });
+  // // Sort by date in ascending order
+  // result.sort((a, b) => {
+  //   const dateA = new Date(a.date);
+  //   const dateB = new Date(b.date);
+  //   return dateA.getTime() - dateB.getTime();
+  // });
 
   // If dateToFilter is provided, take only the days from that date onwards
   if (options?.dateToFilter) {

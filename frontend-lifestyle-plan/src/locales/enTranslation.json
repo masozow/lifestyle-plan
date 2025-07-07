@@ -205,6 +205,25 @@
       "target":"Target",
       "actual":"Actual",
       "macros":"Macros"
+    },
+    "mealTable":{
+      "header":{
+        "meal": "Meal",
+        "food": "Food",
+        "portion": "Portion",
+        "calories": "Calories",
+        "protein": "Protein",
+        "carbs": "Carbs",
+        "fats": "Fats",
+        "actions": "Actions"
+      },
+      "row":{
+        "breakfast":"Breakfast",
+        "lunch":"Lunch",
+        "dinner":"Dinner",
+        "snack1":"Mid-morning Snack",
+        "snack2":"Mid-afternoon Snack"
+      }
     }
   },
   "nutrition": {
