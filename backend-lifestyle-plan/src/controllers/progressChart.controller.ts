@@ -3,6 +3,18 @@ import sequelize from "../config/sequelize.js";
 import { QueryTypes } from "sequelize";
 import { errorAndLogHandler, errorLevels } from "../utils/index.js";
 
+interface ProgressRow{
+  date: string;
+  targetEnergy: number;
+  consumedEnergy: number;
+  targetProtein: number;
+  consumedProtein: number;
+  targetCarbs: number;
+  consumedCarbs: number;
+  targetFat: number;
+  consumedFat: number;
+}
+
 const getUserProgressData = async (req: Request, res: Response) => {
   const userId = req.user?.id;
   if (!userId) {
@@ -16,16 +28,25 @@ const getUserProgressData = async (req: Request, res: Response) => {
   }
 
   try {
-    const result = await sequelize.transaction(async (t) => {
-      const makeQuery = (column: string) => `
+       const results = await sequelize.query<ProgressRow>(
+      `
         SELECT
-          T.date AS 'date',
-          T.value AS 'target',
-          COALESCE(C.value, 0) AS 'consumed'
+          T.date,
+          T.targetEnergy,
+          COALESCE(C.consumedEnergy, 0) AS consumedEnergy,
+          T.targetProtein,
+          COALESCE(C.consumedProtein, 0) AS consumedProtein,
+          T.targetCarbs,
+          COALESCE(C.consumedCarbs, 0) AS consumedCarbs,
+          T.targetFat,
+          COALESCE(C.consumedFat, 0) AS consumedFat
         FROM (
           SELECT
             M.date,
-            SUM(M.target${column}) AS value
+            SUM(M.targetEnergy) AS targetEnergy,
+            SUM(M.targetProtein) AS targetProtein,
+            SUM(M.targetCarbs) AS targetCarbs,
+            SUM(M.targetFat) AS targetFat
           FROM nutrition.userDailyMeal AS M
           JOIN nutrition.userMealProgress AS U
             ON M.userMealProgressId = U.id
@@ -47,7 +68,10 @@ const getUserProgressData = async (req: Request, res: Response) => {
         LEFT JOIN (
           SELECT
             M.date,
-            SUM(COALESCE(I.consumed${column},M.target${column})) AS value
+            SUM(COALESCE(I.consumedEnergy, M.targetEnergy)) AS consumedEnergy,
+            SUM(COALESCE(I.consumedProtein, M.targetProtein)) AS consumedProtein,
+            SUM(COALESCE(I.consumedCarbs, M.targetCarbs)) AS consumedCarbs,
+            SUM(COALESCE(I.consumedFat, M.targetFat)) AS consumedFat
           FROM nutrition.userDailyMeal AS M
           JOIN nutrition.userMealProgress AS U
             ON M.userMealProgressId = U.id
@@ -59,34 +83,42 @@ const getUserProgressData = async (req: Request, res: Response) => {
         ) AS C
         ON T.date = C.date
         ORDER BY T.date;
-      `;
-
-      const energy = await sequelize.query(makeQuery("Energy"), {
+      `,{
         replacements: { userId },
         type: QueryTypes.SELECT,
-        transaction: t,
+      }
+    );
+    const data = {
+      energy: [],
+      protein: [],
+      carbs: [],
+      fat: [],
+    };
+    results.forEach((row) => {
+      data.energy.push({
+        date: row.date,
+        target: row.targetEnergy,
+        consumed: row.consumedEnergy,
       });
-      const protein = await sequelize.query(makeQuery("Protein"), {
-        replacements: { userId },
-        type: QueryTypes.SELECT,
-        transaction: t,
+      data.protein.push({
+        date: row.date,
+        target: row.targetProtein,
+        consumed: row.consumedProtein,
       });
-      const carbs = await sequelize.query(makeQuery("Carbs"), {
-        replacements: { userId },
-        type: QueryTypes.SELECT,
-        transaction: t,
+      data.carbs.push({
+        date: row.date,
+        target: row.targetCarbs,
+        consumed: row.consumedCarbs,
       });
-      const fat = await sequelize.query(makeQuery("Fat"), {
-        replacements: { userId },
-        type: QueryTypes.SELECT,
-        transaction: t,
+      data.fat.push({
+        date: row.date,
+        target: row.targetFat,
+        consumed: row.consumedFat,
       });
-      return { energy, protein, carbs, fat };
     });
-
     return res.status(200).json({
       success: true,
-      data: result,
+      data,
     });
   } catch (error) {
     return res.status(500).json(
