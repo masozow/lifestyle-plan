@@ -24,6 +24,23 @@ export default defineConfig(() => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ['react', 'react-dom'],
+          motion: ['framer-motion'],
+          chart: ['recharts'],
+          shadcn: [
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-tooltip',
+            '@radix-ui/react-dropdown-menu',
+            'lucide-react',
+          ],
+        },
+      },
+    },
+  },
   // optimizeDeps: {
   //   include: [
   //     "zod",
