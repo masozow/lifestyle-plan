@@ -190,7 +190,7 @@ export const MealPlanForm = ({
                 <div className="flex flex-col md:flex-row md:items-center gap-4 text-sm">
                   <div className="flex flex-col items-center">
                     <span className="text-xs text-muted-foreground">
-                      Target
+                      {t("mealPlanForm.macroCard.target")}
                     </span>
                     <Badge
                       variant="outline"
@@ -202,7 +202,7 @@ export const MealPlanForm = ({
                   </div>
                   <div className="flex flex-col items-center">
                     <span className="text-xs text-muted-foreground">
-                      Actual
+                      {t("mealPlanForm.macroCard.actual")}
                     </span>
                     <Badge
                       variant="secondary"
@@ -214,7 +214,7 @@ export const MealPlanForm = ({
                   </div>
                   <div className="flex flex-col">
                     <span className="text-xs text-muted-foreground">
-                      Macros
+                      {t("mealPlanForm.macroCard.macros")}
                     </span>
                     <div className="flex gap-2">
                       <Badge variant="secondary">

@@ -200,6 +200,11 @@
       "protein": "Protein",
       "carbs": "Carbohydrates",
       "fat": "Fats"
+    },
+    "macroCard":{
+      "target":"Target",
+      "actual":"Actual",
+      "macros":"Macros"
     }
   },
   "nutrition": {

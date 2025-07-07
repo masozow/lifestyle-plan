@@ -200,6 +200,11 @@
       "protein": "Proteínas",
       "carbs": "Carbohidratos",
       "fat": "Grasas"
+    },
+    "macroCard":{
+      "target":"Objetivo",
+      "actual":"Consumido",
+      "macros":"Macros"
     }
   },
   "nutrition": {
