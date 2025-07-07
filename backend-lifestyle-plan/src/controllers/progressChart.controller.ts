@@ -51,7 +51,7 @@ const getUserProgressData = async (req: Request, res: Response) => {
           FROM nutrition.userDailyMeal AS M
           JOIN nutrition.userMealProgress AS U
             ON M.userMealProgressId = U.id
-          JOIN nutrition.userDailyIntake AS I
+          LEFT JOIN nutrition.userDailyIntake AS I
             ON I.userDailyMealId = M.id
           WHERE U.userId = :userId
             AND (I.consumed = 1 OR M.consumed = 1)
@@ -66,25 +66,21 @@ const getUserProgressData = async (req: Request, res: Response) => {
         type: QueryTypes.SELECT,
         transaction: t,
       });
-
       const protein = await sequelize.query(makeQuery("Protein"), {
         replacements: { userId },
         type: QueryTypes.SELECT,
         transaction: t,
       });
-
       const carbs = await sequelize.query(makeQuery("Carbs"), {
         replacements: { userId },
         type: QueryTypes.SELECT,
         transaction: t,
       });
-
       const fat = await sequelize.query(makeQuery("Fat"), {
         replacements: { userId },
         type: QueryTypes.SELECT,
         transaction: t,
       });
-
       return { energy, protein, carbs, fat };
     });
 

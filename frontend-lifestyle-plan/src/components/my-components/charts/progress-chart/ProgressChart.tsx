@@ -97,13 +97,13 @@ export const ProgressChart = ({ data }: ProgressChartProps): JSX.Element => {
             type="single"
             value={macro}
             onValueChange={(value) => {
-              if (
-                value === "energy" ||
-                value === "protein" ||
-                value === "carbs" ||
-                value === "fat"
-              ) {
-                setMacro(value);
+              switch (value) {
+                case "energy":
+                case "protein":
+                case "carbs":
+                case "fat":
+                  setMacro(value);
+                  break;
               }
             }}
             variant="outline"
@@ -129,13 +129,13 @@ export const ProgressChart = ({ data }: ProgressChartProps): JSX.Element => {
           <Select
             value={macro}
             onValueChange={(value) => {
-              if (
-                value === "energy" ||
-                value === "protein" ||
-                value === "carbs" ||
-                value === "fat"
-              ) {
-                setMacro(value);
+              switch (value) {
+                case "energy":
+                case "protein":
+                case "carbs":
+                case "fat":
+                  setMacro(value);
+                  break;
               }
             }}
           >
@@ -193,9 +193,15 @@ export const ProgressChart = ({ data }: ProgressChartProps): JSX.Element => {
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
-              <SelectItem value="all">All</SelectItem>
-              <SelectItem value="30d">Last 30 days</SelectItem>
-              <SelectItem value="7d">Last 7 days</SelectItem>
+              <SelectItem value="all">
+                {t("charts.progressChart.timeItems.all")}
+              </SelectItem>
+              <SelectItem value="30d">
+                {t("charts.progressChart.timeItems.30d")}
+              </SelectItem>
+              <SelectItem value="7d">
+                {t("charts.progressChart.timeItems.7d")}
+              </SelectItem>
             </SelectContent>
           </Select>
         </CardAction>

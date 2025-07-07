@@ -1,7 +1,7 @@
 import { MealPlanForm } from "@/components";
 import { motion } from "motion/react";
 
-export const MealPlanPage = () => {
+const MealPlanPage = () => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
