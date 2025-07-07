@@ -24,6 +24,7 @@ import { useMealPlanSync } from "@/hooks";
 import { API_ENDPOINTS } from "@/lib/backendURLS";
 import { MealPlanFormSkeleton } from "@/components";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 interface MealPlanFormProps {
   limitDays?: number;
   dateToFilter?: Date;
@@ -35,6 +36,7 @@ export const MealPlanForm = ({
   showHeader = true,
 }: MealPlanFormProps = {}) => {
   const { user } = useSessionStore();
+  const { t } = useTranslation();
   // console.log("user", user);
   const userId = user?.id;
   const apiEndPointGET = `${API_ENDPOINTS.userMealPlan}/${userId}`;
@@ -72,6 +74,7 @@ export const MealPlanForm = ({
   if (Object.keys(mealStatus).length === 0) {
     return <MealPlanFormSkeleton />;
   }
+  console.log("🔍 Data:", data);
   const { daily_calorie_target, macro_ratios, units } = data;
 
   const handleToggleMealStatus = (meal: Meal, completed: boolean) => {
@@ -127,7 +130,7 @@ export const MealPlanForm = ({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Utensils className="h-6 w-6" />
-                <CardTitle>Weekly Meal Plan</CardTitle>
+                <CardTitle>{t("mealPlanForm.header.title")}</CardTitle>
               </div>
               <div className="flex items-center gap-2">
                 {isSyncing ? (
@@ -136,7 +139,7 @@ export const MealPlanForm = ({
                     className="flex items-center gap-1"
                   >
                     <Wifi className="h-3 w-3 animate-pulse" />
-                    Syncing...
+                    {t("mealPlanForm.header.buttonSyncing")}
                   </Badge>
                 ) : hasInitialSyncCompleted && hasUnsyncedChanges() ? (
                   <>
@@ -145,25 +148,28 @@ export const MealPlanForm = ({
                       className="flex items-center gap-1"
                     >
                       <WifiOff className="h-3 w-3" />
-                      Unsaved changes
+                      {t("mealPlanForm.header.buttonUnsaved")}
                     </Badge>
                     <Button size="sm" onClick={handleSyncToServer}>
                       <Save className="h-3 w-3 mr-1" />
-                      Sync
+                      {t("mealPlanForm.header.buttonSync")}
                     </Button>
                   </>
                 ) : (
                   <Badge variant="default" className="flex items-center gap-1">
                     <Wifi className="h-3 w-3" />
-                    Synced
+                    {t("mealPlanForm.header.buttonSynced")}
                   </Badge>
                 )}
               </div>
             </div>
             <CardDescription>
-              Daily Target: {daily_calorie_target} {units?.macro.energy} |
-              Protein: {macroPercentages.protein}% | Carbohydrates:{" "}
-              {macroPercentages.carbs}% | Fats: {macroPercentages.fat}%
+              {t("mealPlanForm.description.dailyTarget")}:{" "}
+              {daily_calorie_target} {units?.macro.energy} |
+              {t("mealPlanForm.description.protein")}:{" "}
+              {macroPercentages.protein}% |{" "}
+              {t("mealPlanForm.description.carbs")}: {macroPercentages.carbs}% |
+              {t("mealPlanForm.description.fat")}: {macroPercentages.fat}%
             </CardDescription>
           </CardHeader>
         </Card>
@@ -185,7 +191,7 @@ export const MealPlanForm = ({
                 <div className="flex flex-col md:flex-row md:items-center gap-4 text-sm">
                   <div className="flex flex-col items-center">
                     <span className="text-xs text-muted-foreground">
-                      Target
+                      {t("mealPlanForm.macroCard.target")}
                     </span>
                     <Badge
                       variant="outline"
@@ -197,7 +203,7 @@ export const MealPlanForm = ({
                   </div>
                   <div className="flex flex-col items-center">
                     <span className="text-xs text-muted-foreground">
-                      Actual
+                      {t("mealPlanForm.macroCard.actual")}
                     </span>
                     <Badge
                       variant="secondary"
@@ -209,7 +215,7 @@ export const MealPlanForm = ({
                   </div>
                   <div className="flex flex-col">
                     <span className="text-xs text-muted-foreground">
-                      Macros
+                      {t("mealPlanForm.macroCard.macros")}
                     </span>
                     <div className="flex gap-2">
                       <Badge variant="secondary">

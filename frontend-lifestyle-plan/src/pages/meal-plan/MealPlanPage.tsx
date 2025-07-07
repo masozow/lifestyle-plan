@@ -9,7 +9,7 @@ const MealPlanPage = () => {
       transition={{ duration: 0.5, ease: "easeInOut" }}
       className="w-full mx-auto pt-10 sm:pt-1  p-4 md:p-6 "
     >
-      <MealPlanForm />
+      <MealPlanForm dateToFilter={new Date()} />
     </motion.div>
   );
 };

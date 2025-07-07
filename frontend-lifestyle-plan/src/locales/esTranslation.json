@@ -186,6 +186,27 @@
       }
     }
   },
+  "mealPlanForm":{
+    "header":{
+      "title": "Plan de comidas semanal",
+      "buttonSync": "Sincronizar",
+      "buttonSynced": "Sincronizado",
+      "buttonSyncing": "Sincronizando...",
+      "buttonUnsaved": "Cambios no guardados"
+    },
+    "description":{
+      "dailyTarget": "Objetivo diario",
+      "calories": "Calorías",
+      "protein": "Proteínas",
+      "carbs": "Carbohidratos",
+      "fat": "Grasas"
+    },
+    "macroCard":{
+      "target":"Objetivo",
+      "actual":"Consumido",
+      "macros":"Macros"
+    }
+  },
   "nutrition": {
     "title": "Plan Nutricional",
     "submit": "Generar Plan"

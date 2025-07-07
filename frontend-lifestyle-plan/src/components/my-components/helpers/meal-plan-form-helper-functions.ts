@@ -176,14 +176,25 @@ export const groupMealsByDay = (
 
   let result = [...grouped.values()];
 
-  // Convert date string to Date and sort ascending
-  result = result.sort((a, b) => {
-    const dateA = new Date(a.date || "1970-01-01");
-    const dateB = new Date(b.date || "1970-01-01");
+  // Sort by date in ascending order
+  result.sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
     return dateA.getTime() - dateB.getTime();
   });
-  
-  // Limit number of days
+
+  // If dateToFilter is provided, take only the days from that date onwards
+  if (options?.dateToFilter) {
+    const referenceTime = new Date(
+      options.dateToFilter.toISOString().split("T")[0]
+    ).getTime(); // normalize time to 00:00
+    result = result.filter((group) => {
+      const groupTime = new Date(group.date).getTime();
+      return groupTime >= referenceTime;
+    });
+  }
+
+  // Limit the number of days if requested
   if (options?.limitDays) {
     result = result.slice(0, options.limitDays);
   }

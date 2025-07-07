@@ -186,6 +186,27 @@
       }
     }
   },
+  "mealPlanForm":{
+    "header":{
+      "title": "Weekly Meal Plan",
+      "buttonSync": "Sync",
+      "buttonSynced": "Synced",
+      "buttonSyncing": "Syncing...",
+      "buttonUnsaved": "Unsaved changes"
+    },
+    "description":{
+      "dailyTarget": "Daily Target",
+      "calories": "Calories",
+      "protein": "Protein",
+      "carbs": "Carbohydrates",
+      "fat": "Fats"
+    },
+    "macroCard":{
+      "target":"Target",
+      "actual":"Actual",
+      "macros":"Macros"
+    }
+  },
   "nutrition": {
     "title": "Nutrition Plan",
     "submit": "Generate Plan"
