@@ -74,6 +74,7 @@ export const MealPlanForm = ({
   if (Object.keys(mealStatus).length === 0) {
     return <MealPlanFormSkeleton />;
   }
+  console.log("🔍 Data:", data);
   const { daily_calorie_target, macro_ratios, units } = data;
 
   const handleToggleMealStatus = (meal: Meal, completed: boolean) => {
