@@ -25,6 +25,7 @@ import { API_ENDPOINTS } from "@/lib/backendURLS";
 import { MealPlanFormSkeleton } from "@/components";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import { Navigate } from "react-router";
 interface MealPlanFormProps {
   limitDays?: number;
   dateToFilter?: Date;
@@ -73,6 +74,14 @@ export const MealPlanForm = ({
   }
   if (Object.keys(mealStatus).length === 0) {
     return <MealPlanFormSkeleton />;
+  }
+  const filteredWeeklyPlan = groupMealsByDay(mealStatus, {
+    dateToFilter: dateToFilter,
+    limitDays: limitDays,
+  });
+  //adding condition to create a new plan when the actual has been acomplished
+  if (filteredWeeklyPlan.length === 0) {
+    return <Navigate to="/app/new-plan" />;
   }
   console.log("🔍 Data:", data);
   const { daily_calorie_target, macro_ratios, units } = data;
@@ -175,10 +184,7 @@ export const MealPlanForm = ({
         </Card>
       )}
 
-      {groupMealsByDay(mealStatus, {
-        dateToFilter: dateToFilter,
-        limitDays: limitDays,
-      }).map((day) => {
+      {filteredWeeklyPlan.map((day) => {
         const backendTargets = targetsByDay[day.day];
 
         const dayTotals = calculateDayTotals(day.meals);
