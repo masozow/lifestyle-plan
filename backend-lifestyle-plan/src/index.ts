@@ -62,5 +62,5 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`✅ Server is running on port ${PORT}\n`);
 });
-
+console.log("DB_HOST is:", process.env.DB_HOST);
 export default app;

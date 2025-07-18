@@ -14,7 +14,7 @@ import { errorAndLogHandler, errorLevels } from "../utils/errorHandler.js";
  */
 const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-
+  console.log("~ log from login ~ line 17 req.body:", req.body);
   try {
     const user = await User.findOne({ where: { email } });
     if (!user || typeof user.password !== "string") {
@@ -63,6 +63,7 @@ const login = async (req: Request, res: Response) => {
       })
     );
   } catch (error: any) {
+    console.error("Login error:", error);
     return res.status(500).json(
       await errorAndLogHandler({
         level: errorLevels.error,

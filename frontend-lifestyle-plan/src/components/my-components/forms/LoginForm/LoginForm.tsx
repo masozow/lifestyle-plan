@@ -63,10 +63,12 @@ export const LoginForm = () => {
       loginLogic();
     } else if (loginMutation.isError) {
       toast.error(loginMutation.error.message);
+      console.error("Error in login form:", loginMutation.error);
     }
   }, [
     loginMutation.isSuccess,
     loginMutation.isError,
+    loginMutation.error,
     navigate,
     loginMutation?.data?.message,
     loginMutation?.error?.message,
