@@ -14,9 +14,11 @@ import { errorAndLogHandler, errorLevels } from "../utils/errorHandler.js";
  */
 const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  console.log("~ log from login ~ line 17 req.body:", req.body);
+  // console.log("~ log from login ~ line 17 req.headers:", req.headers);
+  // console.log("~ log from login ~ line 18 req.body:", req.body);
   try {
     const user = await User.findOne({ where: { email } });
+    // console.log("~ log from login ~ line 21 user:", user);
     if (!user || typeof user.password !== "string") {
       return res.status(404).json(
         await errorAndLogHandler({

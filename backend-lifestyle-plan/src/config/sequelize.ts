@@ -15,5 +15,13 @@ const sequelize = new Sequelize({
     idle: 10000,
   },
 });
-
+console.log("Sequelize config:", {
+  user: process.env.DB_USER,
+  pass: process.env.DB_PASSWORD,
+  db: process.env.DB_NAME,
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  database: process.env.DB_NAME,
+  environment: process.env
+})
 export default sequelize;

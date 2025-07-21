@@ -75,7 +75,7 @@ export const MealPlanForm = ({
       </div>
     );
   }
-  if (Object.keys(mealStatus).length === 0) {
+  if (!hasInitialSyncCompleted && Object.keys(mealStatus).length === 0) {
     return <MealPlanFormSkeleton />;
   }
   const filteredWeeklyPlan = groupMealsByDay(mealStatus, {
