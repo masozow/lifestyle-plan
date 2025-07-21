@@ -135,7 +135,7 @@ export const MealPlanForm = ({
   );
 
   return (
-    <div className="container mx-auto space-y-6">
+    <div className=" mx-0 space-y-6 w-full">
       {showHeader && (
         <Card>
           <CardHeader>
