@@ -7,7 +7,6 @@ export * from "./my-components/forms/ProfileForm/ProfileForm.tsx";
 export * from "./my-components/forms/BaseForm/CustomNumberInput.tsx";
 export * from "./my-components/forms/BaseForm/CustomRadiogroup.tsx";
 export * from "./my-components/forms/BaseForm/CustomTextArea.tsx";
-export * from "./my-components/forms/RegisterForm/RegisterForm.tsx";
 export * from "@/components/my-components/session/SessionInitializer";
 export * from "@/components/theme/ThemeProvider";
 export * from "@/components/my-components/forms/RegisterForm/RegisterFormSteps.tsx"
