@@ -17,6 +17,7 @@ interface Props<T extends FieldValues> {
   options: { value: string; label: string }[];
   name: Path<T>;
   autoFocus?: boolean;
+  tabIndex?: number;
   error?: FieldError;
 }
 
@@ -27,6 +28,7 @@ export const CustomRadiogroup = <T extends FieldValues>({
   options,
   name,
   autoFocus = true,
+  tabIndex = 0,
   error,
 }: Props<T>) => {
   const { t } = useTranslation();
@@ -73,6 +75,7 @@ export const CustomRadiogroup = <T extends FieldValues>({
                   value={option.value}
                   id={`${name.toString()}-${option.value}`}
                   autoFocus={autoFocus && option.value === defaultValue}
+                  tabIndex={tabIndex}
                 />
                 <Label
                   className="cursor-pointer"
