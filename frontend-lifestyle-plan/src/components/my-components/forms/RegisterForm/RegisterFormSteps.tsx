@@ -130,15 +130,17 @@ export const RegisterFormSteps = () => {
     setCurrentStep((prev) => prev - 1);
     setShowSubmit(false);
   };
-  const { keyDownHandler, nextButtonRef } = useStepFormNavigation({
+  const { keyDownHandler, nextButtonRef, formRef } = useStepFormNavigation({
     currentStep,
     isFinalStep: showSubmit,
     onNext: handleNext,
     animationDuration,
   });
+
   return (
     <Form {...form}>
       <form
+        ref={formRef}
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-6 justify-center items-center w-[80%] sm:w-[40%]"
         onKeyDown={keyDownHandler}

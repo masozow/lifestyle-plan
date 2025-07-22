@@ -13,12 +13,16 @@ export function useStepFormNavigation({
 }) {
   const firstInputRef = useRef<HTMLInputElement | null>(null);
   const nextButtonRef = useRef<HTMLButtonElement | null>(null);
+  const formRef = useRef<HTMLFormElement | null>(null);
 
   const keyDownHandler = (event: React.KeyboardEvent<HTMLFormElement>) => {
     if (event.key === "Enter") {
-      event.preventDefault();
       if (!isFinalStep) {
+        event.preventDefault();
         onNext();
+      } else {
+        event.preventDefault();
+        formRef.current?.requestSubmit();
       }
     }
   };
@@ -39,5 +43,6 @@ export function useStepFormNavigation({
     keyDownHandler,
     firstInputRef,
     nextButtonRef,
+    formRef,
   };
 }
