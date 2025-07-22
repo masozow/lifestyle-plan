@@ -13,8 +13,8 @@ export const AuthFormWrapper = ({
   landing_image_alt,
 }: Props): JSX.Element => {
   return (
-    <div className="grid min-h-svh lg:grid-cols-2">
-      <div className="flex flex-col gap-4 my-5">
+    <div className="grid grid-cols-1 min-h-svh lg:grid-cols-2">
+      <div className="flex flex-col gap-4 my-5 items-center justify-center">
         <div className="flex justify-center gap-2">
           <Link
             to="/"
@@ -28,9 +28,8 @@ export const AuthFormWrapper = ({
             </p>
           </Link>
         </div>
-        <div className="flex flex-1 items-start sm:mt-0 sm:items-center justify-center">
-          <div className="w-full max-w-xs px-2">{children}</div>
-        </div>
+
+        {children}
       </div>
       <div className="relative hidden bg-muted lg:block">
         <img

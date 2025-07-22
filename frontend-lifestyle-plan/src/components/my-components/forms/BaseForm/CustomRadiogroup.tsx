@@ -16,6 +16,7 @@ interface Props<T extends FieldValues> {
   title?: string | null;
   options: { value: string; label: string }[];
   name: Path<T>;
+  autoFocus?: boolean;
   error?: FieldError;
 }
 
@@ -25,9 +26,24 @@ export const CustomRadiogroup = <T extends FieldValues>({
   defaultValue,
   options,
   name,
+  autoFocus = true,
   error,
 }: Props<T>) => {
   const { t } = useTranslation();
+  console.log("CustomRadiogroup received props:", {
+    autoFocus,
+    name,
+    defaultValue,
+  });
+  console.log("CustomRadiogroup props:", {
+    control,
+    defaultValue,
+    title,
+    options,
+    name,
+    autoFocus,
+    error,
+  });
 
   return (
     <motion.div
@@ -37,7 +53,7 @@ export const CustomRadiogroup = <T extends FieldValues>({
       exit={{ opacity: 0, x: -20 }}
       transition={{ duration: 0.3 }}
     >
-      {title && (
+      {title && autoFocus && (
         <h1 className="text-2xl text-left mb-4 font-semibold">{title}</h1>
       )}
       <Controller
@@ -49,14 +65,14 @@ export const CustomRadiogroup = <T extends FieldValues>({
             value={field.value}
             onValueChange={field.onChange}
             defaultValue={defaultValue}
-            autoFocus
+            autoFocus={autoFocus}
           >
             {options.map((option) => (
               <div key={option.value} className="flex items-center space-x-2">
                 <RadioGroupItem
                   value={option.value}
                   id={`${name.toString()}-${option.value}`}
-                  autoFocus={option.value === defaultValue}
+                  autoFocus={autoFocus && option.value === defaultValue}
                 />
                 <Label
                   className="cursor-pointer"
