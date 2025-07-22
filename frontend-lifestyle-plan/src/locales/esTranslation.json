@@ -169,6 +169,44 @@
       "title": "Cerrar sesión"
     }
   },
+  "visualizers":{
+    "titles":{
+      "objectives": "Objetivos",
+      "profile": "Perfil",
+      "userData": "Datos del usuario"
+    },
+    "objective": "Objetivo",
+    "restriction": "Restricción",
+    "preference": "Preferencia",
+    "extras": "Extras",
+    "unitSystem": "Sistema de unidades",
+    "weight": "Peso",
+    "height": "Altura",
+    "age": "Edad",
+    "waist": "Cintura",
+    "neck": "Cuello",
+    "hip": "Cadera",
+    "email": "Correo electrónico",
+    "name": "Nombre",
+    "phone": "Teléfono",
+    "birthDate": "Fecha de nacimiento",
+    "gender": "Género",
+    "lose-fat": "Perder grasa",
+    "gain-muscle": "Ganar músculo",
+    "maintain-weight": "Mantener peso",
+    "metric": "Métrico",
+    "imperial": "Imperial",
+    "male": "Masculino",
+    "female": "Femenino",
+    "none": "Ninguna",
+    "vegetarian": "Vegetariano",
+    "gluten-free": "Sin gluten",
+    "dairy-free": "Sin lácteos",
+    "latin": "Latina",
+    "mediterranean": "Mediterránea",
+    "asian": "Asiática",
+    "high-protein": "Alta en proteínas"
+  },
   "charts": {
     "progressChart": {
       "title": "Progreso Nutricional",

@@ -19,7 +19,7 @@ export const CardContentBaseVisualizer = <T extends Record<string, unknown>>({
 }: Props<T>) => {
   const { user } = useSessionStore();
   const userId = user?.id;
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const locale = i18n.language as LocaleCode;
 
   const { data, isLoading, isError, error } = useApiGet<{
@@ -49,6 +49,23 @@ export const CardContentBaseVisualizer = <T extends Record<string, unknown>>({
 
   const receivedData = data?.data;
 
+  const checkTranslation = (data: string, type: string) => {
+    const key = `visualizers.${data}`;
+    const hasTranslation = i18n.exists(key);
+
+    if (type.toLowerCase().includes("date")) {
+      return locale ? format(String(data), { date: "long" }, locale) : data;
+    } else if (type === "key") {
+      return hasTranslation
+        ? t(key)
+        : data.charAt(0).toUpperCase() + data.slice(1);
+    } else {
+      return hasTranslation
+        ? t(key)
+        : data.replace("-", " ").replace(/^\w/, (c) => c.toUpperCase());
+    }
+  };
+
   return (
     <CardContent key={locale}>
       {receivedData &&
@@ -70,17 +87,16 @@ export const CardContentBaseVisualizer = <T extends Record<string, unknown>>({
           .map(([key, value]) => (
             <div key={key} className="grid grid-cols-5">
               <p className="col-span-2 font-semibold">
-                {key.charAt(0).toUpperCase() + key.slice(1)}
+                {checkTranslation(key, "key")}
               </p>
               <Badge
                 variant="outline"
                 className="col-span-3 text-sm md:text-md"
               >
+                {/* TODO: check for this condition, make it work inside the checkTranslatio function */}
                 {key.toLowerCase().includes("date")
                   ? format(String(value), { date: "long" }, locale)
-                  : String(value)
-                      .replace("-", " ")
-                      .replace(/^\w/, (c) => c.toUpperCase())}
+                  : checkTranslation(String(value), "value")}
               </Badge>
             </div>
           ))}
