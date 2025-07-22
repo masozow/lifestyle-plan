@@ -169,6 +169,44 @@
       "title": "Logout"
     }
   },
+  "visualizers":{
+    "titles":{
+      "objectives": "Objectives",
+      "profile": "Profile",
+      "userData": "User data"
+    },
+    "objective": "Objective",
+    "restriction": "Restriction",
+    "preference": "Preference",
+    "extras": "Extras",
+    "unitSystem": "Unit System",
+    "weight": "Weight",
+    "height": "Height",
+    "age": "Age",
+    "waist": "Waist",
+    "neck": "Neck",
+    "hip": "Hip",
+    "email": "Email",
+    "name": "Name",
+    "phone": "Phone",
+    "birthDate": "Birth Date",
+    "gender": "Gender",
+    "lose-fat": "Lose fat",
+    "gain-muscle": "Gain muscle",
+    "maintain-weight": "Maintain weight",
+    "metric": "Metric",
+    "imperial": "Imperial",
+    "male": "Male",
+    "female": "Female",
+    "none": "None",
+    "vegetarian": "Vegetarian",
+    "gluten-free": "Gluten-free",
+    "dairy-free": "Dairy-free",
+    "latin": "Latin",
+    "mediterranean": "Mediterranean",
+    "asian": "Asian",
+    "high-protein": "High protein"
+  },
   "charts": {
     "progressChart": {
       "title": "Nutrition Progress",

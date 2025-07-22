@@ -4,6 +4,7 @@ import { Card, CardHeader, CardTitle } from "../../ui/card";
 import { CardContentBaseVisualizer } from "./CardContentBaseVisualizer";
 import { mapPlanToFormValues } from "./mappers";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 export type Plan = {
   objective: string;
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export const ObjectivesCard = ({ className }: Props) => {
+  const { t } = useTranslation();
   const { user } = useSessionStore();
   const userId = user?.id;
   const { setPlan } = usePlanStore();
@@ -32,7 +34,9 @@ export const ObjectivesCard = ({ className }: Props) => {
   return (
     <Card className={className}>
       <CardHeader className="border-b">
-        <CardTitle className="text-2xl">Objectives</CardTitle>
+        <CardTitle className="text-2xl">
+          {t("visualizers.titles.objectives")}
+        </CardTitle>
       </CardHeader>
       <CardContentBaseVisualizer<Plan>
         url={url}
