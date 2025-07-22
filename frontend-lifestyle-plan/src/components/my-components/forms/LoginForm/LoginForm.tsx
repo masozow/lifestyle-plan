@@ -81,7 +81,7 @@ export const LoginForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-6 justify-start"
+        className="flex flex-col gap-6 justify-center items-center w-full"
       >
         <div className="flex flex-col items-center gap-2 text-center">
           <h1 className="text-2xl font-bold">{t("loginForm.title")}</h1>
@@ -90,7 +90,7 @@ export const LoginForm = () => {
           </p>
         </div>
 
-        <div className="grid gap-6">
+        <div className="grid gap-6 w-[80%] sm:w-[40%]">
           <FormField
             control={form.control}
             name="email"

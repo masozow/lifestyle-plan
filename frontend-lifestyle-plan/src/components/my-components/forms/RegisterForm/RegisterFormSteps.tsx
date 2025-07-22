@@ -134,7 +134,7 @@ export const RegisterFormSteps = () => {
     <Form {...form}>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-6 justify-start"
+        className="flex flex-col gap-6 justify-center items-center w-[80%] sm:w-[40%]"
       >
         <div className="text-center">
           <h1 className="text-2xl font-bold">{t("registerPage.title")}</h1>
@@ -147,7 +147,7 @@ export const RegisterFormSteps = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.4 }}
-            className="space-y-4"
+            className="space-y-4 w-full"
           >
             {steps[currentStep].map((step, index) => (
               <FormField
@@ -166,6 +166,7 @@ export const RegisterFormSteps = () => {
                           options={step.options || []}
                           defaultValue={step.defaultValue || ""}
                           error={errors[step.name as keyof RegisterFormValues]}
+                          autoFocus={false}
                         />
                       ) : (
                         <Input

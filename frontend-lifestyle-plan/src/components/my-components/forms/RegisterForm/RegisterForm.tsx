@@ -203,6 +203,7 @@ export const RegisterForm = () => {
               { label: "Male", value: "male" },
               { label: "Female", value: "female" },
             ]}
+            autoFocus={false}
             error={form.formState.errors.gender}
           />
         </div>
