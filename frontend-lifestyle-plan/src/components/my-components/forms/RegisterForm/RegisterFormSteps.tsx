@@ -211,7 +211,7 @@ export const RegisterFormSteps = () => {
               onClick={handleBack}
               className="text-lg p-4"
             >
-              Back
+              {t("registerForm.buttons.back")}
             </Button>
           ) : (
             <div />
@@ -227,7 +227,7 @@ export const RegisterFormSteps = () => {
               )}
               ref={nextButtonRef}
             >
-              Next
+              {t("registerForm.buttons.next")}
             </Button>
           ) : (
             <Button
@@ -237,13 +237,16 @@ export const RegisterFormSteps = () => {
                 registerMutation.isPending || registerMutation.isSuccess
               }
             >
-              {registerMutation.isPending ? "Registering..." : "Register"}
+              {registerMutation.isPending
+                ? t("registerForm.buttons.pending")
+                : t("registerForm.buttons.submit")}
             </Button>
           )}
         </div>
 
         <div className="text-center text-sm text-muted-foreground">
-          Step {currentStep + 1} of {steps.length}
+          {t("registerForm.steps.step")} {currentStep + 1}{" "}
+          {t("registerForm.steps.of")} {steps.length}
         </div>
       </form>
     </Form>
