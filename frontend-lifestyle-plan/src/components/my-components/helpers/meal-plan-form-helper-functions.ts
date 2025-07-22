@@ -170,34 +170,22 @@ export const groupMealsByDay = (
         meals: [],
       });
     }
-
     grouped.get(key)!.meals.push(status);
   });
 
   let result = [...grouped.values()];
 
-  // // Sort by date in ascending order
-  // result.sort((a, b) => {
-  //   const dateA = new Date(a.date);
-  //   const dateB = new Date(b.date);
-  //   return dateA.getTime() - dateB.getTime();
-  // });
+  result.sort((a, b) => a.date.localeCompare(b.date));
 
-  // If dateToFilter is provided, take only the days from that date onwards
   if (options?.dateToFilter) {
-    const referenceTime = new Date(
-      options.dateToFilter.toISOString().split("T")[0]
-    ).getTime(); // normalize time to 00:00
-    result = result.filter((group) => {
-      const groupTime = new Date(group.date).getTime();
-      return groupTime >= referenceTime;
-    });
+    const referenceDate = options.dateToFilter.toISOString().split("T")[0]; // "YYYY-MM-DD"
+    result = result.filter((group) => group.date >= referenceDate);
   }
 
-  // Limit the number of days if requested
   if (options?.limitDays) {
     result = result.slice(0, options.limitDays);
   }
 
   return result;
 };
+
