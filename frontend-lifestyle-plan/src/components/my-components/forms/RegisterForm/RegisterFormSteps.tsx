@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router";
-import { useApiRequest, useGroupedSteps } from "@/hooks";
+import { useApiRequest, useGroupedSteps, useStepFormNavigation } from "@/hooks";
 import { schema_registerForm, type RegisterFormValues } from "@/schemas";
 import { toast } from "sonner";
 import { X } from "lucide-react";
@@ -24,6 +24,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
 export const RegisterFormSteps = () => {
+  const animationDuration = 0.4;
   const navigate = useNavigate();
   const { setCredentials } = useAuthStore();
   const { fetchSession } = useSessionStore();
@@ -129,12 +130,18 @@ export const RegisterFormSteps = () => {
     setCurrentStep((prev) => prev - 1);
     setShowSubmit(false);
   };
-
+  const { keyDownHandler, nextButtonRef } = useStepFormNavigation({
+    currentStep,
+    isFinalStep: showSubmit,
+    onNext: handleNext,
+    animationDuration,
+  });
   return (
     <Form {...form}>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-6 justify-center items-center w-[80%] sm:w-[40%]"
+        onKeyDown={keyDownHandler}
       >
         <div className="text-center">
           <h1 className="text-2xl font-bold">{t("registerPage.title")}</h1>
@@ -146,7 +153,7 @@ export const RegisterFormSteps = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: animationDuration }}
             className="space-y-4 w-full"
           >
             {steps[currentStep].map((step, index) => (
@@ -174,8 +181,15 @@ export const RegisterFormSteps = () => {
                             step.type === "password" ? "password" : step.type
                           }
                           placeholder={step.title}
-                          autoFocus={index === 0}
                           {...field}
+                          autoFocus={index === 0}
+                          // ref={(el) => {
+                          //   field.ref(el);
+
+                          //   if (index === 0) {
+                          //     firstInputRef.current = el;
+                          //   }
+                          // }}
                         />
                       )}
                     </FormControl>
@@ -187,7 +201,7 @@ export const RegisterFormSteps = () => {
           </motion.div>
         </AnimatePresence>
 
-        <div className="flex justify-between">
+        <div className="flex justify-between w-full">
           {currentStep > 0 ? (
             <Button
               type="button"
@@ -209,6 +223,7 @@ export const RegisterFormSteps = () => {
               disabled={steps[currentStep].some(
                 (step) => !!errors[step.name as keyof RegisterFormValues]
               )}
+              ref={nextButtonRef}
             >
               Next
             </Button>
