@@ -36,7 +36,7 @@ const SummaryCard = <T extends Record<string, any>>({
                 <h1 className="font-bold capitalize text-1xl">{fieldTitle}</h1>
                 <p
                   className={cn(
-                    "overflow-y-scroll max-h-[3rem]",
+                    "overflow-y-scroll max-h-[3rem] scrollbar-hidden",
                     key.toLowerCase() === "extras" &&
                       "text-sm border-1 border-dashed rounded-b-md"
                   )}
