@@ -272,6 +272,13 @@
       }
     }
   },
+  "errorBoundaries":{
+    "404": {
+      "title": "Ooops!",
+      "message": "404 - Page Not Found",
+      "button": "Let's go to a better place"
+    }
+  },
   "nutrition": {
     "title": "Nutrition Plan",
     "submit": "Generate Plan"

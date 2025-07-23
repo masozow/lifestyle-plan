@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import * as Pages from "@/pages";
 import {
   DashBoardHomeSkeleton,
+  Error404,
   MealPlanFormSkeleton,
   ProgressChartSkeleton,
   TextWaveBase,
@@ -124,5 +125,9 @@ export const router = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: "*",
+    element: <Error404 />,
   },
 ]);

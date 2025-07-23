@@ -272,6 +272,13 @@
       }
     }
   },
+   "errorBoundaries":{
+    "404": {
+      "title": "¡Ups!",
+      "message": "404 - Página no encontrada",
+      "button": "Vayamos a un mejor lugar"
+    }
+  },
   "nutrition": {
     "title": "Plan Nutricional",
     "submit": "Generar Plan"
