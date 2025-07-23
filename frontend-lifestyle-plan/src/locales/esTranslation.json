@@ -141,6 +141,9 @@
       "title": "Género"
     }
   },
+  "loginPage":{
+    "imageAlt": "Mujer cocinando"
+  },
   "loginForm":{
     "title": "Inicia sesión en tu cuenta",
     "subTitle":" Introduce tu correo electrónico a continuación para iniciar sesión en tu cuenta",

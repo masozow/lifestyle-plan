@@ -141,6 +141,9 @@
       "title": "Gender"
     }
   },
+  "loginPage":{
+    "imageAlt": "Woman cooking"
+  },
   "loginForm":{
     "title": "Login to your account",
     "subTitle":" Enter your email below to login to your account",
