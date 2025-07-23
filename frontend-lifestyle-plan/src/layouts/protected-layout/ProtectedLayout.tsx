@@ -4,33 +4,55 @@ import { useSessionStore } from "@/store";
 import { CheckingCredentialsLoader, SessionInitializer } from "@/components";
 
 export const ProtectedLayout = () => {
-  const { isAuthenticated, hasTriedFetching } = useSessionStore();
-  const [timeoutExceeded, setTimeoutExceeded] = useState(false);
+  const { isAuthenticated } = useSessionStore();
+  const [checking, setChecking] = useState(true);
+  const [failed, setFailed] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
-    console.time("ProtectedLayout");
-    if (!hasTriedFetching) {
-      timer = setTimeout(() => {
-        setTimeoutExceeded(true);
-      }, 8000);
-    }
-    console.timeEnd("ProtectedLayout");
-    return () => clearTimeout(timer);
-  }, [hasTriedFetching]);
+    let isCancelled = false;
 
-  useEffect(() => {
-    if (timeoutExceeded && !hasTriedFetching) {
-      navigate("/login");
-    }
-  }, [timeoutExceeded, hasTriedFetching, navigate]);
+    const waitForAuth = async () => {
+      try {
+        await Promise.race([
+          new Promise<void>((resolve) => {
+            const interval = setInterval(() => {
+              if (!isCancelled && useSessionStore.getState().hasTriedFetching) {
+                clearInterval(interval);
+                resolve();
+              }
+            }, 100);
+          }),
+          new Promise<void>((_, reject) =>
+            setTimeout(() => reject(new Error("Timeout")), 8000)
+          ),
+        ]);
+      } catch {
+        if (!isCancelled) {
+          setFailed(true);
+          navigate("/login");
+        }
+      } finally {
+        if (!isCancelled) {
+          setChecking(false);
+        }
+      }
+    };
 
-  if (!hasTriedFetching) {
+    waitForAuth();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [navigate]);
+
+  if (checking) {
     return <CheckingCredentialsLoader textSize="text-3xl" />;
   }
 
-  if (!isAuthenticated) return <Navigate to="/login" />;
+  if (failed || !isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
 
   return (
     <>
