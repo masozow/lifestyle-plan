@@ -1,16 +1,17 @@
 import { useEffect, useRef } from "react";
 
-export function useStepFormNavigation({
-  currentStep,
-  isFinalStep,
-  onNext,
-  animationDuration = 0.4,
-}: {
+interface Props{
   currentStep: number;
   isFinalStep: boolean;
   onNext: () => void;
   animationDuration?: number;
-}) {
+}
+export const useStepFormNavigation=({
+  currentStep,
+  isFinalStep,
+  onNext,
+  animationDuration = 0.4,
+}: Props) =>{
   const firstInputRef = useRef<HTMLInputElement | null>(null);
   const nextButtonRef = useRef<HTMLButtonElement | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -21,7 +22,7 @@ export function useStepFormNavigation({
         event.preventDefault();
         onNext();
       } else {
-        event.preventDefault();
+        // event.preventDefault();
         formRef.current?.requestSubmit();
       }
     }
