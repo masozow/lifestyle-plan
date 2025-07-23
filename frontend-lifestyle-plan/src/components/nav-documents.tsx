@@ -78,6 +78,9 @@ export function NavDocuments({
             ) : (
               <SidebarMenuButton asChild size="lg" className="w-full">
                 <NavLink
+                  onClick={() => {
+                    if (isMobile) toggleSidebar();
+                  }}
                   to={item.url}
                   className="flex items-center gap-2 w-full"
                 >

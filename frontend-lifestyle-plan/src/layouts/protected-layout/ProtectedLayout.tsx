@@ -10,13 +10,13 @@ export const ProtectedLayout = () => {
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
-
+    console.time("ProtectedLayout");
     if (!hasTriedFetching) {
       timer = setTimeout(() => {
         setTimeoutExceeded(true);
       }, 8000);
     }
-
+    console.timeEnd("ProtectedLayout");
     return () => clearTimeout(timer);
   }, [hasTriedFetching]);
 
