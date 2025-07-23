@@ -5,6 +5,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { NavLink } from "react-router";
 
@@ -17,6 +18,7 @@ export function NavMain({
     icon?: Icon;
   }[];
 }) {
+  const { toggleSidebar, isMobile } = useSidebar();
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
@@ -24,7 +26,12 @@ export function NavMain({
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton tooltip={item.title} asChild>
-                <NavLink to={item.url}>
+                <NavLink
+                  onClick={() => {
+                    if (isMobile) toggleSidebar();
+                  }}
+                  to={item.url}
+                >
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
                 </NavLink>
