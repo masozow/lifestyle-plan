@@ -18,6 +18,7 @@ interface Props<T extends FieldValues> {
   name: Path<T>;
   autoFocus?: boolean;
   tabIndex?: number;
+  duration?: number;
   error?: FieldError;
 }
 
@@ -29,6 +30,7 @@ export const CustomRadiogroup = <T extends FieldValues>({
   name,
   autoFocus = true,
   tabIndex = 0,
+  duration = 0.3,
   error,
 }: Props<T>) => {
   const { t } = useTranslation();
@@ -53,7 +55,7 @@ export const CustomRadiogroup = <T extends FieldValues>({
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: duration }}
     >
       {title && autoFocus && (
         <h1 className="text-2xl text-left mb-4 font-semibold">{title}</h1>

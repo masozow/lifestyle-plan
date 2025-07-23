@@ -15,6 +15,7 @@ interface Props<T extends FieldValues> {
   error?: FieldError;
   title: string;
   autoFocus?: boolean;
+  duration?: number;
 }
 
 export const CustomTextArea = <T extends FieldValues>({
@@ -23,6 +24,7 @@ export const CustomTextArea = <T extends FieldValues>({
   error,
   title,
   autoFocus = false,
+  duration = 0.3,
 }: Props<T>) => {
   return (
     <motion.div
@@ -30,7 +32,7 @@ export const CustomTextArea = <T extends FieldValues>({
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: duration }}
     >
       <Label
         className="text-2xl text-left mb-4 font-semibold"

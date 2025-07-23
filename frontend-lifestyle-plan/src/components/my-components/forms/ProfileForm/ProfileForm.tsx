@@ -8,7 +8,7 @@ import { CustomRadiogroup, CustomNumberInput } from "@/components";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import SummaryCard from "../PlannerForm/SummaryCard";
-import { useApiRequest, useSteps } from "@/hooks";
+import { useApiRequest, useStepFormNavigation, useSteps } from "@/hooks";
 import { profileSteps } from "@/config";
 import { useProfileStore, useSessionStore } from "@/store";
 import { API_ENDPOINTS } from "@/lib/backendURLS";
@@ -23,6 +23,7 @@ interface Props {
 }
 
 export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
+  const animationDuration = 0.4;
   const { t } = useTranslation();
   const { setProfile } = useProfileStore();
   const { user } = useSessionStore();
@@ -156,14 +157,21 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
     navigate,
     age,
   ]);
-
+  const { keyDownHandler, nextButtonRef, formRef } = useStepFormNavigation({
+    currentStep,
+    isFinalStep: showSubmit,
+    onNext: handleNext,
+    animationDuration,
+  });
   return (
     <motion.form
+      ref={formRef}
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col justify-between gap-6"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: "easeInOut" }}
+      transition={{ duration: animationDuration, ease: "easeInOut" }}
+      onKeyDown={keyDownHandler}
     >
       <div className="min-h-[12rem] flex flex-col justify-center">
         <AnimatePresence mode="wait">
@@ -176,6 +184,7 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
               defaultValue={steps[currentStep].defaultValue || ""}
               options={steps[currentStep].options || []}
               error={errors[steps[currentStep].name as keyof ProfileFormValues]}
+              duration={animationDuration}
             />
           ) : (
             !isCompleted && (
@@ -185,6 +194,8 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
                 name={steps[currentStep].name as keyof ProfileFormValues}
                 label={steps[currentStep].title}
                 unit={getUnit(steps[currentStep].name)}
+                duration={animationDuration}
+                autoFocus
                 error={
                   errors[steps[currentStep].name as keyof ProfileFormValues]
                 }
@@ -216,6 +227,7 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
             type="button"
             onClick={handleNext}
             className="text-lg p-4"
+            ref={nextButtonRef}
             disabled={
               !!errors[steps[currentStep].name as keyof ProfileFormValues]
             }
