@@ -175,6 +175,7 @@ export const RegisterFormSteps = () => {
                           options={step.options || []}
                           defaultValue={step.defaultValue || ""}
                           error={errors[step.name as keyof RegisterFormValues]}
+                          duration={animationDuration}
                           autoFocus={false}
                         />
                       ) : (

@@ -7,7 +7,7 @@ import { schema_plannerForm, type PlannerFormValues } from "@/schemas";
 import { CustomRadiogroup, CustomTextArea } from "@/components";
 import SummaryCard from "./SummaryCard";
 import { useTranslation } from "react-i18next";
-import { useApiRequest, useSteps } from "@/hooks";
+import { useApiRequest, useStepFormNavigation, useSteps } from "@/hooks";
 import { plannerSteps } from "@/config";
 import { usePlanStore, useSessionStore } from "@/store";
 import { useNavigate } from "react-router";
@@ -21,6 +21,7 @@ interface Props {
 }
 
 export const PlannerForm = ({ titleChangeFunction, initialValues }: Props) => {
+  const animationDuration = 0.4;
   const { t } = useTranslation();
   const { steps, getDefaultValues } = useSteps(plannerSteps);
   const defaultValues = getDefaultValues();
@@ -133,14 +134,21 @@ export const PlannerForm = ({ titleChangeFunction, initialValues }: Props) => {
     setIsCompleted(false);
     setShowSubmit(false);
   };
-
+  const { keyDownHandler, nextButtonRef, formRef } = useStepFormNavigation({
+    currentStep,
+    isFinalStep: showSubmit,
+    onNext: nextStep,
+    animationDuration,
+  });
   return (
     <motion.form
+      ref={formRef}
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col justify-between"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: "easeInOut" }}
+      transition={{ duration: animationDuration, ease: "easeInOut" }}
+      onKeyDown={keyDownHandler}
     >
       <div className="min-h-[12rem] flex flex-col justify-center">
         <AnimatePresence mode="wait">
@@ -153,6 +161,7 @@ export const PlannerForm = ({ titleChangeFunction, initialValues }: Props) => {
               defaultValue={steps[currentStep].defaultValue || ""}
               options={steps[currentStep].options || []}
               error={errors[steps[currentStep].name as keyof PlannerFormValues]}
+              duration={animationDuration}
             />
           ) : (
             !isCompleted && (
@@ -162,7 +171,8 @@ export const PlannerForm = ({ titleChangeFunction, initialValues }: Props) => {
                 control={control}
                 error={errors.extras}
                 title={steps[currentStep].title}
-                autoFocus={true}
+                autoFocus
+                duration={animationDuration}
               />
             )
           )}
@@ -188,7 +198,12 @@ export const PlannerForm = ({ titleChangeFunction, initialValues }: Props) => {
         )}
 
         {!isCompleted || !showSubmit ? (
-          <Button type="button" onClick={nextStep} className="text-lg p-4">
+          <Button
+            type="button"
+            onClick={nextStep}
+            className="text-lg p-4"
+            ref={nextButtonRef}
+          >
             {t("plannerForm.buttons.next")}
           </Button>
         ) : (

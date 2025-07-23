@@ -17,6 +17,7 @@ interface Props<T extends FieldValues> {
   error?: FieldError;
   unit?: string;
   autoFocus?: boolean;
+  duration?: number;
 }
 
 export const CustomNumberInput = <T extends FieldValues>({
@@ -25,6 +26,7 @@ export const CustomNumberInput = <T extends FieldValues>({
   label,
   error,
   unit,
+  duration = 0.3,
   autoFocus = true,
 }: Props<T>) => {
   // const [isTouched, setIsTouched] = useState(false);
@@ -33,7 +35,7 @@ export const CustomNumberInput = <T extends FieldValues>({
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: duration }}
       className="space-y-2"
     >
       <Label
