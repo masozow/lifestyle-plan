@@ -118,6 +118,7 @@ export const AppSidebar = ({
     ],
   };
   const { user } = useSessionStore();
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>

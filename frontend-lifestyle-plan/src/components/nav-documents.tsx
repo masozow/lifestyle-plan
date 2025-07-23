@@ -30,7 +30,7 @@ export function NavDocuments({
   items: NavDocumentItem[];
   title?: string;
 }) {
-  const { isMobile } = useSidebar();
+  const { isMobile, toggleSidebar } = useSidebar();
   const [openMenu, setOpenMenu] = useState<string | null>(null);
 
   return (
@@ -62,6 +62,9 @@ export function NavDocuments({
                   {item.children.map((child) => (
                     <DropdownMenuItem key={child.name} asChild>
                       <NavLink
+                        onClick={() => {
+                          if (isMobile) toggleSidebar();
+                        }}
                         to={child.url}
                         className="flex items-center gap-2 w-full"
                       >
