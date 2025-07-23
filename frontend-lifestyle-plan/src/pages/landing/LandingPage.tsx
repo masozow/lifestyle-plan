@@ -62,7 +62,7 @@ export const LandingPage = () => {
       <div className="hidden w-1/2 sm:block mb-24 md:mb-0 md:w-1/2 lg:w-2/3 md:mx-auto xl:w-1/2">
         <img
           src={landing_image}
-          alt="woman cooking"
+          alt={t("loginPage.imageAlt")}
           className="hover:filter hover:drop-shadow-lg transition-all duration-200 hover:scale-y-[0.98] hover:scale-x-[0.98]"
           loading="lazy"
         />
