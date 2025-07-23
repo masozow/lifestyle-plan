@@ -21,7 +21,7 @@ export const ProtectedLayout = () => {
                 clearInterval(interval);
                 resolve();
               }
-            }, 100);
+            }, 10);
           }),
           new Promise<void>((_, reject) =>
             setTimeout(() => reject(new Error("Timeout")), 8000)
