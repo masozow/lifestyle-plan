@@ -40,4 +40,4 @@ export * from "./my-components/charts/progress-chart/ProgressChart.tsx";
 
 //error boundaries
 export * from "./my-components/error-boundaries/Error404.tsx";
-export * from "./my-components/error-boundaries/ComponentError.tsx";
+export * from "./my-components/error-boundaries/ErrorBoundaryWrapper.tsx";

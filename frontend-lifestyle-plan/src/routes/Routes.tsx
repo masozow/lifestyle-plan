@@ -1,22 +1,26 @@
 import { createBrowserRouter } from "react-router";
 import { AuthLayout, ProtectedLayout } from "@/layouts";
 import DashboardHome from "@/components/my-components/dashboard/DashboardHome";
-import { ErrorBoundary } from "react-error-boundary";
 import { Suspense } from "react";
 import * as Pages from "@/pages";
 import {
   DashBoardHomeSkeleton,
   Error404,
+  ErrorBoundaryWrapper,
   MealPlanFormSkeleton,
   ProgressChartSkeleton,
   TextWaveBase,
 } from "@/components";
-import ComponentError from "@/components/my-components/error-boundaries/ComponentError";
+
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <AuthLayout />,
+    element: (
+      <ErrorBoundaryWrapper>
+        <AuthLayout />
+      </ErrorBoundaryWrapper>
+    ),
     children: [
       {
         path: "",
@@ -35,9 +39,9 @@ export const router = createBrowserRouter([
   {
     path: "/app",
     element: (
-      <ErrorBoundary fallback={<ComponentError />}>
+      <ErrorBoundaryWrapper>
         <ProtectedLayout />,
-      </ErrorBoundary>
+      </ErrorBoundaryWrapper>
     ),
     children: [
       {

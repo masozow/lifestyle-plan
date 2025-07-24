@@ -1,14 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
-import { NavLink } from "react-router";
+import { type FallbackProps } from "react-error-boundary";
 
 // interface Props {}
 
-const ComponentError = () => {
+const ComponentError = ({ error, resetErrorBoundary }: FallbackProps) => {
   const { t } = useTranslation();
-  const handleReload = () => {
-    window.location.reload();
-  };
+  console.error(`Error message: ${error?.message}\n\nStack:\n${error?.stack}`);
   return (
     <div className="flex flex-col items-center justify-center h-screen w-full flex-wrap gap-10">
       <h1 className="text-6xl md:text-9xl font-bold">
@@ -20,13 +18,21 @@ const ComponentError = () => {
       </h2>
       <div className="flex flex-wrap justify-between gap-10">
         <Button asChild className="mt-10" variant="secondary">
-          <NavLink to="/" className="h-[4rem]">
+          <a
+            href={`mailto:support@support.com?subject=App%20Error&body=${encodeURIComponent(
+              `Error message: ${error?.message}\n\nStack:\n${error?.stack}`
+            )}`}
+            className="h-[4rem]"
+          >
             <span className="text-1xl md:text-3xl">
               {t("errorBoundaries.componentError.buttonSecondary")}
             </span>
-          </NavLink>
+          </a>
         </Button>
-        <Button className="mt-10 h-[4rem]" onClick={handleReload}>
+        <Button
+          className="mt-10 h-[4rem] cursor-pointer"
+          onClick={() => resetErrorBoundary()}
+        >
           <span className="text-1xl md:text-3xl">
             {t("errorBoundaries.componentError.buttonPrimary")}
           </span>

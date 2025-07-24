@@ -66,14 +66,23 @@ export const MealPlanForm = ({
     intakeUrl: API_ENDPOINTS.userDailyIntake,
     getUrl: apiEndPointGET,
   });
-
+  // const induceError = true;
   if (isLoading) return <MealPlanFormSkeleton showHeader />;
-  if (isError || !data || !data.macro_ratios || !data.weekly_plan) {
-    return (
-      <div className="text-red-500">
-        Error: {error?.message || "Invalid response structure"}
-      </div>
-    );
+  if (
+    // induceError ||
+    isError ||
+    !data ||
+    !data.macro_ratios ||
+    !data.weekly_plan
+  ) {
+    //changing to throw because error boundary has been implemented
+    console.error("Error:", error, "-", error?.message, "-", data);
+    throw new Error(error?.message || "Invalid response structure");
+    // return (
+    //   <div className="text-red-500">
+    //     Error: {error?.message || "Invalid response structure"}
+    //   </div>
+    // );
   }
   if (!hasInitialSyncCompleted || Object.keys(mealStatus).length === 0) {
     return <MealPlanFormSkeleton />;
@@ -82,11 +91,11 @@ export const MealPlanForm = ({
     dateToFilter: dateToFilter,
     limitDays: limitDays,
   });
-  //adding condition to create a new plan when the actual has been acomplished
+  //adding condition to send the user to create a new plan when the actual has been acomplished
   if (filteredWeeklyPlan.length === 0) {
     return <Navigate to="/app/new-plan" />;
   }
-  console.log("🔍 Data:", data);
+
   const { daily_calorie_target, macro_ratios, units } = data;
 
   const handleToggleMealStatus = (meal: Meal, completed: boolean) => {
