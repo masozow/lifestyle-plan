@@ -9,7 +9,7 @@ import { useSessionStore } from "@/store";
 import { motion } from "motion/react";
 import type { JSX } from "react";
 
-export const ProgressChartPage = (): JSX.Element => {
+const ProgressChartPage = (): JSX.Element => {
   const { user } = useSessionStore();
 
   const { data, isLoading, isError, error } = useApiGet<{
@@ -50,3 +50,5 @@ export const ProgressChartPage = (): JSX.Element => {
     </motion.div>
   );
 };
+
+export default ProgressChartPage;

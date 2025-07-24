@@ -12,7 +12,6 @@ import {
   TextWaveBase,
 } from "@/components";
 
-
 export const router = createBrowserRouter([
   {
     path: "/",
