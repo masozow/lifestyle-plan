@@ -277,6 +277,12 @@
       "title": "¡Ups!",
       "message": "404 - Página no encontrada",
       "button": "Vayamos a un mejor lugar"
+    },
+    "componentError":{
+      "title": "¡Ups!",
+      "message": "Algo salió mal",
+      "buttonPrimary": "Actualiza la página",
+      "buttonSecondary": "Contacta a soporte"
     }
   },
   "nutrition": {

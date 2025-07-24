@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router";
 import { AuthLayout, ProtectedLayout } from "@/layouts";
 import DashboardHome from "@/components/my-components/dashboard/DashboardHome";
+import { ErrorBoundary } from "react-error-boundary";
 import { Suspense } from "react";
 import * as Pages from "@/pages";
 import {
@@ -10,6 +11,7 @@ import {
   ProgressChartSkeleton,
   TextWaveBase,
 } from "@/components";
+import ComponentError from "@/components/my-components/error-boundaries/ComponentError";
 
 export const router = createBrowserRouter([
   {
@@ -32,7 +34,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/app",
-    element: <ProtectedLayout />,
+    element: (
+      <ErrorBoundary fallback={<ComponentError />}>
+        <ProtectedLayout />,
+      </ErrorBoundary>
+    ),
     children: [
       {
         path: "",

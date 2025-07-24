@@ -277,6 +277,12 @@
       "title": "Ooops!",
       "message": "404 - Page Not Found",
       "button": "Let's go to a better place"
+    },
+    "componentError":{
+      "title": "Ooops!",
+      "message": "Something went wrong",
+      "buttonPrimary": "Refresh the page",
+      "buttonSecondary": "Contact support"
     }
   },
   "nutrition": {

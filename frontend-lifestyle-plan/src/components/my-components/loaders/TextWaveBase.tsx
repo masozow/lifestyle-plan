@@ -8,7 +8,7 @@ type Props = {
 
 export const TextWaveBase = ({ textSize, text }: Props) => {
   return (
-    <div className="flex flex-col justify-center items-center h-full w-full m-auto">
+    <div className="flex flex-col justify-center items-center h-screen w-full m-auto">
       <p className={cn("flex gap-[1px]", textSize ?? "text-4xl")}>
         {text.split("").map((char, index) => (
           <motion.span
