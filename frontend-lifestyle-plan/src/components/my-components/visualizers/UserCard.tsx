@@ -5,6 +5,8 @@ import { Card, CardHeader, CardTitle } from "../../ui/card";
 import { CardContentBaseVisualizer } from "@/components";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { ErrorBoundary } from "react-error-boundary";
+import ReloadOrRedirectWhenError from "../error-boundaries/ReloadOrRedirectWhenError";
 
 type User = {
   id: number;
@@ -38,7 +40,17 @@ export const UserCard = ({ className }: Props) => {
           {t("visualizers.titles.userData")}
         </CardTitle>
       </CardHeader>
-      <CardContentBaseVisualizer<User> url={url} />
+      <ErrorBoundary
+        fallbackRender={({ error }) => (
+          <ReloadOrRedirectWhenError
+            url="/register"
+            translationKey="objectivesVisualizer"
+            message={error.message}
+          />
+        )}
+      >
+        <CardContentBaseVisualizer<User> url={url} />
+      </ErrorBoundary>
     </Card>
   );
 };

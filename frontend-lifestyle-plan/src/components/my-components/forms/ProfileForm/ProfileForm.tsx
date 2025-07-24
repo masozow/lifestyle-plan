@@ -113,7 +113,11 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
     setIsCompleted(false);
     setShowSubmit(false);
     titleChangeFunction();
-    setCurrentStep((prev) => prev - 1);
+    if (isCompleted) {
+      setCurrentStep(steps.length - 1);
+    } else {
+      setCurrentStep((prev) => prev - 1);
+    }
   };
 
   useEffect(() => {

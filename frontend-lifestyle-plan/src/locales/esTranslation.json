@@ -283,6 +283,23 @@
       "message": "Algo salió mal",
       "buttonPrimary": "Actualiza la página",
       "buttonSecondary": "Contacta a soporte"
+    },
+    "reloadOrRedirect":{
+      "mealPlanForm": {
+        "title": "¡Ups! Algo salió mal.",
+        "buttonPrimary": "Actualiza la página",
+        "buttonSecondary": "Crea un nuevo plan"
+    },
+      "objectivesVisualizer": {
+        "title": "¡Ups! Algo salió mal.",
+        "buttonPrimary": "Actualiza la página",
+        "buttonSecondary": "Crea nuevos objetivos"
+      },
+      "userVisalizer":{
+        "title": "¡Ups! Algo salió mal.",
+        "buttonPrimary": "Actualiza la página",
+        "buttonSecondary": "Crea un nuevo usuario"        
+      }
     }
   },
   "nutrition": {

@@ -18,7 +18,7 @@ const ProfilePage = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeInOut" }}
-      className="max-w-md mx-auto p-4"
+      className="max-w-md mx-auto p-4 flex flex-col gap-4 w-full"
     >
       <h2 className="text-3xl font-bold tracking-wider">{formTitle}</h2>
       <ProfileForm titleChangeFunction={handleFormTitleChange} />
