@@ -5,15 +5,22 @@ import { Suspense } from "react";
 import * as Pages from "@/pages";
 import {
   DashBoardHomeSkeleton,
+  Error404,
+  ErrorBoundaryWrapper,
   MealPlanFormSkeleton,
   ProgressChartSkeleton,
   TextWaveBase,
 } from "@/components";
 
+
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <AuthLayout />,
+    element: (
+      <ErrorBoundaryWrapper>
+        <AuthLayout />
+      </ErrorBoundaryWrapper>
+    ),
     children: [
       {
         path: "",
@@ -31,7 +38,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/app",
-    element: <ProtectedLayout />,
+    element: (
+      <ErrorBoundaryWrapper>
+        <ProtectedLayout />,
+      </ErrorBoundaryWrapper>
+    ),
     children: [
       {
         path: "",
@@ -124,5 +135,9 @@ export const router = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: "*",
+    element: <Error404 />,
   },
 ]);
