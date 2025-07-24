@@ -130,7 +130,12 @@ export const PlannerForm = ({ titleChangeFunction, initialValues }: Props) => {
 
   const prevStep = () => {
     titleChangeFunction();
-    setCurrentStep((prev) => prev - 1);
+    if (isCompleted) {
+      setCurrentStep(steps.length - 1);
+    } else {
+      setCurrentStep((prev) => prev - 1);
+    }
+
     setIsCompleted(false);
     setShowSubmit(false);
   };
