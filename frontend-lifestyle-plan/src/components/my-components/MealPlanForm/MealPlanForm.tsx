@@ -90,7 +90,7 @@ export const MealPlanForm = ({
     );
   }
   if (!hasInitialSyncCompleted || Object.keys(mealStatus).length === 0) {
-    return <MealPlanFormSkeleton />;
+    return <MealPlanFormSkeleton showHeader />;
   }
   const filteredWeeklyPlan = groupMealsByDay(mealStatus, {
     dateToFilter: dateToFilter,
