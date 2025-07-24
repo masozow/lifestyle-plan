@@ -5,6 +5,8 @@ import { CardContentBaseVisualizer } from "./CardContentBaseVisualizer";
 import { mapProfileToFormValues } from "./mappers";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { ErrorBoundary } from "react-error-boundary";
+import ReloadOrRedirectWhenError from "../error-boundaries/ReloadOrRedirectWhenError";
 
 export type Profile = {
   unitSystem: string;
@@ -40,10 +42,20 @@ export const ProfileCard = ({ className }: Props) => {
           {t("visualizers.titles.profile")}
         </CardTitle>
       </CardHeader>
-      <CardContentBaseVisualizer<Profile>
-        url={url}
-        onDataLoaded={setProfileHandler}
-      />
+      <ErrorBoundary
+        fallbackRender={({ error }) => (
+          <ReloadOrRedirectWhenError
+            url="/app/profile"
+            translationKey="objectivesVisualizer"
+            message={error.message}
+          />
+        )}
+      >
+        <CardContentBaseVisualizer<Profile>
+          url={url}
+          onDataLoaded={setProfileHandler}
+        />
+      </ErrorBoundary>
     </Card>
   );
 };

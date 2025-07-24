@@ -5,6 +5,8 @@ import { CardContentBaseVisualizer } from "./CardContentBaseVisualizer";
 import { mapPlanToFormValues } from "./mappers";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { ErrorBoundary } from "react-error-boundary";
+import ReloadOrRedirectWhenError from "../error-boundaries/ReloadOrRedirectWhenError";
 
 export type Plan = {
   objective: string;
@@ -38,10 +40,20 @@ export const ObjectivesCard = ({ className }: Props) => {
           {t("visualizers.titles.objectives")}
         </CardTitle>
       </CardHeader>
-      <CardContentBaseVisualizer<Plan>
-        url={url}
-        onDataLoaded={setPlanHandler}
-      />
+      <ErrorBoundary
+        fallbackRender={({ error }) => (
+          <ReloadOrRedirectWhenError
+            url="/app/planner"
+            translationKey="objectivesVisualizer"
+            message={error.message}
+          />
+        )}
+      >
+        <CardContentBaseVisualizer<Plan>
+          url={url}
+          onDataLoaded={setPlanHandler}
+        />
+      </ErrorBoundary>
     </Card>
   );
 };

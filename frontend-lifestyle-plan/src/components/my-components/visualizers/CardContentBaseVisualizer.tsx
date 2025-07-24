@@ -48,7 +48,8 @@ export const CardContentBaseVisualizer = <T extends Record<string, unknown>>({
   if (isError) return <div>Error: {(error as Error).message}</div>;
 
   const receivedData = data?.data;
-
+  if (!receivedData || !Object.keys(receivedData).length)
+    throw new Error("No data received from server");
   return (
     <CardContent key={locale}>
       {receivedData &&

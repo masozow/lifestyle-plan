@@ -28,6 +28,7 @@ import { useTranslation } from "react-i18next";
 import { Navigate } from "react-router";
 import type { LocaleCode } from "@/locales/localesTypes";
 import { format } from "@formkit/tempo";
+import ReloadOrRedirectWhenError from "../error-boundaries/ReloadOrRedirectWhenError";
 interface MealPlanFormProps {
   limitDays?: number;
   dateToFilter?: Date;
@@ -77,12 +78,16 @@ export const MealPlanForm = ({
   ) {
     //changing to throw because error boundary has been implemented
     console.error("Error:", error, "-", error?.message, "-", data);
-    throw new Error(error?.message || "Invalid response structure");
-    // return (
-    //   <div className="text-red-500">
-    //     Error: {error?.message || "Invalid response structure"}
-    //   </div>
-    // );
+    //changing to throw because error boundary has been implemented
+    // throw new Error(error?.message || "Invalid response structure");
+    //using the return to not block the entire page when there is an error
+    return (
+      <ReloadOrRedirectWhenError
+        url="/app/new-plan"
+        translationKey="mealPlanForm"
+        message={error?.message}
+      />
+    );
   }
   if (!hasInitialSyncCompleted || Object.keys(mealStatus).length === 0) {
     return <MealPlanFormSkeleton />;
@@ -144,7 +149,7 @@ export const MealPlanForm = ({
   );
 
   return (
-    <div className=" mx-0 space-y-6 w-full">
+    <div className="mx-0 space-y-6 w-full">
       {showHeader && (
         <Card>
           <CardHeader>

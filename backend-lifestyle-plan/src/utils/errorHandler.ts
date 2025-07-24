@@ -92,7 +92,7 @@ export const errorAndLogHandler = async ({
         ? "Error: A record with that data already exists"
         : messageContainsStock
         ? "Error: Insufficient stock to complete the operation"
-        : "An error occurred."
+        : "An error occurred at server level, contact support for more information."
       : message,
   };
 };

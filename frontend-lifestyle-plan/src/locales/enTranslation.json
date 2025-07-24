@@ -283,6 +283,23 @@
       "message": "Something went wrong",
       "buttonPrimary": "Refresh the page",
       "buttonSecondary": "Contact support"
+    },
+    "reloadOrRedirect":{
+      "mealPlanForm": {
+        "title": "Ooops! Something went wrong.",
+        "buttonPrimary": "Refresh the page",
+        "buttonSecondary": "Create a new plan"
+      },
+      "objectivesVisualizer": {
+        "title": "Ooops! Something went wrong.",
+        "buttonPrimary": "Refresh the page",
+        "buttonSecondary": "Create new objectives"
+      },
+      "userVisalizer":{
+        "title": "Ooops! Something went wrong.",
+        "buttonPrimary": "Refresh the page",
+        "buttonSecondary": "Create a new user"        
+      }
     }
   },
   "nutrition": {
