@@ -1,8 +1,11 @@
-// import { RegisterForm } from "@/components";
+import { lazy } from "react";
 import landing_image from "../landing/landing_image.png";
-import { AuthFormWrapper } from "@/layouts";
-import { RegisterFormSteps } from "@/components";
+import { AuthFormWrapper } from "@/layouts/auth-form-layout/AuthFormWrapper";
 
+const RegisterFormSteps = lazy(
+  () =>
+    import("@/components/my-components/forms/RegisterForm/RegisterFormSteps")
+);
 export const RegisterPage = () => {
   return (
     <AuthFormWrapper

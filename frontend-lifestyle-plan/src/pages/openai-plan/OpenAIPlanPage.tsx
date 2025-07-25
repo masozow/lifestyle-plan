@@ -1,4 +1,8 @@
-import { PlannerForm } from "@/components";
+import { lazy } from "react";
+
+const PlannerForm = lazy(
+  () => import("@/components/my-components/forms/PlannerForm/PlannerForm")
+);
 import { motion } from "motion/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

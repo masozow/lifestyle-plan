@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type {  ProfileFormValues } from "@/schemas";
+import type {  ProfileFormValues } from "@/schemas/profileFormSchema";
 
 interface ProfileState {
   profile: ProfileFormValues | null;

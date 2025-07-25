@@ -5,10 +5,8 @@ import { SectionCards } from "@/components/section-cards";
 import { lazy, Suspense } from "react";
 import { MealPlanFormSkeleton } from "../MealPlanForm/MealPlanFormSkeleton";
 
-const MealPlanForm = lazy(() =>
-  import("@/components/my-components/MealPlanForm/MealPlanForm").then((m) => ({
-    default: m.MealPlanForm,
-  }))
+const MealPlanForm = lazy(
+  () => import("@/components/my-components/MealPlanForm/MealPlanForm")
 );
 // import { lazy } from "react";
 // const ChartAreaInteractive = lazy(

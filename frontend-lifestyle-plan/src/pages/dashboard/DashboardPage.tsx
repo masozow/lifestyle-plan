@@ -1,7 +1,10 @@
-import { Dashboard } from "@/components";
+import { lazy } from "react";
 
-export const DashboardPage = () => {
+const Dashboard = lazy(
+  () => import("@/components/my-components/dashboard/Dashboard")
+);
+const DashboardPage = () => {
   return <Dashboard />;
 };
 
-// export default DashboardPage;
+export default DashboardPage;

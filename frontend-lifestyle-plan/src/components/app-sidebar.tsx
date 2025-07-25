@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/sidebar";
 import { NavLink } from "react-router";
 import { Cherry } from "lucide-react";
+
 import { useSessionStore } from "@/store";
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";

@@ -1,4 +1,5 @@
-import type { PlannerFormValues, ProfileFormValues } from "@/schemas";
+import type { PlannerFormValues} from "@/schemas/plannerFormSchema";
+import type {ProfileFormValues } from "@/schemas/profileFormSchema";
 import type { Profile } from "./ProfileCard";
 import type { Plan } from "./ObjectivesCard";
 

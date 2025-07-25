@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { type LoginFormValues } from "@/schemas";
+import { type LoginFormValues } from "@/schemas/loginSchema";
 import { useMealPlanStore, usePlanStore, useProfileStore, useSessionStore } from "@/store";
 
 interface Credentials {

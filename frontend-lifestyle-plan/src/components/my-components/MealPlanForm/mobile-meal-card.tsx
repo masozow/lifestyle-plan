@@ -1,5 +1,3 @@
-import { Pencil } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import type { Meal, ReplacementMeal } from "@/types/openAIPlan";
 import { useTranslation } from "react-i18next";
 import { mealTextMapper } from "./mappers";
+import { Pencil } from "lucide-react";
 
 interface MobileMealCardProps {
   meal: Meal | ReplacementMeal;

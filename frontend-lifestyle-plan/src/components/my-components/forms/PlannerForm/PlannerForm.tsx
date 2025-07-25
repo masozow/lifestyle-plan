@@ -3,7 +3,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
-import { schema_plannerForm, type PlannerFormValues } from "@/schemas";
+import {
+  schema_plannerForm,
+  type PlannerFormValues,
+} from "@/schemas/plannerFormSchema";
 import { CustomRadiogroup, CustomTextArea } from "@/components";
 import SummaryCard from "./SummaryCard";
 import { useTranslation } from "react-i18next";
@@ -14,13 +17,14 @@ import { useNavigate } from "react-router";
 import { API_ENDPOINTS } from "@/lib/backendURLS";
 import { toast } from "sonner";
 import { X } from "lucide-react";
+import { applyZodI18n } from "@/lib/zodSetup";
 
 interface Props {
   titleChangeFunction: (title?: string) => void;
   initialValues?: Partial<PlannerFormValues>;
 }
 
-export const PlannerForm = ({ titleChangeFunction, initialValues }: Props) => {
+const PlannerForm = ({ titleChangeFunction, initialValues }: Props) => {
   const animationDuration = 0.4;
   const { t } = useTranslation();
   const { steps, getDefaultValues } = useSteps(plannerSteps);
@@ -49,7 +53,7 @@ export const PlannerForm = ({ titleChangeFunction, initialValues }: Props) => {
       toast.error("User session is missing. Please log in again.");
     }
   };
-
+  applyZodI18n();
   const form = useForm<PlannerFormValues>({
     resolver: zodResolver(schema_plannerForm),
     mode: "onBlur",
@@ -220,3 +224,4 @@ export const PlannerForm = ({ titleChangeFunction, initialValues }: Props) => {
     </motion.form>
   );
 };
+export default PlannerForm;

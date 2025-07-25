@@ -22,7 +22,7 @@ import {
 import { useMealPlanStore, useSessionStore } from "@/store";
 import { useMealPlanSync } from "@/hooks";
 import { API_ENDPOINTS } from "@/lib/backendURLS";
-import { MealPlanFormSkeleton } from "@/components";
+import { MealPlanFormSkeleton } from "@/components/my-components/MealPlanForm/MealPlanFormSkeleton";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { Navigate } from "react-router";
@@ -34,7 +34,7 @@ interface MealPlanFormProps {
   dateToFilter?: Date;
   showHeader?: boolean;
 }
-export const MealPlanForm = ({
+const MealPlanForm = ({
   limitDays,
   dateToFilter,
   showHeader = true,
@@ -308,3 +308,4 @@ export const MealPlanForm = ({
     </div>
   );
 };
+export default MealPlanForm;

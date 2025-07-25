@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { PlannerFormValues } from "@/schemas";
+import type { PlannerFormValues } from "@/schemas/plannerFormSchema";
 
 interface PlanState {
   plan: PlannerFormValues | null;
