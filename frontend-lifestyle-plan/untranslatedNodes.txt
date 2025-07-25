@@ -1,0 +1,58 @@
+src/components/nav-user.tsx:                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+src/components/theme/mode-toggle.tsx:          <span className="sr-only">Toggle theme</span>
+src/components/data-table.tsx:      <span className="sr-only">Drag to reorder</span>
+src/components/data-table.tsx:    header: () => <div className="w-full text-right">Target</div>,
+src/components/data-table.tsx:    header: () => <div className="w-full text-right">Limit</div>,
+src/components/data-table.tsx:              <SelectItem value="Eddie Lake">Eddie Lake</SelectItem>
+src/components/data-table.tsx:            <span className="sr-only">Open menu</span>
+src/components/data-table.tsx:          <DropdownMenuItem>Edit</DropdownMenuItem>
+src/components/data-table.tsx:          <DropdownMenuItem>Make a copy</DropdownMenuItem>
+src/components/data-table.tsx:          <DropdownMenuItem>Favorite</DropdownMenuItem>
+src/components/data-table.tsx:          <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+src/components/data-table.tsx:            <SelectItem value="outline">Outline</SelectItem>
+src/components/data-table.tsx:            <SelectItem value="past-performance">Past Performance</SelectItem>
+src/components/data-table.tsx:            <SelectItem value="key-personnel">Key Personnel</SelectItem>
+src/components/data-table.tsx:            <SelectItem value="focus-documents">Focus Documents</SelectItem>
+src/components/data-table.tsx:          <TabsTrigger value="outline">Outline</TabsTrigger>
+src/components/data-table.tsx:          <TabsTrigger value="focus-documents">Focus Documents</TabsTrigger>
+src/components/data-table.tsx:                <span className="hidden lg:inline">Customize Columns</span>
+src/components/data-table.tsx:                <span className="lg:hidden">Columns</span>
+src/components/data-table.tsx:            <span className="hidden lg:inline">Add Section</span>
+src/components/data-table.tsx:                <span className="sr-only">Go to first page</span>
+src/components/data-table.tsx:                <span className="sr-only">Go to previous page</span>
+src/components/data-table.tsx:                <span className="sr-only">Go to next page</span>
+src/components/data-table.tsx:                <span className="sr-only">Go to last page</span>
+src/components/data-table.tsx:              <Label htmlFor="header">Header</Label>
+src/components/data-table.tsx:                <Label htmlFor="type">Type</Label>
+src/components/data-table.tsx:                    <SelectItem value="Design">Design</SelectItem>
+src/components/data-table.tsx:                    <SelectItem value="Capabilities">Capabilities</SelectItem>
+src/components/data-table.tsx:                    <SelectItem value="Narrative">Narrative</SelectItem>
+src/components/data-table.tsx:                    <SelectItem value="Cover Page">Cover Page</SelectItem>
+src/components/data-table.tsx:                <Label htmlFor="status">Status</Label>
+src/components/data-table.tsx:                    <SelectItem value="Done">Done</SelectItem>
+src/components/data-table.tsx:                    <SelectItem value="In Progress">In Progress</SelectItem>
+src/components/data-table.tsx:                    <SelectItem value="Not Started">Not Started</SelectItem>
+src/components/data-table.tsx:                <Label htmlFor="target">Target</Label>
+src/components/data-table.tsx:                <Label htmlFor="limit">Limit</Label>
+src/components/data-table.tsx:              <Label htmlFor="reviewer">Reviewer</Label>
+src/components/data-table.tsx:                  <SelectItem value="Eddie Lake">Eddie Lake</SelectItem>
+src/components/data-table.tsx:                  <SelectItem value="Emily Whalen">Emily Whalen</SelectItem>
+src/components/data-table.tsx:          <Button>Submit</Button>
+src/components/data-table.tsx:            <Button variant="outline">Done</Button>
+src/layouts/auth-form-layout/AuthFormWrapper.tsx:              <span className="text-primary">Fit</span>app
+src/components/app-sidebar.tsx:                  <span className="text-primary">Fit</span>app
+src/components/chart-area-interactive.tsx:        <CardTitle>Total Visitors</CardTitle>
+src/components/chart-area-interactive.tsx:          <span className="@[540px]/card:hidden">Last 3 months</span>
+src/components/chart-area-interactive.tsx:            <ToggleGroupItem value="90d">Last 3 months</ToggleGroupItem>
+src/components/chart-area-interactive.tsx:            <ToggleGroupItem value="30d">Last 30 days</ToggleGroupItem>
+src/components/chart-area-interactive.tsx:            <ToggleGroupItem value="7d">Last 7 days</ToggleGroupItem>
+src/components/ui/breadcrumb.tsx:      <span className="sr-only">More</span>
+src/components/ui/dialog.tsx:            <span className="sr-only">Close</span>
+src/components/ui/sidebar.tsx:            <SheetTitle>Sidebar</SheetTitle>
+src/components/ui/sidebar.tsx:            <SheetDescription>Displays the mobile sidebar.</SheetDescription>
+src/components/ui/sidebar.tsx:      <span className="sr-only">Toggle Sidebar</span>
+src/components/ui/sheet.tsx:          <span className="sr-only">Close</span>
+src/components/my-components/forms/MealForm.tsx:      <Button type="submit">Registrar comida</Button>
+src/components/my-components/nav-bar/NavBar.tsx:        <span className="text-primary">Fit</span>app
+src/components/my-components/nav-bar/NavBar.tsx:                <NavLink to="/register">Register</NavLink>
+src/components/my-components/nav-bar/NavBar.tsx:                <NavLink to="/login">Login</NavLink>

@@ -170,6 +170,14 @@
     },
     "logout":{  
       "title": "Logout"
+    },
+    "modeToggle":{
+      "toggle": "Toggle theme",
+      "themes":{
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+      }
     }
   },
   "visualizers":{
