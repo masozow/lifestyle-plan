@@ -16,7 +16,7 @@ import type { Meal } from "@/types/openAIPlan";
 import {
   schema_replacementMeal,
   type ReplacementMealFormValues,
-} from "@/schemas";
+} from "@/schemas/editMealDialogSchema";
 import { CustomNumberInput } from "@/components";
 import { Input } from "@/components/ui/input";
 

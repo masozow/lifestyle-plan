@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router";
 import { useApiRequest } from "@/hooks";
-import { schema_loginForm, type LoginFormValues } from "@/schemas";
+import { schema_loginForm, type LoginFormValues } from "@/schemas/loginSchema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -19,7 +19,7 @@ import { X } from "lucide-react";
 import { useAuthStore, useSessionStore } from "@/store";
 import { useTranslation } from "react-i18next";
 
-export const LoginForm = () => {
+const LoginForm = () => {
   const navigate = useNavigate();
   const { fetchSession } = useSessionStore();
   const { setCredentials } = useAuthStore();
@@ -149,3 +149,5 @@ export const LoginForm = () => {
     </Form>
   );
 };
+
+export default LoginForm;

@@ -10,9 +10,9 @@ import { API_ENDPOINTS } from "@/lib/backendURLS";
 import { useEffect } from "react";
 
 import { toast } from "sonner";
-import { NeuralNetworkLoader } from "@/components";
+import { NeuralNetworkLoader } from "@/components/my-components/loaders/NeuralNetwork";
 
-export const NewPlanForm = () => {
+const NewPlanForm = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { plan } = usePlanStore((state) => state);
@@ -93,3 +93,4 @@ export const NewPlanForm = () => {
     </div>
   );
 };
+export default NewPlanForm;

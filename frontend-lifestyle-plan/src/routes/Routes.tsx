@@ -1,16 +1,15 @@
 import { createBrowserRouter } from "react-router";
-import { AuthLayout, ProtectedLayout } from "@/layouts";
+import { AuthLayout } from "@/layouts/auth-layout/AuthLayout";
+import { ProtectedLayout } from "@/layouts/protected-layout/ProtectedLayout";
 import DashboardHome from "@/components/my-components/dashboard/DashboardHome";
 import { Suspense } from "react";
 import * as Pages from "@/pages";
-import {
-  DashBoardHomeSkeleton,
-  Error404,
-  ErrorBoundaryWrapper,
-  MealPlanFormSkeleton,
-  ProgressChartSkeleton,
-  TextWaveBase,
-} from "@/components";
+import { DashBoardHomeSkeleton } from "@/components/my-components/dashboard/DashboardHomeSkeleton";
+import { Error404 } from "@/components/my-components/error-boundaries/Error404";
+import { ErrorBoundaryWrapper } from "@/components/my-components/error-boundaries/ErrorBoundaryWrapper";
+import { MealPlanFormSkeleton } from "@/components/my-components/MealPlanForm/MealPlanFormSkeleton";
+import ProgressChartSkeleton from "@/components/my-components/charts/progress-chart/ProgressChartSkeleton";
+import { TextWaveBase } from "@/components/my-components/loaders/TextWaveBase";
 
 export const router = createBrowserRouter([
   {

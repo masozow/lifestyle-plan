@@ -3,7 +3,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
-import { schema_plannerForm, type PlannerFormValues } from "@/schemas";
+import {
+  schema_plannerForm,
+  type PlannerFormValues,
+} from "@/schemas/plannerFormSchema";
 import { CustomRadiogroup, CustomTextArea } from "@/components";
 import SummaryCard from "./SummaryCard";
 import { useTranslation } from "react-i18next";
@@ -20,7 +23,7 @@ interface Props {
   initialValues?: Partial<PlannerFormValues>;
 }
 
-export const PlannerForm = ({ titleChangeFunction, initialValues }: Props) => {
+const PlannerForm = ({ titleChangeFunction, initialValues }: Props) => {
   const animationDuration = 0.4;
   const { t } = useTranslation();
   const { steps, getDefaultValues } = useSteps(plannerSteps);
@@ -220,3 +223,4 @@ export const PlannerForm = ({ titleChangeFunction, initialValues }: Props) => {
     </motion.form>
   );
 };
+export default PlannerForm;

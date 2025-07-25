@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet, useNavigate } from "react-router";
 import { useSessionStore } from "@/store";
-import { CheckingCredentialsLoader, SessionInitializer } from "@/components";
+import { CheckingCredentialsLoader } from "@/components/my-components/loaders/CheckingCredentials";
+import { SessionInitializer } from "@/components";
 
 export const ProtectedLayout = () => {
   const { isAuthenticated } = useSessionStore();

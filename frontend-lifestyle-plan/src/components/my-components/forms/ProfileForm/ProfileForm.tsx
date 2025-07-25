@@ -3,7 +3,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
-import { schema_profileForm, type ProfileFormValues } from "@/schemas";
+import {
+  schema_profileForm,
+  type ProfileFormValues,
+} from "@/schemas/profileFormSchema";
 import { CustomRadiogroup, CustomNumberInput } from "@/components";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
@@ -22,7 +25,7 @@ interface Props {
   initialValues?: Partial<ProfileFormValues>;
 }
 
-export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
+const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
   const animationDuration = 0.4;
   const { t } = useTranslation();
   const { setProfile } = useProfileStore();
@@ -251,3 +254,4 @@ export const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
     </motion.form>
   );
 };
+export default ProfileForm;

@@ -1,4 +1,8 @@
-import { NewPlanForm } from "@/components";
+import { lazy } from "react";
+// import { NewPlanForm } from "@/components/my-components/forms/NewPlanForm/NewPlanForm";
+const NewPlanForm = lazy(
+  () => import("@/components/my-components/forms/NewPlanForm/NewPlanForm")
+);
 import { useTranslation } from "react-i18next";
 
 const NewPlanPage = () => {

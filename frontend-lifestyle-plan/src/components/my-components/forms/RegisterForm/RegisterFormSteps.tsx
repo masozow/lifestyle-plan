@@ -12,7 +12,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router";
 import { useApiRequest, useGroupedSteps, useStepFormNavigation } from "@/hooks";
-import { schema_registerForm, type RegisterFormValues } from "@/schemas";
+import {
+  schema_registerForm,
+  type RegisterFormValues,
+} from "@/schemas/registerFormSchema";
 import { toast } from "sonner";
 import { X } from "lucide-react";
 import { useAuthStore, useSessionStore } from "@/store";
@@ -23,7 +26,7 @@ import { registerGroupedSteps } from "@/config/stepsForForms/registerSteps";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
-export const RegisterFormSteps = () => {
+const RegisterFormSteps = () => {
   const animationDuration = 0.4;
   const navigate = useNavigate();
   const { setCredentials } = useAuthStore();
@@ -253,3 +256,5 @@ export const RegisterFormSteps = () => {
     </Form>
   );
 };
+
+export default RegisterFormSteps;

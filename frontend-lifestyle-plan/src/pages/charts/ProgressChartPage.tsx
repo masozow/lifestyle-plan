@@ -1,13 +1,13 @@
-import {
-  ProgressChart,
-  ProgressChartSkeleton,
-  type MacroRow,
-} from "@/components";
+import { lazy, type JSX } from "react";
+const ProgressChart = lazy(
+  () => import("@/components/my-components/charts/progress-chart/ProgressChart")
+);
+import ProgressChartSkeleton from "@/components/my-components/charts/progress-chart/ProgressChartSkeleton";
+import { type MacroRow } from "@/components/my-components/charts/progress-chart/ProgressChart";
 import { useApiGet } from "@/hooks";
 import { API_ENDPOINTS } from "@/lib/backendURLS";
 import { useSessionStore } from "@/store";
 import { motion } from "motion/react";
-import type { JSX } from "react";
 
 const ProgressChartPage = (): JSX.Element => {
   const { user } = useSessionStore();

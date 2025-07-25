@@ -3,7 +3,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Outlet } from "react-router";
 
-export const Dashboard = () => {
+const Dashboard = () => {
   return (
     <SidebarProvider
       style={
@@ -25,3 +25,4 @@ export const Dashboard = () => {
     </SidebarProvider>
   );
 };
+export default Dashboard;

@@ -1,4 +1,7 @@
-import { ProfileForm } from "@/components";
+import { lazy } from "react";
+const ProfileForm = lazy(
+  () => import("@/components/my-components/forms/ProfileForm/ProfileForm")
+);
 import { motion } from "motion/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

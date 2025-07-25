@@ -1,6 +1,9 @@
-import { MealPlanForm } from "@/components";
+import { lazy } from "react";
+// import { MealPlanForm } from "@/components/my-components/MealPlanForm/MealPlanForm";
 import { motion } from "motion/react";
-
+const MealPlanForm = lazy(
+  () => import("@/components/my-components/MealPlanForm/MealPlanForm")
+);
 const MealPlanPage = () => {
   return (
     <motion.div

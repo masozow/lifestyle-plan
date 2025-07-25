@@ -3,12 +3,14 @@ import path from "path";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
+import inspect from "vite-plugin-inspect";
 
 export default defineConfig(({ command }) => ({
 // export default defineConfig(() => ({
   plugins: [
     react(), 
     tailwindcss(),
+    inspect(),
      ...(command === "build"
       ? [
           visualizer({

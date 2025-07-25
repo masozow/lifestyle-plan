@@ -2,7 +2,7 @@ import { useApiGet } from "@/hooks";
 import { useSessionStore } from "@/store";
 import { CardContent } from "../../ui/card";
 import { Badge } from "../../ui/badge";
-import { CustomSpinner } from "@/components";
+import { CustomSpinner } from "@/components/my-components/loaders/CustomSpinner";
 import { useTranslation } from "react-i18next";
 import type { LocaleCode } from "@/locales/localesTypes";
 import { useEffect, useRef } from "react";

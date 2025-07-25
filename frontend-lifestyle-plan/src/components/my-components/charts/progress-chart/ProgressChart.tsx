@@ -41,7 +41,7 @@ export interface ProgressChartProps {
   };
 }
 
-export const ProgressChart = ({ data }: ProgressChartProps): JSX.Element => {
+const ProgressChart = ({ data }: ProgressChartProps): JSX.Element => {
   const isMobile = useIsMobile();
   const [timeRange, setTimeRange] = useState("90d");
   const [macro, setMacro] = useState<"energy" | "protein" | "carbs" | "fat">(
@@ -262,3 +262,5 @@ export const ProgressChart = ({ data }: ProgressChartProps): JSX.Element => {
     </Card>
   );
 };
+
+export default ProgressChart;
