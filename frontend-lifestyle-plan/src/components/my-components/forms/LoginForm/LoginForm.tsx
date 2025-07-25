@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { applyZodI18n } from "@/lib/zodSetup";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router";
@@ -29,7 +30,7 @@ const LoginForm = () => {
     url: `${import.meta.env.VITE_BACKEND_BASE_URL}/api/login`,
     method: "POST",
   });
-
+  applyZodI18n();
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(schema_loginForm),
     defaultValues: {

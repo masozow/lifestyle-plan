@@ -25,6 +25,7 @@ import { cn } from "@/lib/utils";
 import { registerGroupedSteps } from "@/config/stepsForForms/registerSteps";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { applyZodI18n } from "@/lib/zodSetup";
 
 const RegisterFormSteps = () => {
   const animationDuration = 0.4;
@@ -47,6 +48,7 @@ const RegisterFormSteps = () => {
   const { steps, fieldNamesPerStep, getDefaultValues } =
     useGroupedSteps(registerGroupedSteps);
 
+  applyZodI18n();
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(schema_registerForm),
     mode: "onBlur",

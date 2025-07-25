@@ -17,6 +17,7 @@ import { useNavigate } from "react-router";
 import { API_ENDPOINTS } from "@/lib/backendURLS";
 import { toast } from "sonner";
 import { X } from "lucide-react";
+import { applyZodI18n } from "@/lib/zodSetup";
 
 interface Props {
   titleChangeFunction: (title?: string) => void;
@@ -52,7 +53,7 @@ const PlannerForm = ({ titleChangeFunction, initialValues }: Props) => {
       toast.error("User session is missing. Please log in again.");
     }
   };
-
+  applyZodI18n();
   const form = useForm<PlannerFormValues>({
     resolver: zodResolver(schema_plannerForm),
     mode: "onBlur",

@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { X } from "lucide-react";
 import { useNavigate } from "react-router";
 import { date, diffYears } from "@formkit/tempo";
+import { applyZodI18n } from "@/lib/zodSetup";
 
 interface Props {
   titleChangeFunction: (title?: string) => void;
@@ -49,6 +50,7 @@ const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
     }
   );
   const age = diffYears(new Date(), date(user?.birthDate)) || 18;
+  applyZodI18n();
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(schema_profileForm),
     mode: "onBlur",

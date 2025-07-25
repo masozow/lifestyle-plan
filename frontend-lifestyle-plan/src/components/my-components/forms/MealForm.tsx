@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { applyZodI18n } from "@/lib/zodSetup";
 
 const schema = z.object({
   date: z.string(),
@@ -13,7 +14,7 @@ const schema = z.object({
 });
 
 type MealFormType = z.infer<typeof schema>;
-
+applyZodI18n();
 export const MealForm = ({ onAdd }: { onAdd: () => void }) => {
   const {
     register,

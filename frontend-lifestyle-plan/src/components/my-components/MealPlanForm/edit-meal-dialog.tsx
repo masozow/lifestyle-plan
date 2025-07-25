@@ -19,6 +19,7 @@ import {
 } from "@/schemas/editMealDialogSchema";
 import { CustomNumberInput } from "@/components";
 import { Input } from "@/components/ui/input";
+import { applyZodI18n } from "@/lib/zodSetup";
 
 interface EditMealDialogProps {
   isOpen: boolean;
@@ -43,6 +44,7 @@ export const EditMealDialog = ({
   meal,
   units,
 }: EditMealDialogProps) => {
+  applyZodI18n();
   const form = useForm<ReplacementMealFormValues>({
     resolver: zodResolver(schema_replacementMeal),
     defaultValues: {

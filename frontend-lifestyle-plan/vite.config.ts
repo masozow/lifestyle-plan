@@ -42,13 +42,5 @@ export default defineConfig(({ command }) => ({
         },
       },
     },
-  },
-  optimizeDeps: {
-    include: [
-      "zod",
-      "zod-i18n-map",
-      "i18next",
-      "react-i18next"
-    ]
-  },
+  }
 }));
