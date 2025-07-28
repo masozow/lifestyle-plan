@@ -1,21 +1,24 @@
 import { useApiGet } from "@/hooks";
 import { useSessionStore } from "@/store";
 import { CardContent } from "../../ui/card";
-import { Badge } from "../../ui/badge";
 import { CustomSpinner } from "@/components/my-components/loaders/CustomSpinner";
 import { useTranslation } from "react-i18next";
 import type { LocaleCode } from "@/locales/localesTypes";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type JSX } from "react";
 import { checkTranslation } from "../helpers/checkTranslation";
+import { IconAlignBoxBottomCenterFilled } from "@tabler/icons-react";
+import { getUnit } from "../forms/ProfileForm/profileFormHelpers";
 
 interface Props<T> {
   url: string;
+  iconsArray?: Partial<Record<keyof T, JSX.Element>>;
   onDataLoaded?: (data: T) => void;
 }
 
 export const CardContentBaseVisualizer = <T extends Record<string, unknown>>({
   url,
   onDataLoaded,
+  iconsArray,
 }: Props<T>) => {
   const { user } = useSessionStore();
   const userId = user?.id;
@@ -69,26 +72,32 @@ export const CardContentBaseVisualizer = <T extends Record<string, unknown>>({
               value !== ""
           )
           .map(([key, value]) => (
-            <div key={key} className="grid grid-cols-5">
-              <p className="col-span-2 font-semibold">
-                {checkTranslation(key, { t, i18n, locale })}
-              </p>
-              <Badge
-                variant="outline"
-                className="col-span-3 text-sm md:text-md"
-              >
-                {/* TODO: check for this condition, make it work inside the checkTranslatio function */}
-                {checkTranslation(String(value), {
-                  t,
-                  i18n,
-                  locale,
-                  replaceCharacterWith: {
-                    character: "-",
-                    replaceWith: " ",
-                  },
-                })}
-              </Badge>
-            </div>
+            <ul key={key}>
+              <li className="grid grid-cols-[auto_1fr] tracking-wider mb-2">
+                <div className="mr-4">
+                  {iconsArray?.[key] ?? <IconAlignBoxBottomCenterFilled />}
+                </div>
+                <div>
+                  <h2 className="font-bold text-1xl">
+                    {checkTranslation(key, { t, i18n, locale })}
+                  </h2>
+                  <p className="font-light">
+                    {checkTranslation(String(value), {
+                      t,
+                      i18n,
+                      locale,
+                      replaceCharacterWith: {
+                        character: "-",
+                        replaceWith: " ",
+                      },
+                    })}
+                    {"unitSystem" in receivedData &&
+                      key !== "unitSystem" &&
+                      ` ${getUnit(key, receivedData?.unitSystem as string)}`}
+                  </p>
+                </div>
+              </li>
+            </ul>
           ))}
     </CardContent>
   );

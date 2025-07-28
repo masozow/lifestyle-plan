@@ -3,10 +3,19 @@ import { useSessionStore, useProfileStore } from "@/store";
 import { Card, CardHeader, CardTitle } from "../../ui/card";
 import { CardContentBaseVisualizer } from "./CardContentBaseVisualizer";
 import { mapProfileToFormValues } from "./mappers";
-import { useMemo } from "react";
+import { useMemo, type JSX } from "react";
 import { useTranslation } from "react-i18next";
 import { ErrorBoundary } from "react-error-boundary";
 import ReloadOrRedirectWhenError from "../error-boundaries/ReloadOrRedirectWhenError";
+import {
+  IconHourglassEmpty,
+  IconMoodBoy,
+  IconOld,
+  IconRuler2,
+  IconRulerMeasure,
+  IconRulerMeasure2,
+  IconScaleOutline,
+} from "@tabler/icons-react";
 
 export type Profile = {
   unitSystem: string;
@@ -35,6 +44,15 @@ export const ProfileCard = ({ className }: Props) => {
     () => (userId ? `${API_ENDPOINTS.profile}/${userId}` : ""),
     [userId]
   );
+  const icons: Partial<Record<keyof Profile, JSX.Element>> = {
+    unitSystem: <IconRuler2 />,
+    weight: <IconScaleOutline />,
+    height: <IconRulerMeasure2 />,
+    age: <IconOld />,
+    waist: <IconHourglassEmpty />,
+    neck: <IconMoodBoy />,
+    hip: <IconRulerMeasure />,
+  };
   return (
     <Card className={className}>
       <CardHeader className="border-b">
@@ -54,6 +72,7 @@ export const ProfileCard = ({ className }: Props) => {
         <CardContentBaseVisualizer<Profile>
           url={url}
           onDataLoaded={setProfileHandler}
+          iconsArray={icons}
         />
       </ErrorBoundary>
     </Card>
