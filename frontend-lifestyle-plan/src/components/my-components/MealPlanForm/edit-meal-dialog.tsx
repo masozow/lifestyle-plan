@@ -20,6 +20,7 @@ import {
 import { CustomNumberInput } from "@/components";
 import { Input } from "@/components/ui/input";
 import { applyZodI18n } from "@/lib/zodSetup";
+import { useTranslation } from "react-i18next";
 
 interface EditMealDialogProps {
   isOpen: boolean;
@@ -45,6 +46,7 @@ export const EditMealDialog = ({
   units,
 }: EditMealDialogProps) => {
   applyZodI18n();
+  const { t } = useTranslation();
   const form = useForm<ReplacementMealFormValues>({
     resolver: zodResolver(schema_replacementMeal),
     defaultValues: {
@@ -135,9 +137,11 @@ export const EditMealDialog = ({
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
       <DialogContent className="max-h-[100vh] overflow-y-auto sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Edit meal replacement for {meal.meal}</DialogTitle>
+          <DialogTitle>
+            {t("mealPlanForm.editMealDialog.title")} {meal.meal}
+          </DialogTitle>
           <DialogDescription>
-            Modify the meal details below to track your actual intake.
+            {t("mealPlanForm.editMealDialog.subTitle")}
           </DialogDescription>
         </DialogHeader>
 
@@ -151,7 +155,7 @@ export const EditMealDialog = ({
               htmlFor="food"
               className="text-md sm:text-2xl text-left mb-4 font-semibold"
             >
-              Meal title
+              {t("mealPlanForm.editMealDialog.mealTitle")}
             </Label>
             <Controller
               name="food"
@@ -177,7 +181,7 @@ export const EditMealDialog = ({
           <CustomNumberInput<ReplacementMealFormValues>
             control={control}
             name="portion"
-            label="Portion"
+            label={t("mealPlanForm.editMealDialog.portion")}
             unit={units.portion}
             error={errors.portion}
             autoFocus={false}
@@ -187,7 +191,7 @@ export const EditMealDialog = ({
           <CustomNumberInput<ReplacementMealFormValues>
             control={control}
             name="macro.energy"
-            label="Energy"
+            label={t("mealPlanForm.editMealDialog.energy")}
             unit={units.macro.energy}
             error={errors.macro?.energy}
             autoFocus={false}
@@ -197,7 +201,7 @@ export const EditMealDialog = ({
           <CustomNumberInput<ReplacementMealFormValues>
             control={control}
             name="macro.protein"
-            label="Protein"
+            label={t("mealPlanForm.editMealDialog.protein")}
             unit={units.macro.protein}
             error={errors.macro?.protein}
             autoFocus={false}
@@ -207,7 +211,7 @@ export const EditMealDialog = ({
           <CustomNumberInput<ReplacementMealFormValues>
             control={control}
             name="macro.carbs"
-            label="Carbs"
+            label={t("mealPlanForm.editMealDialog.carbs")}
             unit={units.macro.carbs}
             error={errors.macro?.carbs}
             autoFocus={false}
@@ -217,7 +221,7 @@ export const EditMealDialog = ({
           <CustomNumberInput<ReplacementMealFormValues>
             control={control}
             name="macro.fat"
-            label="Fats"
+            label={t("mealPlanForm.editMealDialog.fats")}
             unit={units.macro.fat}
             error={errors.macro?.fat}
             autoFocus={false}
@@ -226,7 +230,7 @@ export const EditMealDialog = ({
           <div className="md:col-span-2 flex gap-2 pt-4">
             <Button type="submit" size="sm">
               <Check className="h-4 w-4 mr-2" />
-              Save Replacement
+              {t("mealPlanForm.editMealDialog.buttons.save")}
             </Button>
             <Button
               type="button"
@@ -235,7 +239,7 @@ export const EditMealDialog = ({
               onClick={handleClose}
             >
               <X className="h-4 w-4 mr-2" />
-              Cancel
+              {t("mealPlanForm.editMealDialog.buttons.cancel")}
             </Button>
           </div>
         </form>

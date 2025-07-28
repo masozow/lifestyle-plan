@@ -278,6 +278,20 @@
         "snack1":"Mid-morning Snack",
         "snack2":"Mid-afternoon Snack"
       }
+    },
+    "editMealDialog":{
+      "title": "Edit meal replacement for ",
+      "subTitle": "Modify the meal details below to track your actual intake.",
+      "mealTitle": "Meal title",
+      "portion": "Portion",
+      "energy" : "Energy",
+      "protein" : "Protein",
+      "carbs": "Carbs",
+      "fats": "Fats",
+      "buttons": {
+        "cancel": "Cancel",
+        "save": "Save Replacement"
+      }
     }
   },
   "errorBoundaries":{

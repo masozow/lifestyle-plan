@@ -55,12 +55,7 @@ export const MobileMealCard = ({
       )}
     >
       <CardHeader className="pb-3">
-        <div
-          className={cn(
-            "text-green-600 min-h-[2.6rem] text-center pb-1 ",
-            isCompleted && "border-b border-green-600"
-          )}
-        >
+        <div className={cn("text-green-600 min-h-[2.6rem] text-center pb-1 ")}>
           {isCompleted && <span className="text-3xl font-bold">✓</span>}
         </div>
         <Checkbox
@@ -70,12 +65,13 @@ export const MobileMealCard = ({
           aria-label="Mark as completed"
         />
 
-        <div className="flex justify-between items-center">
-          <CardTitle
-            className={cn("text-3xl", isCompleted && "text-green-600")}
-          >
-            {mealTextMapper(meal.meal, t)}
-          </CardTitle>
+        <CardTitle
+          className={cn(
+            "flex justify-between text-3xl",
+            isCompleted && "text-green-600"
+          )}
+        >
+          <h2>{mealTextMapper(meal.meal, t)}</h2>
           <Button
             variant="ghost"
             size="icon"
@@ -85,9 +81,14 @@ export const MobileMealCard = ({
               onEdit();
             }}
           >
-            <Pencil className="h-4 w-4" />
+            <Pencil
+              className={cn(
+                "h-4 w-4",
+                isCompleted ? "text-green-600" : "text-muted-foreground"
+              )}
+            />
           </Button>
-        </div>
+        </CardTitle>
 
         <CardDescription className="font-medium text-foreground my-4 text-base text-xl tracking-tight">
           {meal.food}

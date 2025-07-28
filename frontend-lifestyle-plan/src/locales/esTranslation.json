@@ -278,6 +278,20 @@
         "snack1":"Merienda",
         "snack2":"Merienda nocturna"
       }
+    },
+    "editMealDialog":{
+      "title": "Editar reemplazo de comida para ",
+      "subTitle": "Modifica los detalles de la comida a continuación para rastrear tu ingesta real.",
+      "mealTitle": "Título de la comida",
+      "portion": "Porción",
+      "energy" : "Energía",
+      "protein" : "Proteínas",
+      "carbs": "Carbohidratos",
+      "fats": "Grasas",
+      "buttons": {
+        "cancel": "Cancelar",
+        "save": "Guardar reemplazo"
+      }
     }
   },
    "errorBoundaries":{
