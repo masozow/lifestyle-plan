@@ -18,6 +18,7 @@ import {
   IconEggFried,
   IconMeat,
 } from "@tabler/icons-react";
+import { cn } from "@/lib/utils";
 
 interface MobileMealCardProps {
   meal: Meal | ReplacementMeal;
@@ -47,34 +48,55 @@ export const MobileMealCard = ({
   const { t } = useTranslation();
   return (
     <Card
-      className={
-        isCompleted ? "text-left" : "bg-emerald-50 dark:bg-emerald-950/20"
-      }
+      onClick={onToggleComplete}
+      className={cn(
+        "text-left  hover:cursor-pointer py-1",
+        !isCompleted && "bg-emerald-50 dark:bg-emerald-950/20"
+      )}
     >
       <CardHeader className="pb-3">
-        <div className="flex flex-col items-end gap-2 justify-end">
-          <Checkbox checked={isCompleted} onCheckedChange={onToggleComplete} />
+        <div
+          className={cn(
+            "text-green-600 min-h-[2.6rem] text-center pb-1 ",
+            isCompleted && "border-b border-green-600"
+          )}
+        >
+          {isCompleted && <span className="text-3xl font-bold">✓</span>}
         </div>
-        <div className="flex justify-between">
-          <CardTitle className="text-3xl">
+        <Checkbox
+          checked={isCompleted}
+          onCheckedChange={onToggleComplete}
+          className="sr-only"
+          aria-label="Mark as completed"
+        />
+
+        <div className="flex justify-between items-center">
+          <CardTitle
+            className={cn("text-3xl", isCompleted && "text-green-600")}
+          >
             {mealTextMapper(meal.meal, t)}
           </CardTitle>
           <Button
             variant="ghost"
-            size="sm"
-            className="cursor-pointer text-right"
-            onClick={onEdit}
+            size="icon"
+            className="text-muted-foreground hover:text-foreground"
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit();
+            }}
           >
-            <Pencil className="h-4 w-4 px-0 " />
+            <Pencil className="h-4 w-4" />
           </Button>
         </div>
-        <CardDescription className="font-semibold text-foreground mt-1 text-base text-x3">
+
+        <CardDescription className="font-medium text-foreground my-4 text-base text-xl tracking-tight">
           {meal.food}
         </CardDescription>
+
         <ul className="grid grid-cols-[auto_1fr_1fr] gap-x-3 items-center text-lg">
           <li className="contents">
             <IconChartPie />
-            <h4 className="font-medium">
+            <h4 className="font-light">
               {t("mealPlanForm.mealTable.header.portion")}:
             </h4>
             <p className="text-right">
@@ -83,7 +105,7 @@ export const MobileMealCard = ({
           </li>
           <li className="contents">
             <IconBattery3 />
-            <h4 className="font-medium">
+            <h4 className="font-light">
               {t("mealPlanForm.mealTable.header.calories")}:
             </h4>
             <p className="text-right">
@@ -92,7 +114,8 @@ export const MobileMealCard = ({
           </li>
         </ul>
       </CardHeader>
-      <CardContent className="pt-0">
+
+      <CardContent className="pt-0 pb-4">
         <div>
           <p className="text-2xl font-semibold mb-2">
             {t("mealPlanForm.macroCard.macros")}

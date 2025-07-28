@@ -216,53 +216,56 @@ const MealPlanForm = ({
                     (char) => char.toUpperCase()
                   )}
                 </CardTitle>
-
-                <div className="flex flex-col md:flex-row md:items-center gap-4 text-sm">
-                  <div className="flex flex-col items-center">
-                    <span className="text-xs text-muted-foreground">
-                      {t("mealPlanForm.macroCard.target")}
-                    </span>
-                    <Badge
-                      variant="outline"
-                      className="flex items-center gap-1"
-                    >
-                      <Calculator className="h-3 w-3" />
-                      {backendTargets?.energy ?? 0} {units?.macro.energy}
-                    </Badge>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <span className="text-xs text-muted-foreground">
-                      {t("mealPlanForm.macroCard.actual")}
-                    </span>
-                    <Badge
-                      variant="secondary"
-                      className="flex items-center gap-1"
-                    >
-                      <Calculator className="h-3 w-3" />
-                      {dayTotals.totalCalories} {units?.macro.energy}
-                    </Badge>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <span className="text-xs text-muted-foreground">
-                      {t("mealPlanForm.macroCard.macros")}
-                    </span>
-                    <div className="flex gap-2">
-                      <Badge variant="secondary">
-                        P: {dayTotals.totalProtein}/
-                        {backendTargets?.protein ?? 0}
-                        {units?.macro.protein}
-                      </Badge>
-                      <Badge variant="secondary">
-                        C: {dayTotals.totalCarbs}/{backendTargets?.carbs ?? 0}
-                        {units?.macro.carbs}
-                      </Badge>
-                      <Badge variant="secondary">
-                        F: {dayTotals.totalFat}/{backendTargets?.fat ?? 0}
-                        {units?.macro.fat}
-                      </Badge>
+                <CardDescription>
+                  <div className="flex flex-col md:flex-row md:items-center gap-4 text-md md:text-2xl">
+                    <div className="flex flex-wrap justify-center gap-4">
+                      <div className="flex flex-col items-center">
+                        <span className="text-xs text-muted-foreground">
+                          {t("mealPlanForm.macroCard.target")}
+                        </span>
+                        <Badge
+                          variant="outline"
+                          className="flex items-center gap-1"
+                        >
+                          <Calculator className="h-3 w-3" />
+                          {backendTargets?.energy ?? 0} {units?.macro.energy}
+                        </Badge>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <span className="text-xs text-muted-foreground">
+                          {t("mealPlanForm.macroCard.actual")}
+                        </span>
+                        <Badge
+                          variant="secondary"
+                          className="flex items-center gap-1"
+                        >
+                          <Calculator className="h-3 w-3" />
+                          {dayTotals.totalCalories} {units?.macro.energy}
+                        </Badge>
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <span className="text-xs text-muted-foreground">
+                        {t("mealPlanForm.macroCard.macros")}
+                      </span>
+                      <div className="flex gap-2">
+                        <Badge variant="secondary">
+                          P: {dayTotals.totalProtein}/
+                          {backendTargets?.protein ?? 0}
+                          {units?.macro.protein}
+                        </Badge>
+                        <Badge variant="secondary">
+                          C: {dayTotals.totalCarbs}/{backendTargets?.carbs ?? 0}
+                          {units?.macro.carbs}
+                        </Badge>
+                        <Badge variant="secondary">
+                          F: {dayTotals.totalFat}/{backendTargets?.fat ?? 0}
+                          {units?.macro.fat}
+                        </Badge>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </CardDescription>
               </div>
             </CardHeader>
             <CardContent>
@@ -279,7 +282,9 @@ const MealPlanForm = ({
                   handleOpenEditDialog(day.meals[index].targetMeal!)
                 }
               />
-
+              <div className="md:hidden text-sm text-center pb-4 tracking-wider font-light">
+                <p>Click on a card to mark it as completed</p>
+              </div>
               <MobileMealList
                 items={day.meals}
                 units={units as Units}
