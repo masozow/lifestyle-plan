@@ -170,6 +170,14 @@
     },
     "logout":{  
       "title": "Cerrar sesión"
+    },
+    "modeToggle":{
+      "toggle": "Cambiar tema",
+      "themes":{
+        "light": "Claro",
+        "dark": "Oscuro",
+        "system": "Sistema"
+      }
     }
   },
   "visualizers":{

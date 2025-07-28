@@ -3,10 +3,17 @@ import { useSessionStore } from "@/store";
 import { Card, CardHeader, CardTitle } from "../../ui/card";
 
 import { CardContentBaseVisualizer } from "@/components";
-import { useMemo } from "react";
+import { useMemo, type JSX } from "react";
 import { useTranslation } from "react-i18next";
 import { ErrorBoundary } from "react-error-boundary";
 import ReloadOrRedirectWhenError from "../error-boundaries/ReloadOrRedirectWhenError";
+import {
+  IconCake,
+  IconGenderBigender,
+  IconMail,
+  IconPhone,
+  IconUser,
+} from "@tabler/icons-react";
 
 type User = {
   id: number;
@@ -33,6 +40,13 @@ export const UserCard = ({ className }: Props) => {
     () => (userId ? `${API_ENDPOINTS.user}/${userId}` : ""),
     [userId]
   );
+  const icons: Partial<Record<keyof User, JSX.Element>> = {
+    email: <IconMail />,
+    name: <IconUser />,
+    phone: <IconPhone />,
+    birthDate: <IconCake />,
+    gender: <IconGenderBigender />,
+  };
   return (
     <Card className={className}>
       <CardHeader className="border-b">
@@ -49,7 +63,7 @@ export const UserCard = ({ className }: Props) => {
           />
         )}
       >
-        <CardContentBaseVisualizer<User> url={url} />
+        <CardContentBaseVisualizer<User> url={url} iconsArray={icons} />
       </ErrorBoundary>
     </Card>
   );

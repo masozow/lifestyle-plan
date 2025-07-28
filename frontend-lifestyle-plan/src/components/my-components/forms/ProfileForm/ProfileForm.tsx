@@ -20,6 +20,7 @@ import { X } from "lucide-react";
 import { useNavigate } from "react-router";
 import { date, diffYears } from "@formkit/tempo";
 import { applyZodI18n } from "@/lib/zodSetup";
+import { getUnit } from "./profileFormHelpers";
 
 interface Props {
   titleChangeFunction: (title?: string) => void;
@@ -71,13 +72,6 @@ const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
   } = form;
 
   const unitSystem = watch("unitSystem");
-
-  const getUnit = (field: string) => {
-    if (field === "weight") return unitSystem === "metric" ? "kg" : "lbs";
-    if (field === "height") return unitSystem === "metric" ? "cm" : "inches";
-    // if (field === "age") return "";
-    return unitSystem === "metric" ? "cm" : "inches";
-  };
 
   const onSubmit = async (data: ProfileFormValues) => {
     if (user?.id) {
@@ -202,7 +196,7 @@ const ProfileForm = ({ titleChangeFunction, initialValues }: Props) => {
                 control={control}
                 name={steps[currentStep].name as keyof ProfileFormValues}
                 label={steps[currentStep].title}
-                unit={getUnit(steps[currentStep].name)}
+                unit={getUnit(steps[currentStep].name, unitSystem)}
                 duration={animationDuration}
                 autoFocus
                 error={
