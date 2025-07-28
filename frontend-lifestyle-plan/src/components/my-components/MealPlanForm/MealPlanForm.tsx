@@ -242,7 +242,7 @@ const MealPlanForm = ({
                       {dayTotals.totalCalories} {units?.macro.energy}
                     </Badge>
                   </div>
-                  <div className="flex flex-col">
+                  <div className="flex flex-col items-center">
                     <span className="text-xs text-muted-foreground">
                       {t("mealPlanForm.macroCard.macros")}
                     </span>

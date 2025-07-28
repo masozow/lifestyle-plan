@@ -93,6 +93,7 @@ export const CardContentBaseVisualizer = <T extends Record<string, unknown>>({
                     })}
                     {"unitSystem" in receivedData &&
                       key !== "unitSystem" &&
+                      key !== "age" &&
                       ` ${getUnit(key, receivedData?.unitSystem as string)}`}
                   </p>
                 </div>
