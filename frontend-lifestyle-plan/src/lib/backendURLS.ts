@@ -14,7 +14,9 @@ export const API_ENDPOINTS = {
   userDailyIntake: `${BASE_URL}/api/user-daily/intake`,
   userDailyConsumed: `${BASE_URL}/api/user-daily/consumed`,
   //charts
-  progressChart: `${BASE_URL}/api/progress-chart`
+  progressChart: `${BASE_URL}/api/progress-chart`,
+  //reports
+  historicData: `${BASE_URL}/api/historic-data`
 } as const;
 
 export type EndpointKey = keyof typeof API_ENDPOINTS;

@@ -4,6 +4,6 @@ import { checkAuth } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-router.get("/historic-data/",checkAuth, HistoricDataController.getUserHistoricData);
+router.get("/historic-data",checkAuth, HistoricDataController.getUserHistoricData);
 
 export default router;

@@ -50,6 +50,11 @@ const ProgressChartPage = lazy(() =>
     default: m.default,
   }))
 );
+const HistoricDataMealPlanPage = lazy(() =>
+  import("@/pages/reports/HistoricDataMealPlanPage").then((m) => ({
+    default: m.default,
+  }))
+);
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -174,6 +179,14 @@ export const router = createBrowserRouter([
             element: (
               <Suspense fallback={<ProgressChartSkeleton />}>
                 <ProgressChartPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "historic-data",
+            element: (
+              <Suspense fallback={<MealPlanFormSkeleton />}>
+                <HistoricDataMealPlanPage />
               </Suspense>
             ),
           },

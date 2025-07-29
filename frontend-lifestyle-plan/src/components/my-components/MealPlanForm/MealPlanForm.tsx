@@ -30,10 +30,7 @@ import type { LocaleCode } from "@/locales/localesTypes";
 import { format } from "@formkit/tempo";
 import ReloadOrRedirectWhenError from "../error-boundaries/ReloadOrRedirectWhenError";
 interface MealPlanFormProps {
-  paginationLimit?: number;
-  showPagination?: boolean;
-  showPaginationControls?: boolean;
-  paginationPage?: number;
+  paginationURL?: string;
   limitDays?: number;
   dateToFilter?: Date;
   showHeader?: boolean;
@@ -42,10 +39,7 @@ const MealPlanForm = ({
   limitDays,
   dateToFilter,
   showHeader = true,
-  paginationLimit,
-  showPagination,
-  showPaginationControls,
-  paginationPage,
+  paginationURL,
 }: MealPlanFormProps = {}) => {
   const { user } = useSessionStore();
   const { t, i18n } = useTranslation();
@@ -61,6 +55,7 @@ const MealPlanForm = ({
   );
   const [isSyncing, setIsSyncing] = useState(false);
   const [editingMeal, setEditingMeal] = useState<Meal | null>(null);
+  console.log("GET URL:", paginationURL ?? apiEndPointGET);
   const {
     syncToServer,
     hasUnsyncedChanges,
@@ -73,8 +68,10 @@ const MealPlanForm = ({
   } = useMealPlanSync(userId, {
     consumedUrl: API_ENDPOINTS.userDailyConsumed,
     intakeUrl: API_ENDPOINTS.userDailyIntake,
-    getUrl: apiEndPointGET,
+    getUrl: paginationURL ?? apiEndPointGET,
   });
+  console.log("Data:", data);
+  console.log("Meal Status:", mealStatus);
   // const induceError = true;
   if (isLoading) return <MealPlanFormSkeleton showHeader />;
   if (
@@ -84,7 +81,6 @@ const MealPlanForm = ({
     !data.macro_ratios ||
     !data.weekly_plan
   ) {
-    //changing to throw because error boundary has been implemented
     console.error("Error:", error, "-", error?.message, "-", data);
     //changing to throw because error boundary has been implemented
     // throw new Error(error?.message || "Invalid response structure");
@@ -101,10 +97,10 @@ const MealPlanForm = ({
     return <MealPlanFormSkeleton showHeader />;
   }
   console.log("mealStatus", mealStatus);
-  const filteredWeeklyPlan = groupMealsByDay(mealStatus, {
-    dateToFilter: dateToFilter,
-    limitDays: limitDays,
-  });
+  const filteredWeeklyPlan = paginationURL
+    ? groupMealsByDay({ mealStatus, options: { sortByDate: false } }).reverse()
+    : groupMealsByDay({ mealStatus, options: { dateToFilter, limitDays } });
+
   console.log("Data:", data);
   //adding condition to send the user to create a new plan when the actual has been acomplished
   if (filteredWeeklyPlan.length === 0) {
@@ -225,6 +221,8 @@ const MealPlanForm = ({
                     /^./,
                     (char) => char.toUpperCase()
                   )}
+                  {", "}
+                  {format(String(day.date), { date: "long" }, locale)}
                 </CardTitle>
                 <CardDescription>
                   <div className="flex flex-col md:flex-row md:items-center gap-4 text-md md:text-2xl">

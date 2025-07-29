@@ -120,7 +120,7 @@ const getUserHistoricData = async (req: Request, res: Response) => {
     JOIN LatestProgress AS L ON M.date = L.date AND M.userMealProgressId = L.MaxProgressId
     JOIN PaginatedDates AS PD ON M.date = PD.date
     LEFT JOIN userDailyIntake AS I ON I.userDailyMealId = M.id
-    ORDER BY M.date DESC, M.meal ASC
+    ORDER BY M.date DESC
     `,
     {
       replacements: { userId, offset, limit },
@@ -210,6 +210,9 @@ const getUserHistoricData = async (req: Request, res: Response) => {
 
     const firstEntry = results[0];
     const data = {
+      response:{
+
+      
       meta: null,
       unit_system: firstEntry.unitSystem ?? null,
       units: {
@@ -234,6 +237,7 @@ const getUserHistoricData = async (req: Request, res: Response) => {
         totalItems,
         totalPages,
       },
+    }
     };
 
     return res.status(200).json({

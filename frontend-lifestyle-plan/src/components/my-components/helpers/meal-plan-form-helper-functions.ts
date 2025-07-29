@@ -144,14 +144,24 @@ export const calculateMacroPercentages = (macroRatios: MacroRatios) => {
     fat: Math.round(macroRatios.fat * 100),
   };
 };
-
-export const groupMealsByDay = (
+interface GroupMealsByDayParams{
   mealStatus: MealStatus,
   options?: {
     limitDays?: number;
     dateToFilter?: Date;
+    sortByDate?: boolean  
   }
+  
+}
+export const groupMealsByDay = ({
+  mealStatus,
+  options}: GroupMealsByDayParams
 ) => {
+   const {
+    limitDays,
+    dateToFilter,
+    sortByDate = true,
+  } = options ?? {}; 
   const grouped = new Map<
     string,
     { day: string; date: string; meals: MealStatusItem[] }
@@ -175,15 +185,15 @@ export const groupMealsByDay = (
 
   let result = [...grouped.values()];
 
-  result.sort((a, b) => a.date.localeCompare(b.date));
+  if( sortByDate) result.sort((a, b) => a.date.localeCompare(b.date));
 
-  if (options?.dateToFilter) {
-    const referenceDate = options.dateToFilter.toISOString().split("T")[0]; // "YYYY-MM-DD"
+  if (dateToFilter) {
+    const referenceDate = dateToFilter.toISOString().split("T")[0]; // "YYYY-MM-DD"
     result = result.filter((group) => group.date >= referenceDate);
   }
 
-  if (options?.limitDays) {
-    result = result.slice(0, options.limitDays);
+  if (limitDays) {
+    result = result.slice(0, limitDays);
   }
 
   return result;
