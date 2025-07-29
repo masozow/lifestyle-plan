@@ -12,3 +12,6 @@ export * from "./userDailyMealAndIntake.controller.js";
 
 //charts
 export * from "./progressChart.controller.js";
+
+//reports
+export * from "./historicData.controller.js";

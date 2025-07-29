@@ -93,7 +93,7 @@ const sendPlanPrompt = async (req: Request, res: Response) => {
       },
       { transaction: t }
     );
-
+    console.log("~~ Meal plan data:", mealPlan);
     const newestUserMealProgress = await UserMealProgress.create({
       userId,
       openAIResponseId: response.id,

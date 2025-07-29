@@ -13,7 +13,7 @@ const create = async (req: Request, res: Response) => {
         })
       );
     }
-
+    console.log("~ File: userMealProgress.controller.ts, Line: 8 📋", req.body);
     const newRecord = await UserMealProgress.create({
       ...req.body,
       userId,

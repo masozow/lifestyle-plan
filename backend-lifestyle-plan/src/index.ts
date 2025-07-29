@@ -18,6 +18,7 @@ import openAIResponseRoutes from "./routes/openAIResponse.route.js";
 import userMealPlanRoutes from "./routes/userMealPlan.route.js";
 import userDailyMealAndIntakeRoutes from "./routes/userDailyMealAndIntake.route.js";
 import progressChartRoutes from "./routes/charts.route.js";
+import historicDataRoutes from "./routes/historicData.route.js";
 
 dotenv.config();
 const app = express();
@@ -51,6 +52,7 @@ app.use("/api", openAIResponseRoutes);
 app.use("/api", userMealPlanRoutes);
 app.use("/api", userDailyMealAndIntakeRoutes);
 app.use("/api", progressChartRoutes);
+app.use("/api", historicDataRoutes);
 
 // Global error middleware
 app.use((err, req, res, next) => {
@@ -62,5 +64,5 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`✅ Server is running on port ${PORT}\n`);
 });
-console.log("DB_HOST is:", process.env.DB_HOST);
+
 export default app;

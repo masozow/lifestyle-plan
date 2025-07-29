@@ -17,5 +17,4 @@ export const API_ENDPOINTS = {
   progressChart: `${BASE_URL}/api/progress-chart`
 } as const;
 
-// Tipado automático
 export type EndpointKey = keyof typeof API_ENDPOINTS;

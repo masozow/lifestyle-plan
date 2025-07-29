@@ -92,10 +92,12 @@ const MealPlanForm = ({
   if (!hasInitialSyncCompleted || Object.keys(mealStatus).length === 0) {
     return <MealPlanFormSkeleton showHeader />;
   }
+  console.log("mealStatus", mealStatus);
   const filteredWeeklyPlan = groupMealsByDay(mealStatus, {
     dateToFilter: dateToFilter,
     limitDays: limitDays,
   });
+  console.log("Data:", data);
   //adding condition to send the user to create a new plan when the actual has been acomplished
   if (filteredWeeklyPlan.length === 0) {
     return <Navigate to="/app/new-plan" />;
