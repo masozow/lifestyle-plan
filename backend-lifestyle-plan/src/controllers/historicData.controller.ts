@@ -45,11 +45,49 @@ const getUserHistoricData = async (req: Request, res: Response) => {
     );
   }
 
+  const limit = parseInt(req.query.limit as string) || 5;
+  const page = parseInt(req.query.page as string) || 1;
+  const offset = (page - 1) * limit;
+
   try {
+    // Total count for pagination metadata
+    const totalResults = await sequelize.query<{ count: number }>(
+      `
+      SELECT COUNT(DISTINCT M.date) AS count
+      FROM userDailyMeal AS M
+      JOIN userMealProgress AS U ON M.userMealProgressId = U.id
+      WHERE U.userId = :userId
+      `,
+      {
+        replacements: { userId },
+        type: QueryTypes.SELECT,
+      }
+    );
+    const totalItems = totalResults[0]?.count || 0;
+    const totalPages = Math.ceil(totalItems / limit);
+
+    // Main paginated query
     const results = await sequelize.query<MealResult>(
     `
+    WITH LatestProgress AS (
+      SELECT 
+        M2.date,
+        MAX(M2.userMealProgressId) AS MaxProgressId
+      FROM userDailyMeal AS M2
+      JOIN userMealProgress AS U2 ON M2.userMealProgressId = U2.id
+      WHERE U2.userId = :userId
+      GROUP BY M2.date
+    ),
+    PaginatedDates AS (
+      SELECT DISTINCT M.date
+      FROM userDailyMeal AS M
+      JOIN userMealProgress AS U ON M.userMealProgressId = U.id
+      WHERE U.userId = :userId
+      ORDER BY M.date DESC
+      LIMIT :limit OFFSET :offset
+    )
     SELECT 
-      M.id AS id,
+      M.id,
       M.date,
       M.day,
       M.meal,
@@ -79,31 +117,41 @@ const getUserHistoricData = async (req: Request, res: Response) => {
       U.dailyCalorieTarget
     FROM userDailyMeal AS M
     JOIN userMealProgress AS U ON M.userMealProgressId = U.id
-    JOIN (
-      SELECT 
-        M2.date,
-        MAX(M2.userMealProgressId) AS MaxProgressId
-      FROM userDailyMeal AS M2
-      JOIN userMealProgress AS U2 ON M2.userMealProgressId = U2.id
-      WHERE U2.userId = :userId
-      GROUP BY M2.date
-    ) AS latest
-      ON M.date = latest.date AND M.userMealProgressId = latest.MaxProgressId
+    JOIN LatestProgress AS L ON M.date = L.date AND M.userMealProgressId = L.MaxProgressId
+    JOIN PaginatedDates AS PD ON M.date = PD.date
     LEFT JOIN userDailyIntake AS I ON I.userDailyMealId = M.id
     ORDER BY M.date DESC, M.meal ASC
     `,
     {
-      replacements: { userId },
+      replacements: { userId, offset, limit },
       type: QueryTypes.SELECT,
     }
   );
 
-  if (!results.length) return null;
+      if (!results.length) {
+        return res.status(200).json({
+          success: true,
+          data: {
+            meta: null,
+            unit_system: null,
+            units: null,
+            macro_ratios: null,
+            daily_calorie_target: null,
+            weekly_plan: [],
+            pagination: {
+              currentPage: page,
+              pageSize: limit,
+              totalItems,
+              totalPages,
+            },
+          },
+        });
+      }
 
-  const grouped: Record<string, {
-    day: string;
-    date: string | null;
-    meals: {
+    const grouped: Record<string, {
+      day: string;
+      date: string | null;
+      meals: {
         id: number;
         food: string;
         meal: string;
@@ -111,84 +159,88 @@ const getUserHistoricData = async (req: Request, res: Response) => {
         day: string;
         date: string;
         macro: {
-        protein: number;
-        carbs: number;
-        fat: number;
-        energy: number;
+          protein: number;
+          carbs: number;
+          fat: number;
+          energy: number;
         };
         consumed: boolean;
-    }[];
-    day_macro_targets: {
+      }[];
+      day_macro_targets: {
         energy: number;
         protein: number;
         carbs: number;
         fat: number;
-    };
+      };
     }> = {};
 
+    for (const meal of results) {
+      const mealDay = meal.day;
 
-  for (const meal of results) {
-    const mealDay = meal.day;
-
-
-    if (!grouped[mealDay]) {
-       grouped[mealDay] = {
-            day: mealDay,
-            date: meal.date,
-            meals: [],
-            day_macro_targets: {
+      if (!grouped[mealDay]) {
+        grouped[mealDay] = {
+          day: mealDay,
+          date: meal.date,
+          meals: [],
+          day_macro_targets: {
             protein: meal.targetProtein,
             carbs: meal.targetCarbs,
             fat: meal.targetFat,
             energy: meal.targetEnergy,
-            },
+          },
         };
+      }
+
+      grouped[mealDay].meals.push({
+        id: meal.id,
+        food: meal.consumedFood ?? meal.recommendedMeal,
+        meal: meal.meal,
+        portion: meal.consumedPortion ?? meal.targetPortion,
+        day: mealDay,
+        date: meal.date,
+        macro: {
+          protein: meal.consumedProtein ?? meal.targetProtein,
+          carbs: meal.consumedCarbs ?? meal.targetCarbs,
+          fat: meal.consumedFat ?? meal.targetFat,
+          energy: meal.consumedEnergy ?? meal.targetEnergy,
+        },
+        consumed: meal.intakeConsumed ?? meal.consumed,
+      });
     }
 
-    grouped[mealDay].meals.push({
-      id: meal.id,
-      food: meal.consumedFood ?? meal.recommendedMeal,
-      meal: meal.meal,
-      portion: meal.consumedPortion ?? meal.targetPortion,
-      day: mealDay,
-      date: meal.date,
-      macro: {
-        protein: meal.consumedProtein ?? meal.targetProtein,
-        carbs: meal.consumedCarbs ?? meal.targetCarbs,
-        fat: meal.consumedFat ?? meal.targetFat,
-        energy: meal.consumedEnergy ?? meal.targetEnergy,
+    const firstEntry = results[0];
+    const data = {
+      meta: null,
+      unit_system: firstEntry.unitSystem ?? null,
+      units: {
+        portion: firstEntry.portionUnit ?? null,
+        macro: {
+          protein: firstEntry.macroProteinUnit ?? null,
+          carbs: firstEntry.macroCarbsUnit ?? null,
+          fat: firstEntry.macroFatUnit ?? null,
+          energy: firstEntry.macroEnergyUnit ?? null,
+        },
       },
-      consumed: meal.intakeConsumed ?? meal.consumed,
-    });
-  }
-
-  const firstEntry = results[0];
-  const data = {
-    meta: null,
-    unit_system: firstEntry.unitSystem ?? null,
-    units: {
-      portion: firstEntry.portionUnit ?? null,
-      macro: {
-        protein: firstEntry.macroProteinUnit ?? null,
-        carbs: firstEntry.macroCarbsUnit ?? null,
-        fat: firstEntry.macroFatUnit ?? null,
-        energy: firstEntry.macroEnergyUnit ?? null,
+      macro_ratios: {
+        protein: firstEntry.ratioProtein ?? null,
+        carbs: firstEntry.ratioCarbs ?? null,
+        fat: firstEntry.ratioFat ?? null,
       },
-    },
-    macro_ratios: {
-      protein: firstEntry.ratioProtein ?? null,
-      carbs: firstEntry.ratioCarbs ?? null,
-      fat: firstEntry.ratioFat ?? null,
-    },
-    daily_calorie_target: firstEntry.dailyCalorieTarget ?? null,
-    weekly_plan: Object.values(grouped),
-  };
+      daily_calorie_target: firstEntry.dailyCalorieTarget ?? null,
+      weekly_plan: Object.values(grouped),
+      pagination: {
+        currentPage: page,
+        pageSize: limit,
+        totalItems,
+        totalPages,
+      },
+    };
 
-  
     return res.status(200).json({
       success: true,
       data,
     });
+
   } catch (error) {
     return res.status(500).json(
       await errorAndLogHandler({
@@ -199,6 +251,7 @@ const getUserHistoricData = async (req: Request, res: Response) => {
     );
   }
 };
+
 
 export const HistoricDataController = {
   getUserHistoricData,

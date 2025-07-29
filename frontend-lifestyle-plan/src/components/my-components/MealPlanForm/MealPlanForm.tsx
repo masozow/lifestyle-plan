@@ -30,6 +30,10 @@ import type { LocaleCode } from "@/locales/localesTypes";
 import { format } from "@formkit/tempo";
 import ReloadOrRedirectWhenError from "../error-boundaries/ReloadOrRedirectWhenError";
 interface MealPlanFormProps {
+  paginationLimit?: number;
+  showPagination?: boolean;
+  showPaginationControls?: boolean;
+  paginationPage?: number;
   limitDays?: number;
   dateToFilter?: Date;
   showHeader?: boolean;
@@ -38,6 +42,10 @@ const MealPlanForm = ({
   limitDays,
   dateToFilter,
   showHeader = true,
+  paginationLimit,
+  showPagination,
+  showPaginationControls,
+  paginationPage,
 }: MealPlanFormProps = {}) => {
   const { user } = useSessionStore();
   const { t, i18n } = useTranslation();
